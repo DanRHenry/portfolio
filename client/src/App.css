@@ -1,0 +1,97 @@
+
+/* .App { */
+  /* background-image: url("./media/pankaj-patel-u2Ru4QBXA5Q-unsplash.jpg"); */
+  /* text-align: center; */
+/* } */
+.CodingBackgroundImg {
+  height: 85vh;
+  width: 100vw;
+  position: fixed;
+  top: 15vh;
+  right: 0;
+  opacity: .35;
+  z-index: -1;
+}
+
+.NavigationMenu {
+  position: fixed;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  margin: 0;
+  align-items: center;
+  width: 100vw;
+  /* height: 15vh; */
+  /* min-height: fit-content; */
+  top: 0;
+  border-bottom: 1em black solid;
+  background-color: rgb(57, 57, 123);
+}
+
+#header{
+  text-align: center;
+  margin-top: 1em;
+}
+#navBtn {
+  font-size: x-large;
+  /* position: absolute; */
+  /* left: 4em; */
+  /* bottom: 0; */
+  /* margin-left: 2em; */
+}
+
+#navBtn:hover{
+  color: antiquewhite;
+}
+
+#projectsMenuItems {
+  visibility: hidden;
+}
+
+#projectsMenu {
+  z-index: 1;
+  opacity: 1;
+  padding-top: 8em;
+  /* position: absolute; */
+  /* top: 15vh; */
+  height: 30vh;
+  width: 0;
+  transition: height .25s;
+  /* overflow-y: scroll; */
+  /* transition: height .25s, width .25s; */
+}
+
+.projectsMenuText {
+  display: inline-block;
+  z-index: 5;
+  font-size: x-large;
+  display: flex;
+  flex-direction: column;
+  padding-left: 1em;
+  padding-top: 1em;
+  width: fit-content;
+  /* padding-right: auto; */
+}
+
+.projectsMenuText:hover {
+  font-size: xx-large;
+  padding-top: .36em;
+}
+
+#projectDisplay{
+  z-index: -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: fixed;
+  padding-left: auto;
+  padding-right: auto;
+  top: 15vh;
+  right: 5vw;
+  height: 0;
+  width: 0;
+  transition: height .5s, width .5s;
+}
+
+#projectsiframe {
+  height: 100%;
+  width: 70%;
+}

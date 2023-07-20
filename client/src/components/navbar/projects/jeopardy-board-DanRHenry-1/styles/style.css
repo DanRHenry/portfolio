@@ -1,0 +1,377 @@
+.flexRow {
+    display: flex;
+    flex-direction: row;
+}
+
+.centered {
+    text-align: center;
+}
+
+body {
+    background-color: rgb(101, 101, 101);
+    user-select: none;
+    color: white;
+    font-size: 2vw;
+    margin: 0;
+}
+
+h1 {
+    top: 0;
+    text-shadow: 2px 2px 2px black;
+}
+
+.r1 {
+    background-color: rgb(59, 127, 127);
+}
+
+.r2 {
+    background-color: rgb(87, 16, 87);
+}
+
+.f {
+    background-color: rgb(38, 22, 189);
+}
+
+.nameInput {
+    margin: 1em;
+}
+
+input {
+    height:2em;
+    width: fit-content;
+    margin: 1em;
+    margin-left: auto;
+    margin-right: auto;
+    border: 2px black solid;
+    border-radius: 1rem;
+    font-size: 1rem;
+}
+
+#hero {
+    margin-top: 5vh;
+    border-radius: 1em;
+    width: 50vw;
+    height: 25vw;
+}
+
+.bottom * {
+    width: 18vw;
+    height: 2vw;
+    font-size: 1.5vw;
+    padding: .15em;
+}
+
+hr {
+    width: 80%;
+    background-color: black;
+}
+
+#inputFieldForP1Name {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-top-color: gray;
+    border-left-color: gray;
+}
+
+#inputFieldForP2Name {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-color: gray;
+    border-left-color: gray;
+}
+
+#startGame {
+    font-size: 1.5em;
+    width: 3em;
+    height: fit-content;
+    border: 2px black solid;
+    margin-bottom: 2rem;
+    border-top-color: gray;
+    border-left-color: gray;
+    color: rgb(95, 95, 95);
+}
+
+#startGame:hover, .previousRound > button:hover, .nextRound >button:hover {
+    background-color: rgb(188, 188, 188);
+}
+
+#startGame:active {
+    background-color: gray;
+}
+
+#gameGrid {
+    display: grid;
+    grid-template-columns: 20%  80%;
+}
+
+.finalGrid {
+    margin-left: 6vw;
+}
+
+aside {
+    max-width: 8em;
+    max-height: fit-content;
+    color: black;
+    margin-left: 2vw;
+    margin-right: 2vw;
+    background-color: white;
+    border: .6vw solid antiquewhite;
+    padding-bottom: 2vw;
+}
+
+aside div{
+    margin: 1em 1em 0 1em;
+}
+
+.answerBoard {
+    margin-right: 25vw;
+    margin-left: 4vw;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    background-color: blue;
+    border: .1vw solid white;
+}
+
+.finalAnswerBoard{
+    margin-right: 25vw;
+    margin-left: 5vw;
+    background-color: blue;
+    border: .2vw solid white;
+    min-height: fit-content;
+    max-width: 20em;
+}
+
+#finalCategory {
+    font-size: 2vw;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    height: 2em;
+    padding-top: .5em;
+    border-bottom: .2vw solid white;
+    color: black;
+    background-color: rgba(255, 255, 255, 0.473);
+}
+
+.playerTurn {
+    margin-top: .5em;
+    text-shadow: 2px 2px 2px black;
+}
+
+#finalBet {
+    margin-bottom: 0;
+    min-height: fit-content;
+    font-size: 1vw;
+    width: 10em;
+    margin-top: 0;
+    border-top-color: gray;
+    border-left-color: gray;
+}
+
+.finalQuestionAndGuess {
+    display: flex;
+    flex-direction: row;
+    margin-right: auto;
+    margin-left: auto;
+    height: 2rem;
+}
+
+#inputFieldForAnswer {
+    margin-top: 0;
+    height: 2.7vw;
+    font-size: 2vw;
+    width: 13em;
+    border-radius: 0;
+    border-top-color: gray;
+    border-left-color: gray;
+}
+
+.finalInput {
+    margin-top: 0;
+    margin-bottom: 0;
+    height: 2.7vw;
+    font-size: 2vw;
+    min-height: 80%;
+    width: 13em;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+#passBtn {
+    display: none;
+    border-top-left-radius: 1em;
+    border-bottom-left-radius: 1em;
+    font-size: 2vw;
+    min-height: 3.06vw;
+    max-height: 100%;
+    width: 6em;
+    max-width: 5em;
+    color: rgb(95, 95, 95);
+    border-top-color: gray;
+    border-left-color: gray;
+}
+#placeholderPassBtn {
+    border-top-left-radius: 1em;
+    border-bottom-left-radius: 1em;
+    font-size: 2vw;
+    min-height: 3.06vw;
+    max-height: 100%;
+    width: 6em;
+    max-width: 5em;
+    color: rgb(95, 95, 95);
+    border-top-color: gray;
+    border-left-color: gray;
+}
+
+#passBtn:hover, #finalBtn:hover, #guessBtn:hover, #finalBtn:active #placeholderGuessBtn:hover, #placeholderPassBtn:hover{
+    background-color: rgb(210, 210, 210);
+}
+
+#finalBtn:active, #passBtn:active, #guessBtn:active{
+    background-color: gray;
+    color: white;
+}
+
+#guessBtn, #finalBtn{
+    display: none;
+    border-top-right-radius: 1em;
+    border-bottom-right-radius: 1em;
+    font-size: 2vw;
+    min-height: 3.06vw;
+    max-height: 100%;
+    width: 6em;
+    max-width: 5em;
+    color: rgb(95, 95, 95);
+    border-top-color: gray;
+    border-left-color: gray;
+}
+#placeholderGuessBtn, #placeholderFinalBtn{
+    border-top-right-radius: 1em;
+    border-bottom-right-radius: 1em;
+    font-size: 2vw;
+    min-height: 3.06vw;
+    max-height: 100%;
+    width: 6em;
+    max-width: 5em;
+    color: rgb(95, 95, 95);
+    border-top-color: gray;
+    border-left-color: gray;
+}
+
+.category {
+    font-size: 1.25vw;
+    padding-top: 1em;
+    padding-bottom: 1em;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    border: .2vw solid white;
+    color: black;
+    background-color: rgba(255, 255, 255, 0.473);
+}
+
+.answer {
+    padding-top: 1.5em;
+    border: .2vw solid white;
+    margin: 0;
+    font-weight: bold;
+    font-size: 1.15vw;
+}
+
+.answer:hover {
+    background-color: rgb(104, 104, 251);
+}
+
+#textDisplay {
+    display: none;
+    position: fixed;
+    padding-right: auto;
+    padding-left: auto;
+    color: white;
+    background-color: rgb(92, 107, 160);
+    border: .5em solid black;
+    border-radius: 2em;
+    height: 11em;
+    top: 7em;
+    left: 20%;
+    right: 20%;
+}
+
+#textDispCont {
+    position: relative;
+    top: 5em;
+}
+
+#textDisplayBtn {
+    display: none;
+    position: absolute;
+    bottom: 1em;
+}
+
+.footer {
+    display: flex;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    text-shadow: 2px 2px 2px black;
+    font-size: 2.75vw;
+}
+
+.footer button {
+    height: fit-content;
+    padding-right: .5em;
+    padding-left: .5em;
+    font-size: 1.5vw;
+}
+
+#finalFooter {
+    font-size: 2.75vw;
+}
+
+.finalInput{
+    border-top-color: gray;
+    border-left-color: gray;
+}
+
+#finalFooter button {
+    height: fit-content;
+    padding-right: .5em;
+    padding-left: .5em;
+    font-size: 2vw;
+    margin-left: -19vw;
+    align-items: center;
+}
+
+.previousRound {
+    height: 1.5rem;
+    padding-inline: 2em;
+    border-top-color: gray;
+    border-right-color: black;
+    border-bottom-color: black;
+    border-left-color: gray ;
+    color: rgb(95, 95, 95);
+}
+
+.previousRound > button, .nextRound > button {
+    border-color: gray black black gray;
+    color: rgb(95, 95, 95);
+}
+
+.nextRound {
+    display: none;
+    height: 1.5rem;
+    padding-inline: 2em;
+    max-height: 1rem;
+}
+.placeholderNextRound {
+    height: 1.5rem;
+    padding-inline: 2em;
+    max-height: 1rem;
+}
+
+#finalFooter {
+    margin-top: 1vh;
+    padding-top: 0;
+    margin-left: 16%;
+} 
+
+#finalFooter > .previousRound {
+    padding-right: 0;
+}

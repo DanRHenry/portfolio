@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Final Jeopardy</title>
+    <link rel="stylesheet" href="./styles/style.css">
+    <!-- <link media="screen and (max-width: 991px)" rel="stylesheet" href="./styles/landscapeMobileStyle.css"> -->
+  </head>
+  <body class="f centered">
+    <h1>Final Jeopardy</h1>
+    <!-- Game Scores and Play Grid -->
+    <div id="gameGrid" class="finalGrid">
+      <aside>
+        <div id="p1Name">Player 1 Score</div>
+        <div>$00,000</div>
+        <hr>
+        <div id="p2Name">Player 2 Score</div>
+        <div>$00,000</div>
+      </aside>
+      <div class="finalAnswerBoard">
+        <div id="finalCategory">Final Category</div>
+      </div>
+    </div>
+  
+    <!-- Player Number -->
+        <div class="playerTurn">Player #: </div>
+        <input id="finalBet" class="centered" type="number" placeholder="Place Your Bet"></input>
+<br>
+  <!-- Enter Question, Guess -->
+    <input class="centered finalInput" type="text"  placeholder="Enter Your Question">
+    <button id="finalBtn">Guess</button>
+<!-- <br> -->
+  <!-- Exit Btn, Footer Text -->
+  <div class="flexRow" id="finalFooter">
+    <a class="previousRound" href="./index.html"><button>Exit</button></a> 
+    <footer style="margin-top: 0;">Dan Henry 2023 Upright Education Coding Lab</footer>
+  </div>
+  <!-- Do not change the script source. Allows import/export to work. -->
+  <!-- <audio id="sound1" src="./assets/Jeopardy-theme-song.mp3" autoplay="autoplay"></audio> -->
+  <!-- <script>
+    let playerOneScoreName = document.getElementById("p1Name");
+    let playerTwoScoreName = document.getElementById("p2Name");
+    
+    // playerOneScoreName.innerText = `${localStorage.playerOneName}'s Score:`;
+    
+    if (localStorage.playerOneName != "") {
+          if (localStorage.playerOneName[(localStorage.playerOneName.length-1)] =="s") {
+            playerOneScoreName.innerText = `${localStorage.playerOneName}' Score:`;} else {
+          playerOneScoreName.innerText = `${localStorage.playerOneName}'s Score:`;
+         }
+
+    } else {
+        playerOneScoreName.innerText = "Player 1's Score"
+    };
+    
+    if (localStorage.playerTwoName != "") {
+    if (localStorage.playerTwoName[(localStorage.playerTwoName.length-1)] =="s") {
+      playerTwoScoreName.innerText = `${localStorage.playerTwoName}' Score:`;
+    } else {
+    playerTwoScoreName.innerText = `${localStorage.playerTwoName}'s Score:`;
+    }
+} else {
+    playerTwoScoreName.innerText = "Player 2's Score"
+};
+    </script> -->
+  <!-- <script src="./scripts/index.js" type="module"></script> -->
+  <script src="./scripts/main.js"></script>
+</body>
+</html>

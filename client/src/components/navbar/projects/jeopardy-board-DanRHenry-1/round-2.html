@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Double Jeopardy</title>
+    <link rel="stylesheet" href="./styles/style.css">
+  </head>
+<body class="r2 centered">
+  <h1>Double Jeopardy</h1>
+
+<!-- Game Scores and Play Grid -->
+  <div id="gameGrid">
+    <aside>
+      <div id="p1Name">Player 1 Score</div>
+    <div id="p1Score">$00,000</div>
+    <hr>
+    <div id="p2Name">Player 2 Score</div>
+      <div id="p2Score">$00,000</div>
+    </aside>
+    <div>
+      <div id="answerBoard" class="answerBoard">
+        <div class="category">Category 1</div>
+        <div class="category">Category 2</div>
+        <div class="category">Category 3</div>
+        <div class="category">Category 4</div>
+        <div class="category">Category 5</div>
+        <div class="category">Category 6</div>
+        <!-- <div class="answer">400</div>
+        <div class="answer">400</div>
+        <div class="answer">400</div>
+        <div class="answer">400</div>
+        <div class="answer">400</div>
+        <div class="answer">400</div>
+        <div class="answer">800</div>
+        <div class="answer">800</div>
+        <div class="answer">800</div>
+        <div class="answer">800</div>
+        <div class="answer">800</div>
+        <div class="answer">800</div>
+        <div class="answer">1200</div>
+        <div class="answer">1200</div>
+        <div class="answer">1200</div>
+        <div class="answer">1200</div>
+        <div class="answer">1200</div>
+        <div class="answer">1200</div>
+        <div class="answer">1600</div>
+        <div class="answer">1600</div>
+        <div class="answer">1600</div>
+        <div class="answer">1600</div>
+        <div class="answer">1600</div>
+        <div class="answer">1600</div>
+        <div class="answer">2000</div>
+        <div class="answer">2000</div>
+        <div class="answer">2000</div>
+        <div class="answer">2000</div>
+        <div class="answer">2000</div>
+        <div class="answer">2000</div> -->
+      </div>
+    </div>
+  </div>
+
+<!-- Player Number -->
+  <div id="playerTurn" class="playerTurn">Player #: </div>
+
+<!-- Pass, Enter Question, Guess -->
+  <button id="passBtn">Pass</button>
+  <input class="centered" type="text" id= "inputFieldForAnswer" placeholder="Enter Your Question">
+  <button id="guessBtn">Guess</button>
+
+<!-- Exit Btn, Footer Text, Next Round -->
+  <div class="footer">
+    <a class="previousRound" href="./index.html"><button>Exit</button></a> 
+    <footer>Dan Henry 2023 Upright Education Coding Lab</footer>
+    <a class="nextRound" href="./final-jeopardy.html"><button>Final</button></a> <!-- Change this later to respond to a either timer or the answerboard running out -->
+  </div>
+    <!-- Do not change the script source. Allows import/export to work. -->
+    <!-- <audio id="sound1" src="./assets/Jeopardy Board SMS.mp3" autoplay="autoplay"></audio> -->
+    <!-- <script>
+      let playerOneScoreName = document.getElementById("p1Name");
+      let playerTwoScoreName = document.getElementById("p2Name");
+      
+      // playerOneScoreName.innerText = `${localStorage.playerOneName}'s Score:`;
+      if (localStorage.playerOneName != "") {
+          if (localStorage.playerOneName[(localStorage.playerOneName.length-1)] =="s") {
+            playerOneScoreName.innerText = `${localStorage.playerOneName}' Score:`;} else {
+          playerOneScoreName.innerText = `${localStorage.playerOneName}'s Score:`;
+         }
+
+      } else {
+          playerOneScoreName.innerText = "Player 1's Score"
+      };
+      
+      if (localStorage.playerTwoName != "") {
+    if (localStorage.playerTwoName[(localStorage.playerTwoName.length-1)] =="s") {
+      playerTwoScoreName.innerText = `${localStorage.playerTwoName}' Score:`;
+    } else {
+    playerTwoScoreName.innerText = `${localStorage.playerTwoName}'s Score:`;
+    }
+} else {
+    playerTwoScoreName.innerText = "Player 2's Score"
+};
+      </script> -->
+    <!-- <script src="./scripts/index.js" type="module"></script> -->
+    <script src="./scripts/main.js"></script>
+    <!-- <script src="scripts/r2.js" type = "module"></script> -->
+    <!-- <script>    
+      let boxes = document.querySelectorAll(".answer");
+        Array.from(boxes, function(box) {
+            box.addEventListener("click", function() {
+                box.textContent = "here"
+            });
+        });
+        </script> -->
+  </body>
+</html>
