@@ -17,8 +17,8 @@ export default function Navigation() {
 
   if (projectsMenuState === true) {
     projectsMenu.style.height = "100vh";
-    projectsMenu.style.width = "17em";
-    // projectsMenu.style.backgroundColor = "black";
+    // projectsMenu.style.width = "fit-content";
+    projectsMenu.style.width = "28.5em";
     setTimeout(() => {
       projectMenuItems.style.visibility = "visible";
     }, 50);
@@ -36,15 +36,17 @@ export default function Navigation() {
     // <Container>
     <Row className="NavigationMenu">
       <h1 id="header">Welcome</h1>
-      <Col id="navBtn" onClick={projectsMenuToggle}>
+      <div id="navbarbuttons">
+      <Col id="projectsbtn" onClick={projectsMenuToggle}>
         Projects
       </Col>
-      <Col id="aboutme" onClick={projectsMenuToggle}>
+      <Col id="aboutmebtn" onClick={projectsMenuToggle}>
         About Me
       </Col>
-      <Col id="contact" onClick={projectsMenuToggle}>
+      <Col id="contactbtn" onClick={projectsMenuToggle}>
         Contact
       </Col>
+    </div>
     </Row>
     // </Container>
   );
