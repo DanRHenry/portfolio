@@ -6,8 +6,8 @@ import CodingBackground from './components/CodingBackground';
 function App() {
   return (
     <div className="App">
-      <Navigation />
       <Projects />
+      <Navigation />
       <CodingBackground />
     </div>
   );
