@@ -8,6 +8,10 @@ export default function Projects() {
   let widthVar;
   const [projectState, projectToggle] = useState();
   const [urlState, urlToggle] = useState();
+  const [apiProjectMenuStatus, apiProjectMenuStatusToggle] = useState(false);
+  const [fullStackMenuStatus, fullStackMenuStatusToggle] = useState(false);
+const [learningFavoritesMenuStatus, learningFavoritesMenuStatusToggle] = useState(false);
+  // Opens the project display panel
   const toggleDisplay = () => {
     const projectDisplay = document.getElementById("projectDisplay");
     if ((projectDisplay.style.width = "0")) {
@@ -19,6 +23,7 @@ export default function Projects() {
     }
   };
 
+  //   Use Effect to select the correct project to display
   useEffect(() => {
     if (projectState === "ZorkingtonDOM") {
       console.log("ZorkingtonDOM");
@@ -51,52 +56,112 @@ export default function Projects() {
     }
   });
 
+  // Use effect to toggle the Full Stack Menu sub items
+  useEffect(() => {
+    if (fullStackMenuStatus === false) {
+      document.getElementById("fullStackMenuItems").style.display = "none";
+    } else {
+      document.getElementById("fullStackMenuItems").style.display = "inherit";
+    }
+  });
+
+  // Use effect to toggle the API project menu sub items
+  useEffect(() => {
+    if (apiProjectMenuStatus === false) {
+      document.getElementById("apiProjectsMenuText").style.display = "none";
+    } else {
+      document.getElementById("apiProjectsMenuText").style.display = "inherit";
+    }
+  });
+
+//   Use effect to toggle the Learning Favorites menu sub items
+  useEffect(() => {
+    if (learningFavoritesMenuStatus === false) {
+    //   document.getElementsByClassName("personalLearningFavorites").style.display = "none";
+    document.getElementById("scrabble").style.display = "none";
+    document.getElementById("newjeopardy").style.display = "none";
+    document.getElementById("textadventure").style.display = "none";
+    document.getElementById("zorkingtondom").style.display = "none";
+    } else {
+    //   document.getElementsByClassName("personalLearningFavorites").style.display = "inherit";
+    document.getElementById("scrabble").style.display = "inherit";
+    document.getElementById("newjeopardy").style.display = "inherit";
+    document.getElementById("textadventure").style.display = "inherit";
+    document.getElementById("zorkingtondom").style.display = "inherit";
+    }
+  });
+
+  // Takes in the name of the project and updates the useState, then toggles the display
   const toggleProject = (name) => {
     projectToggle(name);
     toggleDisplay();
   };
+
+  function toggleFullStackMenuContent() {
+    fullStackMenuStatusToggle(!fullStackMenuStatus);
+  }
+
+  function toggleAPIMenuContent() {
+    apiProjectMenuStatusToggle(!apiProjectMenuStatus);
+  }
+
+  function toggleLearningFavoritesMenuContent() {
+    learningFavoritesMenuStatusToggle(!learningFavoritesMenuStatus)
+  }
   return (
     <div id="projectsMenu">
       <div id="projectsMenuItems">
         {/* ---------------------------------------- API Fetching ---------------------------------------------- */}
-        <div id="fetchingfromapis">
+        <div onClick={toggleAPIMenuContent} className="projectsMenuText">
           Fetching from APIs
-          {/*--------------------------------------------- Movie Night ------------------------------------------- */}
-          <div
-            className="projectsMenuText"
-            onClick={() => {
-              heightVar = "78vh";
-              widthVar = "80vw";
-              toggleProject("APIProject");
-              urlToggle(
-                "http://danhenrydev.com/iFrames/API%20Project/index.html"
-              );
-            }}
-          >
-            Movie Suggestions
-          </div>
         </div>
-        {/* --------------------------------------------- Capstone ----------------------------------------------*/}
-            <div id="capstone" className="projectsMenuText">
+        {/*--------------------------------------------- Movie Night ------------------------------------------- */}
         <div
+          id="apiProjectsMenuText"
+          className="projectsMenuSecondaryText"
+          onClick={() => {
+            heightVar = "78vh";
+            widthVar = "80vw";
+            toggleProject("APIProject");
+            urlToggle(
+              "http://danhenrydev.com/iFrames/API%20Project/index.html"
+            );
+          }}
+        >
+          Movie Suggestions
+        </div>
+
+        {/* <div id="fullStackMenu"> */}
+        {/* --------------------------------------------- Capstone ----------------------------------------------*/}
+        <div
+          onClick={toggleFullStackMenuContent}
+          className="projectsMenuText"
+          id="fullStack"
+        >
+          Full Stack
+        </div>
+        <div
+          id="fullStackMenuItems"
+          className="projectsMenuSecondaryText"
           onClick={() => {
             heightVar = "78vh";
             widthVar = "80vw";
             toggleProject("Capstone");
             urlToggle("https://www.youtube.com/embed/QGYtbh6PuIc");
-            // urlToggle("http://danhenrydev.com/iFrames/capstone/index.html")
           }}
         >
-          Capstone
-        </div>
-        Dollar Divider
+          Dollar Divider
         </div>
         {/* --------------------------------- Personal Learning Favorites -------------------------------------- */}
-        <div id="personallearningfavorites">
+        <div className="projectsMenuText"
+        onClick={toggleLearningFavoritesMenuContent}
+        >
           Learning Favorites
+          </div>
           {/* --------------------------------------------- Scrabble --------------------------------------------- */}
           <div
-            className="projectsMenuText"
+            className="projectsMenuSecondaryText"
+            id="scrabble"
             onClick={() => {
               heightVar = "78vh";
               widthVar = "80vw";
@@ -106,22 +171,9 @@ export default function Projects() {
           >
             Scrabble
           </div>
-          {/* -------------------------------------------- Jeopardy -----------------------------------------------*/}
-          {/* <div
-            className="projectsMenuText"
-            onClick={() => {
-                heightVar = "82vh"
-                widthVar = "80vw"
-                toggleProject("Jeopardy");
-              urlToggle(
-                "http://danhenrydev.com/iFrames/jeopardy-board-DanRHenry/index.html"
-              );
-            }}
-          >
-            Jeopardy
-          </div> */}
           <div
-            className="projectsMenuText"
+            className="projectsMenuSecondaryText"
+            id="newjeopardy"
             onClick={() => {
               heightVar = "78vh";
               widthVar = "80vw";
@@ -135,7 +187,8 @@ export default function Projects() {
           </div>
           {/*------------------------------------------- Text Adventure -------------------------------------------*/}
           <div
-            className="projectsMenuText"
+            className="projectsMenuSecondaryText"
+            id="textadventure"
             onClick={() => {
               heightVar = "78vh";
               widthVar = "80vw";
@@ -149,7 +202,8 @@ export default function Projects() {
           </div>
           {/* ------------------------------------------- Zorkington DOM ------------------------------------------*/}
           <div
-            className="projectsMenuText"
+            className="projectsMenuSecondaryText"
+            id="zorkingtondom"
             onClick={() => {
               heightVar = "78vh";
               // widthVar = "31.5vw"
@@ -162,7 +216,6 @@ export default function Projects() {
           >
             ZorkingtonDOM
           </div>
-        </div>
         <ProjectDisplay pageToDisplay={pageToDisplay} url={urlState} />
       </div>
     </div>
