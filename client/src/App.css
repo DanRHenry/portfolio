@@ -1,7 +1,6 @@
-
 /* .App { */
-  /* background-image: url("./media/pankaj-patel-u2Ru4QBXA5Q-unsplash.jpg"); */
-  /* text-align: center; */
+/* background-image: url("./media/pankaj-patel-u2Ru4QBXA5Q-unsplash.jpg"); */
+/* text-align: center; */
 /* } */
 .CodingBackgroundImg {
   height: 85vh;
@@ -9,13 +8,13 @@
   position: fixed;
   top: 15vh;
   right: 0;
-  opacity: .35;
+  opacity: 0.35;
   z-index: -2;
 }
 
 .NavigationMenu {
   position: fixed;
-  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
   margin: 0;
   width: 100vw;
   height: 10em;
@@ -24,8 +23,7 @@
   background-color: rgb(57, 57, 123);
 }
 
-
-#header{
+#header {
   text-align: center;
   margin-top: 1em;
 }
@@ -44,13 +42,16 @@
   /* top: 0; */
   font-size: x-large;
   width: 15em;
+  text-shadow: 2px 1px 1px black;
+
   /* background-color: red; */
 }
 
-.col:hover{
+.col:hover {
   /* height: 1.5em; */
   cursor: pointer;
-  font-size: xx-large;
+  /* font-size: xx-large; */
+  color: rgb(102, 102, 102);
 }
 
 #projectsMenuItems {
@@ -63,12 +64,14 @@
   padding-top: 10em;
   height: 30vh;
   width: 0;
-  transition: height .25s;
+  transition: height 0.25s;
 }
 
 .projectsMenuText {
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
   /* background-color: red; */
-  display: inline-block;
+  /* display: inline-block; */
+  display: none;
   /* z-index: 1; */
   font-size: x-large;
   display: flex;
@@ -77,15 +80,62 @@
   padding-top: 1em;
   width: fit-content;
   /* padding-right: auto; */
-}
-
-.projectsMenuText:hover {
-  font-size: xx-large;
-  padding-top: .36em;
   cursor: pointer;
 }
 
-#projectDisplay{
+.projectsMenuText:hover {
+  color: rgb(166, 166, 166);
+}
+
+/* .projectsMenuText:active {
+  color: rgb(123, 123, 123);
+} */
+
+.projectsMenuSecondaryText {
+  cursor: pointer;
+
+  font-size: large;
+  padding-left: 2em;
+  /* background-color: green; */
+  /* color: red; */
+}
+
+.projectsMenuSecondaryText:hover {
+  color: rgb(166, 166, 166);
+}
+
+.projectsMenuSecondaryText:active {
+  color: rgb(123, 123, 123);
+}
+
+
+#apiProjectsMenuText {
+  display: none;
+}
+#fullStackMenuItems {
+  display: none;
+}
+
+#scrabble {
+  display: none;
+}
+
+#newjeopardy {
+  display: none;
+}
+
+#textadventure {
+  display: none;
+}
+
+#zorkingtondom {
+  display: none;
+}
+/* .personalLearningFavorites {
+  display: none;
+} */
+
+#projectDisplay {
   z-index: 1;
   position: fixed;
   padding-right: 0;
