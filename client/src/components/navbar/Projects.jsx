@@ -15,6 +15,7 @@ export default function Projects() {
   const [fullStackMenuStatus, fullStackMenuStatusToggle] = useState(false);
   const [learningFavoritesMenuStatus, learningFavoritesMenuStatusToggle] =
     useState(false);
+  const [displayInformation, toggleDisplayInformation] = useState()
   // Opens the project display panel
   const toggleDisplay = () => {
     const projectDisplay = document.getElementById("projectDisplay");
@@ -26,21 +27,6 @@ export default function Projects() {
       projectState.style.height = "0";
     }
   };
-  //   const toggleInformation = () => {
-  //     const projectInformation = document.getElementById("projectInformation");
-  //     if ((projectInformation.style.width = "0")) {
-  //         console.log("projectInformation1")
-  //     //   projectInformation.style.display = "inherit" LOOK INTO THE USEEFFECT
-  //       projectInformation.style.height = heightVar;
-  //       projectInformation.style.width = widthVar;
-  //     } else {
-  //         console.log("projectInformation2")
-
-  //     //   projectInformation.style.display = "none"LOOK INTO THE USEEFFECT
-  //       projectInformation.style.width = "0";
-  //       projectState.style.height = "0";
-  //     }
-  //   };
 
   //   Use Effect to select the correct project to display
   useEffect(() => {
@@ -152,8 +138,9 @@ export default function Projects() {
   const newJeopardyInfo = `The goal of this project was to begin to implement JavaScript, HTML, and CSS to recreate a Jeopardy game. I focused on creating a clean interface and to begin to develop functionality.`;
 
   const jeopardyInfo = ``;
-
   const capstoneInfo = `When my dev team met with our client, she requested a family budgeting app that could help manage shared household living expenses. It makes use of the MERN stack to provide a clean, interface with cross functionality between budget items, budget categories, transactions, and account balances for personal and household living expenses.`;
+
+  let projectInfo = document.getElementById("projectInformation");
   return (
     <div id="projectsMenu">
       <div id="projectsMenuItems">
@@ -169,7 +156,9 @@ export default function Projects() {
             heightVar = "78vh";
             widthVar = "80vw";
             toggleProject("APIProject");
-            toggleProjectInformation(apiProjectInfo)
+            toggleProjectInformation(apiProjectInfo);
+            toggleDisplayInformation(document.getElementById("projectInformation").style.visibility = "inherit");
+            document.getElementById("btncontainer").style.visibility = "inherit";
             urlToggle(
               "http://danhenrydev.com/iFrames/API%20Project/index.html"
             );
@@ -191,10 +180,12 @@ export default function Projects() {
           id="fullStackMenuItems"
           className="projectsMenuSecondaryText"
           onClick={() => {
-            heightVar = "78vh";
+            heightVar = "80vh";
             widthVar = "80vw";
             toggleProject("Capstone");
             toggleProjectInformation(capstoneInfo);
+            toggleDisplayInformation(document.getElementById("projectInformation").style.visibility = "inherit");
+            document.getElementById("btncontainer").style.visibility = "inherit";
             urlToggle("https://www.youtube.com/embed/QGYtbh6PuIc");
           }}
         >
@@ -215,6 +206,8 @@ export default function Projects() {
             heightVar = "78vh";
             widthVar = "80vw";
             toggleProject("Scrabble");
+            toggleDisplayInformation(document.getElementById("projectInformation").style.visibility = "inherit");
+            document.getElementById("btncontainer").style.visibility = "inherit";
             toggleProjectInformation(scrabbleInfo)
             urlToggle("http://danhenrydev.com/iFrames/Scrabble/index.html");
           }}
@@ -228,7 +221,9 @@ export default function Projects() {
             heightVar = "78vh";
             widthVar = "80vw";
             toggleProject("NewJeopardy");
-            toggleProjectInformation(newJeopardyInfo)
+            toggleProjectInformation(newJeopardyInfo);
+            document.getElementById("btncontainer").style.visibility = "inherit";
+            toggleDisplayInformation(document.getElementById("projectInformation").style.visibility = "inherit")
             urlToggle(
               "http://danhenrydev.com/iFrames/jeopardy-board-DanRHenry-1/index.html"
             );
@@ -244,7 +239,9 @@ export default function Projects() {
             heightVar = "78vh";
             widthVar = "80vw";
             toggleProject("TextAdventure");
-            toggleProjectInformation(textAdventureInfo)
+            toggleProjectInformation(textAdventureInfo);
+            document.getElementById("btncontainer").style.visibility = "inherit";
+            toggleDisplayInformation(document.getElementById("projectInformation").style.visibility = "inherit");
             urlToggle(
               "http://danhenrydev.com/iFrames/text-adventure/index.html"
             );
@@ -261,7 +258,9 @@ export default function Projects() {
             // widthVar = "31.5vw"
             widthVar = "80vw";
             toggleProject("ZorkingtonDOM");
-            toggleProjectInformation(zorkingtonInfo)
+            toggleProjectInformation(zorkingtonInfo);
+            document.getElementById("btncontainer").style.visibility = "inherit";
+            toggleDisplayInformation(document.getElementById("projectInformation").style.visibility = "inherit");
             urlToggle(
               "http://danhenrydev.com/iFrames/Zorkington-DOM/index.html"
             );
@@ -270,10 +269,14 @@ export default function Projects() {
           ZorkingtonDOM
         </div>
       </div>
+      
+
       <ProjectDisplay
         pageToDisplay={pageToDisplay}
         url={urlState}
         projectInformation={projectInformationState}
+        toggleDisplayInformation = {toggleDisplayInformation}
+        projectInfo = {projectInfo}
       />
     </div>
   );

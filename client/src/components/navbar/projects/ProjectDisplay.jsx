@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Button } from "reactstrap";
 
 export default function ProjectDisplay(props) {
-console.log("props",props)
+// console.log("props",props)
   let url = props.url;
 
 
@@ -10,6 +10,14 @@ console.log("props",props)
 document.getElementById("projectInformation").style.display = "none";
   } else {
     // document.getElementById("projectInformation").style.display = "inherit";
+  }
+
+  function toggleProjectInfo() {
+    if (props.projectInfo) {
+      // props.projectInfo.style.zIndex = "-1";
+      props.projectInfo.style.visibility = "hidden";
+      document.getElementById("btncontainer").style.visibility = "hidden";
+    }
   }
 
   return (
@@ -21,11 +29,11 @@ document.getElementById("projectInformation").style.display = "none";
           {/* {props.projectInformation.current} */}
           <br />
           <br />
-          <Button onClick={props.infoStateToggle}>Close</Button>
           </div>
           </div>
       
         <iframe id="projectsiframe" title="display" src={url}></iframe>
+          <div id="btncontainer"><Button id="projectCloseButton" onClick={toggleProjectInfo}>Close</Button></div>
       </div>
     </div>
   );
