@@ -136,6 +136,8 @@
 } */
 
 #projectDisplay {
+  /* display: none; */
+  /* background-color: white; */
   z-index: 1;
   position: fixed;
   padding-right: 0;
@@ -149,4 +151,21 @@
 #projectsiframe {
   height: 100%;
   width: 100%;
+}
+
+#projectInformation {
+  height: 100%;
+  width: 100%;
+  opacity: .8;
+  background-color: black;
+  z-index: 1;
+  position: absolute;
+  padding-right: 0;
+  margin: 0;
+}
+
+#projectInformationContent{
+  margin: 8em;
+  font-size: xx-large;
+  text-align: center;
 }
