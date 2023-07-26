@@ -59,12 +59,13 @@
 }
 
 #projectsMenu {
+  /* background-color: black; */
   z-index: 2;
   opacity: 1;
   padding-top: 10em;
   height: 30vh;
   width: 0;
-  transition: height 0.25s;
+  /* transition: height 0.5s; */
 }
 
 .projectsMenuText {
@@ -147,6 +148,76 @@
   height: 0;
   width: 0;
 }
+/* #aboutMeDisplay {
+  z-index: 1;
+  position: fixed;
+  padding-right: 0;
+  margin: 0;
+  top: 15.5vh;
+  right: 5vw;
+  height: 0;
+  width: 0;
+} */
+
+#aboutMeMenu {
+  /* display: flex; */
+  /* flex-direction: column; */
+  /* align-items: center; */
+  position: relative;
+  left: 12vw;
+  background-color: rgb(77, 77, 77);
+  visibility: hidden;
+  position: fixed;
+  top: 15.5vh;
+  height: 0;
+  width: 0;
+  margin-bottom: 1em black solid;
+}
+
+#aboutMeDisplay {
+  /* display: flex;
+  position: relative; */
+  display: inline-block;
+  top: 10rem;
+  cursor: auto;
+  align-items: center;
+  margin-left: 12rem;
+  margin-top: 12rem;
+  font-size: xx-large;
+}
+
+#aboutMeContent {
+  position: absolute;
+  padding: 0;
+  margin: 0;
+  left: 5vw;
+  font-size: clamp(13px,3vw,28px);
+  max-width: 45%;
+  /* width: 50%; */
+  /* background-color: blue; */
+}
+
+.bioContent {
+  font-size: clamp(12px,2.5vw,23px);
+  width: 40vw;
+  height: 40em;
+  margin-left: 3em;
+  display: block;
+}
+#headshotcontainer {
+  display: inline;
+}
+
+#headshotImg {
+  position: absolute;
+  border: 2px solid black;
+  border-radius: .1em;
+  right: 5vw;
+  width: 30vh;
+  max-width: 32vw;
+  max-width: 50%;
+  user-select: none;
+}
 
 #projectsiframe {
   height: 100%;
@@ -162,7 +233,6 @@
   position: absolute;
   padding-right: 0;
   margin: 0;
-  /* overflow-y: scroll; */
 }
 
 #btncontainer {
