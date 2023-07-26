@@ -15,53 +15,41 @@ export default function Projects() {
   const [fullStackMenuStatus, fullStackMenuStatusToggle] = useState(false);
   const [learningFavoritesMenuStatus, learningFavoritesMenuStatusToggle] =
     useState(false);
-  const [displayInformation, toggleDisplayInformation] = useState()
   // Opens the project display panel
   const toggleDisplay = () => {
     const projectDisplay = document.getElementById("projectDisplay");
-    if ((projectDisplay.style.width = "0")) {
-      projectDisplay.style.height = heightVar;
-      projectDisplay.style.width = widthVar;
-    } else {
-      projectDisplay.style.width = "0";
-      projectState.style.height = "0";
-    }
+    projectDisplay.style.height = heightVar;
+    projectDisplay.style.width = widthVar;
+    document.getElementById("projectCloseButton").style.visibility = "visible";
   };
 
   //   Use Effect to select the correct project to display
   useEffect(() => {
     if (projectState === "ZorkingtonDOM") {
-      //   console.log("ZorkingtonDOM");
       url.current = urlState;
       pageToDisplay.current = projectState;
       projectInformation.current = zorkingtonInfo;
     } else if (projectState === "TextAdventure") {
-      //   console.log("TextAdventure");
       url.current = urlState;
       pageToDisplay.current = projectState;
       projectInformation.current = textAdventureInfo;
     } else if (projectState === "Scrabble") {
-      //   console.log("Scrabble");
       url.current = urlState;
       pageToDisplay.current = projectState;
       projectInformation.current = scrabbleInfo;
     } else if (projectState === "APIProject") {
-      //   console.log("API Project");
       url.current = urlState;
       pageToDisplay.current = projectState;
       projectInformation.current = apiProjectInfo;
     } else if (projectState === "NewJeopardy") {
-      //   console.log("NewJeopardy");
       url.current = urlState;
       pageToDisplay.current = projectState;
       projectInformation.current = newJeopardyInfo;
     } else if (projectState === "Jeopardy") {
-      //   console.log("Jeopardy");
       url.current = urlState;
       pageToDisplay.current = projectState;
       projectInformation.current = jeopardyInfo;
     } else if (projectState === "Capstone") {
-      //   console.log("Capstone");
       url.current = urlState;
       pageToDisplay.current = projectState;
       projectInformation.current = capstoneInfo;
@@ -89,13 +77,11 @@ export default function Projects() {
   //   Use effect to toggle the Learning Favorites menu sub items
   useEffect(() => {
     if (learningFavoritesMenuStatus === false) {
-      //   document.getElementsByClassName("personalLearningFavorites").style.display = "none";
       document.getElementById("scrabble").style.display = "none";
       document.getElementById("newjeopardy").style.display = "none";
       document.getElementById("textadventure").style.display = "none";
       document.getElementById("zorkingtondom").style.display = "none";
     } else {
-      //   document.getElementsByClassName("personalLearningFavorites").style.display = "inherit";
       document.getElementById("scrabble").style.display = "inherit";
       document.getElementById("newjeopardy").style.display = "inherit";
       document.getElementById("textadventure").style.display = "inherit";
@@ -107,13 +93,17 @@ export default function Projects() {
   const toggleProject = (name) => {
     projectToggle(name);
     toggleDisplay();
+    if (projectInfo) {
+      projectInfo.style.visibility = "visible";
+      document.getElementById("btncontainer").style.visibility = "visible";
+    }
     document.getElementById("projectInformation").style.display = "inherit";
   };
 
-// //! Toggle the project description
+  // //! Toggle the project description
   const toggleProjectInformation = (info) => {
     projectInformationToggle(info);
-  }
+  };
 
   function toggleFullStackMenuContent() {
     fullStackMenuStatusToggle(!fullStackMenuStatus);
@@ -157,8 +147,8 @@ export default function Projects() {
             widthVar = "80vw";
             toggleProject("APIProject");
             toggleProjectInformation(apiProjectInfo);
-            toggleDisplayInformation(document.getElementById("projectInformation").style.visibility = "inherit");
-            document.getElementById("btncontainer").style.visibility = "inherit";
+            document.getElementById("btncontainer").style.visibility =
+              "inherit";
             urlToggle(
               "http://danhenrydev.com/iFrames/API%20Project/index.html"
             );
@@ -184,8 +174,8 @@ export default function Projects() {
             widthVar = "80vw";
             toggleProject("Capstone");
             toggleProjectInformation(capstoneInfo);
-            toggleDisplayInformation(document.getElementById("projectInformation").style.visibility = "inherit");
-            document.getElementById("btncontainer").style.visibility = "inherit";
+            document.getElementById("btncontainer").style.visibility =
+              "inherit";
             urlToggle("https://www.youtube.com/embed/QGYtbh6PuIc");
           }}
         >
@@ -206,9 +196,10 @@ export default function Projects() {
             heightVar = "78vh";
             widthVar = "80vw";
             toggleProject("Scrabble");
-            toggleDisplayInformation(document.getElementById("projectInformation").style.visibility = "inherit");
-            document.getElementById("btncontainer").style.visibility = "inherit";
-            toggleProjectInformation(scrabbleInfo)
+            // toggleDisplayInformation(document.getElementById("projectInformation").style.visibility = "inherit");
+            document.getElementById("btncontainer").style.visibility =
+              "inherit";
+            toggleProjectInformation(scrabbleInfo);
             urlToggle("http://danhenrydev.com/iFrames/Scrabble/index.html");
           }}
         >
@@ -222,8 +213,8 @@ export default function Projects() {
             widthVar = "80vw";
             toggleProject("NewJeopardy");
             toggleProjectInformation(newJeopardyInfo);
-            document.getElementById("btncontainer").style.visibility = "inherit";
-            toggleDisplayInformation(document.getElementById("projectInformation").style.visibility = "inherit")
+            document.getElementById("btncontainer").style.visibility =
+              "inherit";
             urlToggle(
               "http://danhenrydev.com/iFrames/jeopardy-board-DanRHenry-1/index.html"
             );
@@ -240,8 +231,8 @@ export default function Projects() {
             widthVar = "80vw";
             toggleProject("TextAdventure");
             toggleProjectInformation(textAdventureInfo);
-            document.getElementById("btncontainer").style.visibility = "inherit";
-            toggleDisplayInformation(document.getElementById("projectInformation").style.visibility = "inherit");
+            document.getElementById("btncontainer").style.visibility =
+              "inherit";
             urlToggle(
               "http://danhenrydev.com/iFrames/text-adventure/index.html"
             );
@@ -255,12 +246,11 @@ export default function Projects() {
           id="zorkingtondom"
           onClick={() => {
             heightVar = "78vh";
-            // widthVar = "31.5vw"
             widthVar = "80vw";
             toggleProject("ZorkingtonDOM");
             toggleProjectInformation(zorkingtonInfo);
-            document.getElementById("btncontainer").style.visibility = "inherit";
-            toggleDisplayInformation(document.getElementById("projectInformation").style.visibility = "inherit");
+            document.getElementById("btncontainer").style.visibility =
+              "inherit";
             urlToggle(
               "http://danhenrydev.com/iFrames/Zorkington-DOM/index.html"
             );
@@ -269,14 +259,11 @@ export default function Projects() {
           ZorkingtonDOM
         </div>
       </div>
-      
-
       <ProjectDisplay
         pageToDisplay={pageToDisplay}
         url={urlState}
         projectInformation={projectInformationState}
-        toggleDisplayInformation = {toggleDisplayInformation}
-        projectInfo = {projectInfo}
+        projectInfo={projectInfo}
       />
     </div>
   );
