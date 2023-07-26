@@ -33,6 +33,7 @@
   display: flex;
   /* background-color: red; */
   height: 2em;
+  user-select: none;
 }
 
 .col {
@@ -186,6 +187,15 @@
   font-size: xx-large;
 }
 
+.bioHeader:hover {
+  cursor: pointer;
+  color: rgb(200, 200, 200);
+}
+
+.bioHeader:active {
+  color: rgb(200, 200, 200);
+}
+
 #aboutMeContent {
   position: absolute;
   padding: 0;
@@ -215,7 +225,7 @@
   right: 5vw;
   width: 30vh;
   max-width: 32vw;
-  max-width: 50%;
+  max-width: 45%;
   user-select: none;
 }
 
