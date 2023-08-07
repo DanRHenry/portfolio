@@ -249,8 +249,6 @@
   left: 0;
   visibility: hidden;
   padding: 0;
-  padding-left: 2em;
-  padding-right: auto;
   padding-top: 2em;
   margin: 0;
   font-size: clamp(13px, 3vw, 28px);
@@ -261,6 +259,26 @@
 .column {
   display: flex;
   align-items: center;
+  width: 100%;
+}
+.contactDescriptors {
+  left: 0;
+  padding-left: 2em;
+  width: 7em;
+  font-size: clamp(13px, 5vw, 19px);
+  padding-top: 0;
+  margin: 0;
+}
+
+.textFields {
+  padding-left: 2em;
+}
+#contactGreeting {
+  position: relative;
+  font-size: clamp(13px, 5vw, 28px);
+  text-align: center;
+  left: -2%;
+  height: 2em;
 }
 
 #name,
@@ -274,10 +292,8 @@
   min-width: 13em;
 }
 
-#contactGreeting {
-  font-size: clamp(13px, 5vw, 28px);
-  text-align: center;
-  height: 2em;
+#email {
+  height: 2.5rem;
 }
 
 #subject {
@@ -290,7 +306,7 @@
 #message {
   position: relative;
   max-width: 80%;
-  height: 11em;
+  height: 7rem;
   padding-right: 5em;
 }
 
