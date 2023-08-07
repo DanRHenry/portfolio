@@ -23,6 +23,7 @@ export default function Projects() {
     document.getElementById("projectCloseButton").style.visibility = "visible";
   };
 
+  let projectInfo = document.getElementById("projectInformation");
   //   Use Effect to select the correct project to display
   useEffect(() => {
     if (projectState === "ZorkingtonDOM") {
@@ -130,7 +131,6 @@ export default function Projects() {
   const jeopardyInfo = ``;
   const capstoneInfo = `When my dev team met with our client, she requested a family budgeting app that could help manage shared household living expenses. It makes use of the MERN stack to provide a clean, interface with cross functionality between budget items, budget categories, transactions, and account balances for personal and household living expenses.`;
 
-  let projectInfo = document.getElementById("projectInformation");
   return (
     <div id="projectsMenu">
       <div id="projectsMenuItems">
