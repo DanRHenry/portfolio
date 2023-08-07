@@ -3,21 +3,21 @@ import { Row, Col } from "reactstrap";
 export default function Navigation(props) {
 
   function projectsBtnClick () {
-    props.aboutMeMenuToggle(false);
     props.projectsMenuToggle(!props.projectsMenuState);
+    props.aboutMeMenuToggle(false);
     props.contactMenuToggle(false)
   }
 
   function aboutMeBtnClick () {
-    props.aboutMeMenuToggle(!props.aboutMeMenuState)
     props.projectsMenuToggle(false)
+    props.aboutMeMenuToggle(!props.aboutMeMenuState)
     props.contactMenuToggle(false)
   }
 
   function contactBtnClick () {
-    props.contactMenuToggle(!props.contactMenuState)
-    props.aboutMeMenuToggle(false)
     props.projectsMenuToggle(false)
+    props.aboutMeMenuToggle(false)
+    props.contactMenuToggle(!props.contactMenuState)
   }
   return (
     // <Container>
