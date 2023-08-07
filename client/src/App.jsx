@@ -11,8 +11,6 @@ function App() {
   const [aboutMeMenuState, toggleAboutMeMenu] = useState(false);
   const [contactMenuState, toggleContactMenu] = useState(false);
 
-  //Todo Add functions to toggle the about me and contact menus
-
   const aboutMeMenuToggle = (state) => {
     toggleAboutMeMenu(state);
     const aboutMeDisplay = document.getElementById("aboutMeDisplay");
@@ -24,21 +22,6 @@ function App() {
 
   const aboutMeMenu = document.getElementById("aboutMeMenu");
   
-  if (aboutMeMenuState === true) {
-    aboutMeMenu.style.height = "83vh";
-    aboutMeMenu.style.width = "80vw";
-    setTimeout(() => {
-      aboutMeMenu.style.visibility = "visible";
-    }, 50);
-  }
-
-  if (aboutMeMenuState === false) {
-    if (aboutMeMenu) {
-      aboutMeMenu.style.height = "0";
-      aboutMeMenu.style.width = "0";
-      aboutMeMenu.style.visibility = "hidden";
-    }
-  }
   const projectsMenuToggle = (state) => {
     toggleProjectsMenu(state);
     const projectDisplay = document.getElementById("projectDisplay");
@@ -46,6 +29,7 @@ function App() {
       projectDisplay.style.width = "0";
       projectDisplay.style.height = "0";
       document.getElementById("projectCloseButton").style.visibility = "hidden";
+      document.getElementById("projectInformation").style.visibility = "hidden"
     }
   };
 
@@ -62,7 +46,8 @@ function App() {
 
   const projectsMenu = document.getElementById("projectsMenu");
   const projectMenuItems = document.getElementById("projectsMenuItems");
-  const contactContent = document.getElementById("contactContent")
+  const contactContent = document.getElementById("contactContent");
+
   if (projectsMenuState === true) {
     projectsMenu.style.height = "100vh";
     projectsMenu.style.width = "28.5em";
@@ -79,13 +64,33 @@ function App() {
     }
   }
 
+  if (aboutMeMenuState === true) {
+    aboutMeMenu.style.height = "83vh";
+    aboutMeMenu.style.width = "80vw";
+    setTimeout(() => {
+      aboutMeMenu.style.visibility = "visible";
+    }, 50);
+  }
+
+  if (aboutMeMenuState === false) {
+    if (aboutMeMenu) {
+      aboutMeMenu.style.height = "0";
+      aboutMeMenu.style.width = "0";
+      aboutMeMenu.style.visibility = "hidden";
+    }
+  }
 
   if (contactMenuState === true) {
+    if (contactDisplay) {
     contactDisplay.style.height = "83vh";
     contactDisplay.style.width = "80vw";
+    contactDisplay.style.minWidth = "16em";
     setTimeout(() => {
       contactContent.style.visibility = "visible";
+      contactContent.style.width = "100%";
+      contactContent.style.height = "100%";
     }, 50);
+  }
   }
 
   if (contactMenuState === false) {
@@ -100,7 +105,6 @@ function App() {
     contactContent.style.visibility = "hidden";
     }
   }
-
 
   return (
     <div className="App">
