@@ -43,11 +43,6 @@ export default function ContactContent() {
 
     e.preventDefault();
     setActive(!active);
-    console.log("name:", name.current.value);
-    console.log("organization:", organization.current.value);
-    console.log("Address:", address.current.value);
-    console.log("Subject:", subject.current.value);
-    console.log("Message:", message.current.value);
     sendEmail();
     address.current.value = "";
     subject.current.value = "";
@@ -65,14 +60,12 @@ export default function ContactContent() {
         <div>
           <div id="contactGreeting">Send Me a Message</div>
           <Form onSubmit={handleSubmit}>
-            {/* Email Input */}
-
             {/* First Name */}
             <FormGroup className="column" row>
-              <Label for="Name" sm={2}>
+              <Label className="contactDescriptors" for="Name" sm={2}>
                 Name
               </Label>
-              <Col sm={10}>
+              <Col className="textFields" sm={10}>
                 <Input
                   id="name"
                   name="text"
@@ -83,12 +76,12 @@ export default function ContactContent() {
                 />
               </Col>
             </FormGroup>
-            {/* Last Name */}
+            {/* Organization */}
             <FormGroup className="column" row>
-              <Label for="Organization" sm={2}>
+              <Label className="contactDescriptors" for="Organization" sm={2}>
                 Organization
               </Label>
-              <Col sm={10}>
+              <Col className="textFields" sm={10}>
                 <Input
                   id="organization"
                   name="text"
@@ -99,12 +92,11 @@ export default function ContactContent() {
               </Col>
             </FormGroup>
             {/* Email Address */}
-
             <FormGroup className="column" row>
-              <Label for="email" sm={2}>
+              <Label className="contactDescriptors" for="email" sm={2}>
                 Email Address
               </Label>
-              <Col sm={10}>
+              <Col className="textFields" sm={10}>
                 <Input
                   id="email"
                   name="email"
@@ -118,10 +110,10 @@ export default function ContactContent() {
 
             {/* Subject */}
             <FormGroup className="column" row>
-              <Label for="subject" sm={2}>
+              <Label className="contactDescriptors" for="subject" sm={2}>
                 Subject
               </Label>
-              <Col sm={10}>
+              <Col className="textFields" sm={10}>
                 <Input
                   id="subject"
                   name="text"
@@ -135,10 +127,10 @@ export default function ContactContent() {
 
             {/* Message Body */}
             <FormGroup className="column" row>
-              <Label for="message" sm={2}>
+              <Label className="contactDescriptors" for="message" sm={2}>
                 Message
               </Label>
-              <Col sm={10}>
+              <Col className="textFields" sm={10}>
                 <Input
                   id="message"
                   name="text"
