@@ -11,7 +11,7 @@ export default function ProjectDisplay(props) {
   }
 
   return (
-    <div>
+    <div id="projectContainer">
       <div id="projectDisplay">
         <div id="projectInformation">
           <div id="projectInformationContent">
