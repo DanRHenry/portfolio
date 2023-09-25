@@ -220,7 +220,7 @@ export default function Projects() {
             );
           }}
         >
-          New Jeopardy
+          Jeopardy
         </div>
         {/*------------------------------------------- Text Adventure -------------------------------------------*/}
         <div
