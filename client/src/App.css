@@ -1,19 +1,24 @@
 /* background-image: url("./media/pankaj-patel-u2Ru4QBXA5Q-unsplash.jpg"); */
 * {
   text-shadow: 2px 2px 2px black;
+  max-width: 100vw;
+  max-height: 100vh;
 }
 .CodingBackgroundImg {
-  height: 85vh;
+  /* height: 100%; */
   width: 100vw;
   position: fixed;
-  top: 15vh;
-  right: 0;
+  /* top: 15vh; */
+  top: 0;
+  left: 0;
+  /* right: 0; */
   opacity: 0.35;
   z-index: -2;
 }
 
 .NavigationMenu {
-  position: fixed;
+  position: absolute;
+  /* visibility: hidden; */
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
   margin: 0;
   width: 100vw;
@@ -49,14 +54,40 @@
   color: rgb(102, 102, 102);
 }
 
+#projectContainer {
+  position: fixed;
+  top: 2em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* position: absolute; */
+  width: 100vw;
+  /* background-color: red; */
+}
+
+#projectDisplay {
+  z-index: 1;
+  position: absolute;
+  /* padding-right: 0; */
+  margin: 0;
+  top: 15.5vh;
+  /* margin-left: 50%; */
+  /* right: 5vw; */
+  height: 0;
+  width: 0;
+}
+
 #projectsMenuItems {
   visibility: hidden;
+  /* overflow-y: scroll; */
 }
 
 #projectsMenu {
+  position: relative;
+  top: 10em;
   z-index: 2;
   opacity: 1;
-  padding-top: 10em;
+  /* padding-top: 10em; */
   height: 30vh;
   width: 0;
 }
@@ -64,10 +95,11 @@
 .projectsMenuText {
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
   /* display: none; */
-  font-size: x-large;
+  font-size: clamp(15px, 2.5vw, 23px);
   display: flex;
   flex-direction: column;
   padding-left: 4rem;
+  padding-left: clamp(10px, 2rem, 20rem);
   padding-top: 1em;
   width: 20em;
   cursor: pointer;
@@ -79,8 +111,9 @@
 
 .projectsMenuSecondaryText {
   cursor: pointer;
-  font-size: large;
-  padding-left: 6rem;
+  /* font-size: large; */
+  font-size: clamp(15px, 1.5vw, 18px);
+  padding-left: clamp(10px, 3rem, 20rem);
   width: 25em;
 }
 
@@ -115,36 +148,21 @@
   display: none;
 }
 
-#projectDisplay {
-  z-index: 1;
-  position: fixed;
-  padding-right: 0;
-  margin: 0;
-  top: 15.5vh;
-  right: 5vw;
-  height: 0;
-  width: 0;
-}
-
 #aboutMeMenu {
-  position: relative;
+  position: absolute;
+  top: 10em;
   left: 12vw;
   background-color: rgb(77, 77, 77);
   visibility: hidden;
-  position: fixed;
-  top: 15.5vh;
   height: 0;
   width: 0;
   margin-bottom: 1em black solid;
 }
 
 #aboutMeDisplay {
-  display: inline-block;
+  display: hidden;
   cursor: auto;
-  align-items: center;
-  margin-left: 12rem;
   margin-top: 12rem;
-  font-size: xx-large;
 }
 
 .bioHeader {
@@ -223,6 +241,7 @@
 
 #projectInformationContent {
   display: flex;
+  /* display: none; */
   flex-direction: column;
   align-items: center;
   opacity: 1;
@@ -234,26 +253,21 @@
 }
 
 #contactDisplay {
-  position: relative;
+  position: absolute;
+  top: 10em;
   left: 12vw;
   background-color: rgb(77, 77, 77);
-  position: fixed;
-  top: 15.5vh;
+  /* visibility: hidden; */
   height: 0;
   width: 0;
   margin-bottom: 1em black solid;
 }
 
 #contactContent {
-  position: absolute;
-  left: 0;
+  display: none;
   visibility: hidden;
-  padding: 0;
   padding-top: 2em;
-  margin: 0;
   font-size: clamp(13px, 3vw, 28px);
-  width: 100%;
-  min-width: 13em;
 }
 
 .column {
@@ -265,13 +279,15 @@
   left: 0;
   padding-left: 2em;
   width: 7em;
-  font-size: clamp(13px, 5vw, 19px);
+  font-size: clamp(13px, 2.5vw, 19px);
+  /* font-size: clamp(15px, 2.5vw, 23px); */
   padding-top: 0;
   margin: 0;
 }
 
 .textFields {
   padding-left: 2em;
+  font-size: clamp(13px, 2.5vw, 19px);
 }
 #contactGreeting {
   position: relative;
@@ -290,6 +306,8 @@
   height: 2rem;
   max-width: 35%;
   min-width: 13em;
+  font-size: clamp(13px, 2.5vw, 19px);
+
 }
 
 #email {
