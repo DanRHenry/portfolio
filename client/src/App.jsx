@@ -65,7 +65,7 @@ function App() {
   }
 
   if (aboutMeMenuState === true) {
-    aboutMeMenu.style.height = "83vh";
+    aboutMeMenu.style.height = "80vh";
     aboutMeMenu.style.width = "80vw";
     setTimeout(() => {
       aboutMeMenu.style.visibility = "visible";
@@ -82,7 +82,8 @@ function App() {
 
   if (contactMenuState === true) {
     if (contactDisplay) {
-    contactDisplay.style.height = "83vh";
+    // contactDisplay.style.height = "100%";
+    contactDisplay.style.height = "80vh";
     contactDisplay.style.width = "80vw";
     contactDisplay.style.minWidth = "16em";
     setTimeout(() => {
