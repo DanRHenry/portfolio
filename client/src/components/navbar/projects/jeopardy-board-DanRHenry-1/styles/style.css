@@ -280,18 +280,20 @@ aside div{
 }
 
 #textDisplay {
-    display: none;
+    display: hidden;
+    overflow: hidden;
     position: fixed;
     padding-right: auto;
     padding-left: auto;
     color: white;
+    color: rgb(92, 107, 160);;
     background-color: rgb(92, 107, 160);
-    border: .5em solid black;
-    border-radius: 2em;
-    height: 11em;
-    top: 7em;
-    left: 20%;
-    right: 20%;
+    height: 0em;
+    width: 0em;
+    transition: height .25s, width .25s, left .25s, top .25s;
+    top: 12em;
+    left: 50%;
+    /* right: 20%; */
 }
 
 #textDispCont {
