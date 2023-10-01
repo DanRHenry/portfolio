@@ -35,7 +35,6 @@ const questionArray = [];
 let textDisplay = document.getElementById("textDisplay");
 let textDispCont = document.getElementById("textDispCont");
 let textDisplayBtn = document.getElementById("textDisplayBtn");
-
 let answer200 = document.createElement("div");
 let answer400 = document.createElement("div");
 let answer600 = document.createElement("div");
@@ -57,40 +56,59 @@ let round;
 let randomResultArray = [];
 let roundOneArray = [];
 let roundTwoArray = [];
-let FinalJeopardyCategory = [];
+let finalJeopardyCategory = [];
 
-// for (let i = 0; i < 60; i++) {
-//   if ((i * m) / 6 === 1) {
-//     roundOneArray.push(placeholderQuestions[i])
-//     console.log("placeholderquestions_i:", placeholderQuestions[i])
-//   }
-//   if (roundOneArray.length === 30) {
-//     i = 0;
-//     if ((i * m) / 12 === 1) {
-//       roundTwoArray.push(placeholderQuestions[i])
-//     }
-//   }
-// else if (m > 5) {
-//   roundTwoArray.push(placeholderQuestions[i])
-// }
-// if (roundOne.length < 9) {
-//   columnOne.push(placeholderQuestions[i])
-// } else if (columnTwo.length < 5) {
-//   columnTwo.push(placeholderQuestions[i])
-// } else if (columnThree.length < 5) {
-//   columnThree.push(placeholderQuestions[i])
-// } else if (columnFour.length < 5) {
-//   columnFour.push(placeholderQuestions[i])
-// } else if (columnFive.length < 5) {
-//   columnFive.push(placeholderQuestions[i])
-// } else if (columnSix.length < 5) {
-//   columnSix.push(placeholderQuestions[i])
-// }
-// }
-FinalJeopardyCategory.push(placeholderQuestions[60]);
+// console.log("placeholderQuestions", placeholderQuestions);
 
-console.log("roundOneArray", roundOneArray);
-console.log("roundTwoArray", roundTwoArray);
+// Fill Round One, Two, and final Arrays
+for (let m = 0; roundTwoArray.length < 30; m++) {
+  for (let questionPosition = m; questionPosition < 60; questionPosition++) {
+    for (let catIndex = 0; catIndex < 6; catIndex++) {
+      if (roundTwoArray.length < 30) {
+        roundOneArray.push(placeholderQuestions[questionPosition]);
+        questionPosition += 5;
+        roundTwoArray.push(placeholderQuestions[questionPosition]);
+        questionPosition += 5;
+      }
+    }
+  }
+}
+finalJeopardyCategory.push(placeholderQuestions[60]);
+
+// Swt round value
+if (roundName[0].innerText == "Jeopardy!") {
+  round = "title";
+  titleScreen();
+} else if (roundName[0].innerText == "Round One") {
+  round = "round1";
+  roundOne();
+} else if (roundName[0].innerText == "Double Jeopardy") {
+  round = "round2";
+  roundOne();
+} else if (roundName[0].innerText == "Final Jeopardy") {
+  round = "final";
+}
+
+// Pull category names from round arrays
+if (round === "round1") {
+  document.getElementById("catr1-1").innerText = roundOneArray[0].category;
+  document.getElementById("catr1-2").innerText = roundOneArray[1].category;
+  document.getElementById("catr1-3").innerText = roundOneArray[2].category;
+  document.getElementById("catr1-4").innerText = roundOneArray[3].category;
+  document.getElementById("catr1-5").innerText = roundOneArray[4].category;
+  document.getElementById("catr1-6").innerText = roundOneArray[5].category;
+}
+if (round === "round2") {
+  document.getElementById("catr2-1").innerText = roundTwoArray[0].category;
+  document.getElementById("catr2-2").innerText = roundTwoArray[1].category;
+  document.getElementById("catr2-3").innerText = roundTwoArray[2].category;
+  document.getElementById("catr2-4").innerText = roundTwoArray[3].category;
+  document.getElementById("catr2-5").innerText = roundTwoArray[4].category;
+  document.getElementById("catr2-6").innerText = roundTwoArray[5].category;
+}
+
+if (round === "final") {
+}
 //---------------------------------------------- Event Listeners ----------------------------------------------
 
 //! Sloppy fix applied and commented back in (index.html)
@@ -164,7 +182,8 @@ let fetchAnswers = async () => {
 
 // Get Player Names on the Title Screen and Set to Local Storage
 
-//!--------------------------------------------- Title Screen Function --------------------------------------------
+//!--------------------------------------------- Title Screen Function ------------------------------------------
+
 async function titleScreen() {
   playBtn.addEventListener("click", saveName);
   function saveName() {
@@ -214,14 +233,14 @@ function getNamesAndScoreboardInfo() {
       localStorage.playerOneName[localStorage.playerOneName.length - 1] == "s"
     ) {
       playerOneScoreName.innerText = `${localStorage.playerOneName}' Score:`;
-      playerOnesName = `${localStorage.playerOneName}'`;
+      playerOnesName = `${localStorage.playerOneName}`;
     } else {
       playerOneScoreName.innerText = `${localStorage.playerOneName}'s Score:`;
-      playerOnesName = `${localStorage.playerOneName}'s`;
+      playerOnesName = `${localStorage.playerOneName}`;
     }
   } else {
     playerOneScoreName.innerText = "Player 1's Score";
-    playerOnesName = "Player 1's";
+    playerOnesName = "Player 1";
   }
 
   if (localStorage.playerTwoName != "") {
@@ -229,14 +248,14 @@ function getNamesAndScoreboardInfo() {
       localStorage.playerTwoName[localStorage.playerTwoName.length - 1] == "s"
     ) {
       playerTwoScoreName.innerText = `${localStorage.playerTwoName}' Score:`;
-      playerTwosName = `${localStorage.playerTwoName}'`;
+      playerTwosName = `${localStorage.playerTwoName}`;
     } else {
       playerTwoScoreName.innerText = `${localStorage.playerTwoName}'s Score:`;
-      playerTwosName = `${localStorage.playerTwoName}'s`;
+      playerTwosName = `${localStorage.playerTwoName}`;
     }
   } else {
     playerTwoScoreName.innerText = "Player 2's Score";
-    playerTwosName = "Player 2's";
+    playerTwosName = "Player 2";
   }
 
   p1Score.textContent = player1Score;
@@ -246,15 +265,25 @@ function getNamesAndScoreboardInfo() {
 
 // Notify that it is player 1's turn to choose
 function displayPlayerTurnMessage() {
-  playerTurn.innerText = `${activePlayer} Turn. Pick an Answer!`;
+  if (activePlayer[activePlayer.length - 1] === "s") {
+    playerTurn.innerText = `${activePlayer}' turn. Pick an Answer!`;
+  } else {
+    playerTurn.innerText = `${activePlayer}'s turn. Pick an Answer!`;
+  }
 }
 
 // Switch Players
 function switchPlayer() {
-  if (activePlayer == playerOnesName) {
+  if (passed === true) {
+
+  } else if (activePlayer == playerOnesName) {
     activePlayer = playerTwosName;
+    console.log("Player's turn:",activePlayer)
+    win = null;
   } else if (activePlayer == playerTwosName) {
     activePlayer = playerOnesName;
+    console.log("Player's turn:",activePlayer)
+    win = null;
   }
   displayPlayerTurnMessage();
 }
@@ -296,6 +325,80 @@ function closeTextDisplayWindow() {
   textDisplay.style.border = "0";
 }
 
+function submitGuess(i) {
+  playerGuess = inputFieldForAnswer.value;
+  if (round === "round1") {
+    if (roundOneArray[i].answer.toLowerCase() === playerGuess.toLowerCase()) {
+      inputFieldForAnswer.value = "";
+      win = true;
+      console.log("win:",win, "roundOneArrayAnswer:",roundOneArray[i].answer,"playerGuess:", playerGuess)
+      playerGuess = "";
+    } else {
+      win = false;
+      console.log("win:",win, "roundOneArrayAnswer:",roundOneArray[i].answer,"playerGuess:", playerGuess)
+      playerGuess = "";
+      switchPlayer();
+    }
+  }
+  if (round === "round2") {
+    if (roundTwoArray[i].answer.toLowerCase() === playerGuess.toLowerCase()) {
+      inputFieldForAnswer.value = "";
+      win = true;
+      console.log("win:",win, "roundTwoArrayAnswer:",roundTwoArray[i].answer,"playerGuess:", playerGuess)
+      playerGuess = "";
+    } else {
+      win = false;
+      console.log("win:",win, "roundTwoArrayAnswer:",roundTwoArray[i].answer,"playerGuess:", playerGuess)
+      playerGuess = "";
+      switchPlayer();
+    }
+  }
+  if (round === "final") {
+    if (finalJeopardyCategory[i].answer == playerGuess) {
+      win = true;
+    } else {
+      win = false;
+      switchPlayer();
+    }
+  }
+
+  if (win === true) {
+    textDispCont.textContent = `Congratulations ${activePlayer}, you answered correctly!`;
+    textDisplayBtn.style.display = "inline-block";
+    setActivePlayerScore();
+    activePlayerScore += 200; //! Change this to reflect the actual amount
+    p1Score.textContent = player1Score;
+    p2Score.textContent = player2Score;
+    deactivateButtons();
+  } else if (win === false) {
+    if (passed == false || passed == undefined) {
+      textDispCont.textContent = `Wrong answer. ${activePlayer}, would you like to play?`;
+      setActivePlayerScore();
+      activePlayerScore -= 200;
+      p1Score.textContent = player1Score;
+      p2Score.textContent = player2Score;
+      passed = true;
+      switchPlayer();
+      setTimeout(() => {
+        textDispCont.textContent = placeholderQuestions[i].question;
+      }, 2000);
+    } else {
+      switchPlayer();
+      setActivePlayerScore();
+      textDispCont.textContent = `I'm sorry, ${activePlayer} that's the wrong answer.`;
+      activePlayerScore -= 200;
+      p1Score.textContent = player1Score;
+      p2Score.textContent = player2Score;
+      setTimeout(() => {
+        // textDisplay.style.display = "none";
+        closeTextDisplayWindow();
+        deactivateButtons();
+        hideCloseBtn();
+      }, 2000);
+    }
+  }
+}
+
 //! Round One Function
 async function roundOne() {
   getNamesAndScoreboardInfo();
@@ -307,18 +410,16 @@ async function roundOne() {
   //!------------------------------------- Fill in the Answer board --------------------------------------
 
   // First Row
-  if (round === "round1") {
-    for (let i = 0; i < 6; i++) {
-    answer200.textContent = `$200`;
-    answer200.className = `answer`;
+  for (let i = 0; i < 6; i++) {
+    // answer200.textContent = `$200`;
     if (round === "round1") {
       answer200.textContent = `$200`;
     } else if (round === "round2") {
       answer200.textContent = `$400`;
     }
+    answer200.className = `answer`;
     answerBoard.appendChild(answer200.cloneNode(true));
   }
-}
   // Second Row
   for (let i = 0; i < 6; i++) {
     answer400.className = `answer`;
@@ -365,97 +466,39 @@ async function roundOne() {
   let answerSquares = document.getElementsByClassName("answer");
   for (let i = 0; i < answerSquares.length; i++) {
     answerSquares[i].addEventListener("click", function clicked() {
-      console.log("question", placeholderQuestions[i].question);
-      console.log("answer", placeholderQuestions[i].answer);
-      console.log("category", placeholderQuestions[i].category);
+      if (round === "round1") {
+        console.log("question", roundOneArray[i].question);
+        console.log("answer", roundOneArray[i].answer);
+        console.log("category", roundOneArray[i].category);
+      } else if (round === "round2") {
+        console.log("question", roundTwoArray[i].question);
+        console.log("answer", roundTwoArray[i].answer);
+        console.log("category", roundTwoArray[i].category);
+      }
+
       let box = answerSquares[i];
       activateButtons();
       box.textContent = "";
       openTextDisplayWindow();
+
       //! This fills in the question (answer) when the box is clicked.
       if (round === "round1") {
-        textDispCont.textContent = placeholderQuestions[i].question;
-        console.log("pointsAvailable:", placeholderQuestions[i].score);
+        textDispCont.textContent = roundOneArray[i].question;
+        console.log("pointsAvailable:", roundOneArray[i].score);
       } else if (round === "round2") {
-        textDispCont.textContent = placeholderQuestions[i + 6].question;
-        console.log("pointsAvailable:", placeholderQuestions[i + 6].score);
+        textDispCont.textContent = roundTwoArray[i].question;
+        console.log("pointsAvailable:", roundTwoArray[i].score);
       }
 
-      guessBtn.addEventListener("click", function submitGuess() {
-        playerGuess = inputFieldForAnswer.value;
-        inputFieldForAnswer.value = "";
-        if (round === "round1") {
-          if (placeholderQuestions[i].answer == playerGuess) {
-            win = true;
-          } else {
-            win = false;
-            switchPlayer();
-          }
-        }
-        if (round === "round2") {
-          if (placeholderQuestions[i + 6].answer == playerGuess) {
-            win = true;
-          } else {
-            win = false;
-            switchPlayer();
-          }
-        }
-        if (placeholderQuestions[i].answer == playerGuess) {
-          win = true;
-        } else {
-          win = false;
-          switchPlayer();
-        }
-        if (win === true) {
-          textDispCont.textContent = "Congratulations, you answered correctly!";
-          textDisplayBtn.style.display = "inline-block";
-          setActivePlayerScore();
-          activePlayerScore += 200; //! Change this to reflect the actual amount
-          p1Score.textContent = player1Score;
-          p2Score.textContent = player2Score;
-          deactivateButtons();
-        } else if (win === false) {
-          if (passed == false || passed == undefined) {
-            textDispCont.textContent = `Wrong answer. ${activePlayer}, would you like to play?`;
-            setActivePlayerScore();
-            activePlayerScore -= 200;
-            p1Score.textContent = player1Score;
-            p2Score.textContent = player2Score;
-            passed = true;
-            switchPlayer();
-            setTimeout(() => {
-              textDispCont.textContent = placeholderQuestions[i].question;
-            }, 2000);
-          } else {
-            switchPlayer();
-            setActivePlayerScore();
-            textDispCont.textContent = `I'm sorry, ${activePlayer} that's the wrong answer.`;
-            activePlayerScore -= 200;
-            p1Score.textContent = player1Score;
-            p2Score.textContent = player2Score;
-            setTimeout(() => {
-              // textDisplay.style.display = "none";
-              closeTextDisplayWindow();
-              deactivateButtons();
-              hideCloseBtn();
-            }, 2000);
-          }
-        }
+      //! When clicked, the guess button calls submitGuess
+      guessBtn.addEventListener("click", guess => {
+        submitGuess(i);
       });
+      inputFieldForAnswer.onsubmit = () => {
+        console.log("submitted")
+        submitGuess(i)};
+      
       answerSquares[i].removeEventListener("click", clicked);
     });
   }
-}
-
-if (roundName[0].innerText == "Jeopardy!") {
-  round = "title";
-  titleScreen();
-} else if (roundName[0].innerText == "Round One") {
-  round = "round1";
-  roundOne();
-} else if (roundName[0].innerText == "Double Jeopardy") {
-  round = "round2";
-  roundOne();
-} else if (roundName[0].innerText == "Final Jeopardy") {
-  round = "final";
 }
