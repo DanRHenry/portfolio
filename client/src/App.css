@@ -1,29 +1,26 @@
 /* background-image: url("./media/pankaj-patel-u2Ru4QBXA5Q-unsplash.jpg"); */
 * {
   text-shadow: 2px 2px 2px black;
-  max-width: 100vw;
-  max-height: 100vh;
 }
 .CodingBackgroundImg {
-  /* height: 100%; */
+  position: absolute;
   width: 100vw;
-  position: fixed;
-  /* top: 15vh; */
+  height: 100vh;
   top: 0;
   left: 0;
-  /* right: 0; */
   opacity: 0.35;
   z-index: -2;
 }
 
 .NavigationMenu {
-  position: absolute;
+  /* position: absolute; */
+  position: sticky;
   /* visibility: hidden; */
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
   margin: 0;
   width: 100vw;
   min-width: 22rem;
-  height: 10em;
+  height: fit-content;
   top: 0;
   border-bottom: 1em black solid;
   background-color: rgb(57, 57, 123);
@@ -60,36 +57,47 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* position: absolute; */
   width: 100vw;
-  /* background-color: red; */
+  background-color: red;
 }
 
 #projectDisplay {
   z-index: 1;
   position: absolute;
-  /* padding-right: 0; */
   margin: 0;
   top: 15.5vh;
-  /* margin-left: 50%; */
-  /* right: 5vw; */
   height: 0;
   width: 0;
 }
 
-#projectsMenuItems {
+.closedProjectsMenuItems {
   visibility: hidden;
+  width: fit-content;
   /* overflow-y: scroll; */
 }
 
-#projectsMenu {
+.openProjectsMenuItems {
+  visibility: visible;
+}
+
+.openProjectsMenu {
   position: relative;
-  top: 10em;
+  /* top: 10em; */
   z-index: 2;
   opacity: 1;
-  /* padding-top: 10em; */
-  height: 30vh;
+  /* height: 100vh; */
+  height: fit-content;
+  width: fit-content;
+  visibility: visible;
+  background-color: rgb(77, 77, 77);
+  padding-bottom: 1.5em;
+  border-bottom-right-radius: 1em;
+}
+
+.closedProjectsMenu {
+  height: 0;
   width: 0;
+  visibility: hidden;
 }
 
 .projectsMenuText {
@@ -98,10 +106,11 @@
   font-size: clamp(15px, 2.5vw, 23px);
   display: flex;
   flex-direction: column;
-  padding-left: 4rem;
-  padding-left: clamp(10px, 2rem, 20rem);
+  padding-left: 1em;
+  /* padding-left: clamp(10px, 2rem, 20rem); */
   padding-top: 1em;
-  width: 20em;
+  padding-right: 3em;
+  width: fit-content;
   cursor: pointer;
 }
 
@@ -113,8 +122,9 @@
   cursor: pointer;
   /* font-size: large; */
   font-size: clamp(15px, 1.5vw, 18px);
-  padding-left: clamp(10px, 3rem, 20rem);
-  width: 25em;
+  /* padding-left: clamp(10px, 3rem, 20rem); */
+  padding-left: 2em;
+  width: fit-content;
 }
 
 .projectsMenuSecondaryText:hover {
@@ -148,28 +158,77 @@
   display: none;
 }
 
-#aboutMeMenu {
+.openAboutMeDisplay {
   position: absolute;
-  top: 10em;
-  left: 12vw;
+  display: flex;
+  margin-left: 10%;
   background-color: rgb(77, 77, 77);
+  width: 80vw;
+  /* height: 70%; */
+  min-height: fit-content;
+  position: absolute;
+  border-bottom-left-radius: 1em;
+  border-bottom-right-radius: 1em;
+}
+
+@media (orientation: landscape) {
+  .openAboutMeDisplay, .openContactDisplay {
+  /* height: 70%; */
+  max-height: 70vh;
+  /* height: 70vh; */
+  }
+}
+
+@media (orientation: portrait) {
+  .openAboutMeDisplay {
+    height: fit-content;
+  }
+}
+
+.closedAboutMeDisplay {
   visibility: hidden;
-  height: 0;
+  position: initial;
+  min-height: initial;
   width: 0;
-  margin-bottom: 1em black solid;
+  height: 0;
+  top: 5em;
+  left: 12vw;
+  
 }
 
-#aboutMeDisplay {
-  display: hidden;
-  cursor: auto;
-  margin-top: 12rem;
+.openAboutMeContent {
+  position: relative;
+  /* display: inline-block; */
+  align-items: center;
+  top: 15%;
+  width: 49%;
+  padding: 4%;
+  margin: 0;
+  font-size: clamp(19px, 2vw, 28px);
+  /* overflow: hidden; */
+  /* overflow: scroll; */
+  /* height: fit-content; */
+  /* background-color: rebeccapurple; */
 }
 
-.bioHeader {
+.closedAboutMeContent {
+  visibility: hidden;
+}
+
+#aboutMeHeading {
+  /* position: absolute; */
+  /* margin-top: 110%; */
+  /* top: 30%; */
+  display: inline-block;
+  top: 6em;
+  /* background-color: rebeccapurple; */
+}
+
+/* .bioHeader {
   user-select: none;
   text-shadow: 2px 2px 2px black;
   padding-top: 0.5em;
-}
+} */
 
 .bioHeader:hover {
   cursor: pointer;
@@ -180,35 +239,36 @@
   color: rgb(200, 200, 200);
 }
 
-#aboutMeContent {
-  position: absolute;
-  padding: 0;
-  margin: 0;
-  left: 5vw;
-  font-size: clamp(13px, 3vw, 28px);
-  max-width: 42.5%;
-}
-
 .bioContent {
+  /* position: relative; */
+  overflow: hidden;
   font-size: clamp(12px, 2.5vw, 23px);
-  width: 40vw;
   height: 40em;
-  margin-left: 3em;
+  /* overflow: scroll; */
+  /* margin-left: 3em; */
 }
 
 #headshotcontainer {
-  display: inline;
+  position: relative;
+  top: 10%; 
+  /* display: inline-block; */
+  /* background-color: red; */
+
+  width: 49%;
+  text-align: center;
 }
 
 #headshotImg {
-  position: absolute;
+  position: relative;
+  top: 5vh;
   border: 2px solid black;
   border-radius: 0.1em;
-  right: 5vw;
-  width: 30vh;
-  max-width: 32vw;
-  max-width: 42%;
+  background-color: beige;
+  /* max-height: 50%; */
+  max-width: 90%;
+  max-height: 80%;
   user-select: none;
+  /* margin-left: 10vw; */
 }
 
 #projectsiframe {
@@ -235,7 +295,14 @@
   text-align: center;
 }
 #projectCloseButton {
-  align-items: center;
+  /* align-items: center; */
+  visibility: hidden;
+  padding: .25em;
+}
+
+#fullScreenProjectButton {
+  margin-top: .5em;
+  padding: .25em;
   visibility: hidden;
 }
 
@@ -252,22 +319,35 @@
   text-align: center;
 }
 
-#contactDisplay {
-  position: absolute;
-  top: 10em;
-  left: 12vw;
-  background-color: rgb(77, 77, 77);
-  /* visibility: hidden; */
-  height: 0;
-  width: 0;
-  margin-bottom: 1em black solid;
+.openContactDisplay {
+  /* display: initial; */
+  position: relative;
+  z-index: -1;
+  left: 10vw;
+  height: 80%;
+  width: 80vw;
+  min-width: 16em;
+  min-height: fit-content;
 }
 
-#contactContent {
+.closedContactContent {
   display: none;
-  visibility: hidden;
-  padding-top: 2em;
+  position: relative;
+  top: 0;
+  height: 0;
   font-size: clamp(13px, 3vw, 28px);
+}
+
+.openContactContent {
+  visibility: visible;
+  width: 100%;
+  height: 100%;
+  min-height: fit-content;
+  background-color: rgb(77, 77, 77);
+  border-bottom-right-radius: 1em;
+  border-bottom-left-radius: 1em;
+
+  /* background-color: red; */
 }
 
 .column {
@@ -291,12 +371,17 @@
 }
 #contactGreeting {
   position: relative;
+  top: .5em;
   font-size: clamp(13px, 5vw, 28px);
   text-align: center;
   left: -2%;
   height: 2em;
+  /* margin-top: 1em; */
 }
 
+#name {
+  margin-top: 1em;
+}
 #name,
 #organization,
 #email,
@@ -323,16 +408,17 @@
 
 #message {
   position: relative;
-  max-width: 80%;
+  max-width: 100%;
   height: 7rem;
-  padding-right: 5em;
+  /* padding-right: 5em; */
 }
 
 #submitBtnCnt {
-  padding-top: 2em;
+  padding-top: 1.5em;
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding-bottom: 1.5em;
 }
 
 #sentMessage {
