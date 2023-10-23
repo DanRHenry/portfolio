@@ -21,6 +21,7 @@ export default function Projects() {
     projectDisplay.style.height = heightVar;
     projectDisplay.style.width = widthVar;
     document.getElementById("projectCloseButton").style.visibility = "visible";
+    document.getElementById("fullScreenProjectButton").style.visibility = "visible";
   };
 
   let projectInfo = document.getElementById("projectInformation");
@@ -132,8 +133,8 @@ export default function Projects() {
   const capstoneInfo = `When my dev team met with our client, she requested a family budgeting app that could help manage shared household living expenses. It makes use of the MERN stack to provide a clean, interface with cross functionality between budget items, budget categories, transactions, and account balances for personal and household living expenses.`;
 
   return (
-    <div id="projectsMenu">
-      <div id="projectsMenuItems">
+    <div id="projectsMenu" className="closedProjectsMenu">
+      <div id="projectsMenuItems" className="closedProjectsMenuItems">
         {/* ---------------------------------------- API Fetching ---------------------------------------------- */}
         <div onClick={toggleAPIMenuContent} className="projectsMenuText">
           Fetching from APIs
