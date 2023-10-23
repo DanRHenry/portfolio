@@ -53,7 +53,7 @@ export default function ContactContent() {
   };
 
   return (
-    <div id="contactContent">
+    <div id="contactContent" className="closedContactContent">
       {active ? (
         <div id="sentMessage">Your message has been sent</div>
       ) : (
