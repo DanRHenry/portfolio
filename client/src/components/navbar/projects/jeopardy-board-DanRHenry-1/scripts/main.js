@@ -52,6 +52,8 @@ let passed;
 let activePlayerScore;
 let activePlayer;
 let round;
+let index;
+
 
 let randomResultArray = [];
 let roundOneArray = [];
@@ -116,7 +118,8 @@ passBtn.addEventListener("click", function listener() {
   if (passed == undefined || passed == false) {
     console.log("passed value:", passed);
     console.log("I'll Pass Thank you");
-    displayPlayerTurnMessage();
+    switchPlayer();
+    // displayPlayerTurnMessage();
     passed = true;
     console.log("passed value:", passed);
   } else {
@@ -189,6 +192,8 @@ async function titleScreen() {
   function saveName() {
     let player1Name = inputFieldForP1Name.value;
     let player2Name = inputFieldForP2Name.value;
+
+    //! Add fetch to backend
     localStorage.setItem("playerOneName", player1Name);
     localStorage.setItem("playerTwoName", player2Name);
   }
@@ -201,7 +206,6 @@ function deactivateButtons() {
   guessBtn.style.display = "none";
   placeholderPassBtn.style.display = "inline-block";
   passBtn.style.display = "none";
-  passed = false;
 }
 
 // Disable the close button
@@ -223,9 +227,12 @@ function enableNextRound() {
   placeholderNextRound.style.display = "none";
 }
 
-//------------------------------------------- Scoreboard and Name Functionality ------------------------------------
+
+
+//!------------------------------------------ Scoreboard and Name Functionality ------------------------------------
 // Check Local Storage and Populate Scoreboard and Names
 function getNamesAndScoreboardInfo() {
+  //! Add fetch from backend
   // Get player names from local storage and input them to the scoreboard names
   if (localStorage.playerOneName != "") {
     // playerOneName = localStorage.playerOneName;
@@ -265,6 +272,7 @@ function getNamesAndScoreboardInfo() {
 
 // Notify that it is player 1's turn to choose
 function displayPlayerTurnMessage() {
+  // console.log("activePlayer in Display Player Turn Message Function", activePlayer)
   if (activePlayer[activePlayer.length - 1] === "s") {
     playerTurn.innerText = `${activePlayer}' turn. Pick an Answer!`;
   } else {
@@ -275,8 +283,13 @@ function displayPlayerTurnMessage() {
 // Switch Players
 function switchPlayer() {
   if (passed === true) {
+    // passed = false;
+// console.log("activeplayer:", activePlayer)
+// console.log("playerOnesName", playerOnesName)
+// console.log("playerTwosName", playerTwosName)
 
-  } else if (activePlayer == playerOnesName) {
+  } else 
+  if (activePlayer == playerOnesName) {
     activePlayer = playerTwosName;
     console.log("Player's turn:",activePlayer)
     win = null;
@@ -323,80 +336,142 @@ function closeTextDisplayWindow() {
   textDisplay.style.left = "50%";
   textDisplay.style.borderRadius = "0";
   textDisplay.style.border = "0";
+  if (win === false) {
+    // passed = false;
+    // win = undefined;
+    console.log("playerOnesName:",playerOnesName)
+    console.log("playerTwosName",playerTwosName)
+
+    if (activePlayer == playerOnesName) {
+      activePlayer = playerTwosName;
+    } else {
+      activePlayer = playerOnesName;
+    }
+    displayPlayerTurnMessage();
+    console.log("activePlayer",activePlayer)
+
+
+    
+  }
 }
 
-function submitGuess(i) {
-  playerGuess = inputFieldForAnswer.value;
-  if (round === "round1") {
-    if (roundOneArray[i].answer.toLowerCase() === playerGuess.toLowerCase()) {
-      inputFieldForAnswer.value = "";
-      win = true;
-      console.log("win:",win, "roundOneArrayAnswer:",roundOneArray[i].answer,"playerGuess:", playerGuess)
-      playerGuess = "";
-    } else {
-      win = false;
-      console.log("win:",win, "roundOneArrayAnswer:",roundOneArray[i].answer,"playerGuess:", playerGuess)
-      playerGuess = "";
-      switchPlayer();
-    }
-  }
-  if (round === "round2") {
-    if (roundTwoArray[i].answer.toLowerCase() === playerGuess.toLowerCase()) {
-      inputFieldForAnswer.value = "";
-      win = true;
-      console.log("win:",win, "roundTwoArrayAnswer:",roundTwoArray[i].answer,"playerGuess:", playerGuess)
-      playerGuess = "";
-    } else {
-      win = false;
-      console.log("win:",win, "roundTwoArrayAnswer:",roundTwoArray[i].answer,"playerGuess:", playerGuess)
-      playerGuess = "";
-      switchPlayer();
-    }
-  }
-  if (round === "final") {
-    if (finalJeopardyCategory[i].answer == playerGuess) {
-      win = true;
-    } else {
-      win = false;
-      switchPlayer();
-    }
-  }
+//!----------------------------------------- Correct / Incorrect Functions -----------------------------------------
 
-  if (win === true) {
-    textDispCont.textContent = `Congratulations ${activePlayer}, you answered correctly!`;
-    textDisplayBtn.style.display = "inline-block";
+const correct = () => {
+  console.log("...correct has been called")
+  playerGuess = "";
+  textDispCont.textContent = `Congratulations ${activePlayer}, you answered correctly!`;
+  textDisplayBtn.style.display = "inline-block";
+  setActivePlayerScore();
+  activePlayerScore += 200; //! Change this to reflect the actual amount
+  p1Score.textContent = player1Score;
+  p2Score.textContent = player2Score;
+  guessBtn.removeEventListener("click", submitGuess);
+  deactivateButtons();
+  console.log("end of correct function...")
+}
+
+const incorrect = () => {
+  console.log("...incorrect function has been called")
+  playerGuess = "";
+  if (passed == false || passed == undefined) {
+    switchPlayer();
+    passed = true;
+    textDispCont.textContent = `Wrong answer. ${activePlayer}, would you like to play?`;
     setActivePlayerScore();
-    activePlayerScore += 200; //! Change this to reflect the actual amount
+    activePlayerScore -= 200;
     p1Score.textContent = player1Score;
     p2Score.textContent = player2Score;
-    deactivateButtons();
-  } else if (win === false) {
-    if (passed == false || passed == undefined) {
-      textDispCont.textContent = `Wrong answer. ${activePlayer}, would you like to play?`;
-      setActivePlayerScore();
-      activePlayerScore -= 200;
-      p1Score.textContent = player1Score;
-      p2Score.textContent = player2Score;
-      passed = true;
-      switchPlayer();
+    // passed = true;
+    if (round === "round1") {
       setTimeout(() => {
-        textDispCont.textContent = placeholderQuestions[i].question;
-      }, 2000);
-    } else {
-      switchPlayer();
-      setActivePlayerScore();
-      textDispCont.textContent = `I'm sorry, ${activePlayer} that's the wrong answer.`;
-      activePlayerScore -= 200;
-      p1Score.textContent = player1Score;
-      p2Score.textContent = player2Score;
-      setTimeout(() => {
-        // textDisplay.style.display = "none";
-        closeTextDisplayWindow();
-        deactivateButtons();
-        hideCloseBtn();
+        // textDispCont.textContent = placeholderQuestions[index].question;
+        textDispCont.textContent = roundOneArray[index].question;
       }, 2000);
     }
+    if (round === "round2") {
+      setTimeout(() => {
+        // textDispCont.textContent = placeholderQuestions[index].question;
+        textDispCont.textContent = roundTwoArray[index].question;
+      }, 2000);  
+    }
+    if (round === "final") {
+      setTimeout(() => {
+        // textDispCont.textContent = placeholderQuestions[index].question;
+        textDispCont.textContent = finalJeopardyCategory.question;
+      }, 2000);  
+    }
+    // setTimeout(() => {
+    //   // textDispCont.textContent = placeholderQuestions[index].question;
+    //   textDispCont.textContent = roundOneArray[i].question;
+    // }, 2000);
+  } else {
+    console.log("passed is true")
+    setActivePlayerScore();
+    textDispCont.textContent = `I'm sorry, ${activePlayer} that's the wrong answer.`;
+    activePlayerScore -= 200;
+    p1Score.textContent = player1Score;
+    p2Score.textContent = player2Score;
+    console.log("end turn")
+    switchPlayer();
+    setTimeout(() => {
+      // textDisplay.style.display = "none";
+      closeTextDisplayWindow();
+      deactivateButtons();
+      hideCloseBtn();
+    }, 2000);
   }
+  console.log("end of incorrect function...")
+}
+
+let submitCounter = 0;
+
+function submitGuess() {
+  submitCounter ++
+  console.log("submitCounter:",submitCounter)
+  console.log("submitting guess")
+  // Set the playerGuess Variable
+  playerGuess = inputFieldForAnswer.value;
+
+  // Clear the input field
+  inputFieldForAnswer.value = "";
+
+  // Check the Round
+  console.log("checking round...")
+  if (round === "round1") {
+    if (roundOneArray[index].answer.toLowerCase() === playerGuess.toLowerCase()) {
+      console.log("playerGuess:",playerGuess.toLowerCase())
+      console.log("answer:",roundOneArray[index].answer.toLowerCase())
+      win = true;
+      console.log("calling correct...")
+      correct();
+    } else {
+      console.log("playerGuess:",playerGuess.toLowerCase())
+      console.log("answer:",roundOneArray[index].answer.toLowerCase())
+      win = false;
+      console.log("calling incorrect...")
+      incorrect()
+    }
+  }
+  console.log("round function has completed...")
+  // if (round === "round2") {
+  //   if (roundTwoArray[i].answer.toLowerCase() === playerGuess.toLowerCase()) {
+  //     win = true;
+  //     correct();
+  //   } else {
+  //     win = false;
+  //     incorrect()
+  //   }
+  // }
+  // if (round === "final") {
+  //   if (finalJeopardyCategory[i].answer.toLowerCase() == playerGuess.toLowerCase()) {
+  //     win = true;
+  //     correct();
+  //   } else {
+  //     win = false;
+  //     incorrect()
+  //   }
+  // }
 }
 
 //! Round One Function
@@ -466,14 +541,18 @@ async function roundOne() {
   let answerSquares = document.getElementsByClassName("answer");
   for (let i = 0; i < answerSquares.length; i++) {
     answerSquares[i].addEventListener("click", function clicked() {
+      passed = false;
+      console.log("clicked", i)
+      index = i;
+      // console.log("passed",passed)
       if (round === "round1") {
         console.log("question", roundOneArray[i].question);
         console.log("answer", roundOneArray[i].answer);
-        console.log("category", roundOneArray[i].category);
+        // console.log("category", roundOneArray[i].category);
       } else if (round === "round2") {
         console.log("question", roundTwoArray[i].question);
         console.log("answer", roundTwoArray[i].answer);
-        console.log("category", roundTwoArray[i].category);
+        // console.log("category", roundTwoArray[i].category);
       }
 
       let box = answerSquares[i];
@@ -491,13 +570,7 @@ async function roundOne() {
       }
 
       //! When clicked, the guess button calls submitGuess
-      guessBtn.addEventListener("click", guess => {
-        submitGuess(i);
-      });
-      inputFieldForAnswer.onsubmit = () => {
-        console.log("submitted")
-        submitGuess(i)};
-      
+      guessBtn.addEventListener("click", submitGuess);
       answerSquares[i].removeEventListener("click", clicked);
     });
   }
