@@ -49,11 +49,10 @@ let player2Score = 0;
 let playerOnesName;
 let playerTwosName;
 let passed;
-let activePlayerScore;
+let activePlayerScore = 0;
 let activePlayer;
 let round;
 let index;
-
 
 let randomResultArray = [];
 let roundOneArray = [];
@@ -291,21 +290,29 @@ function switchPlayer() {
   } else 
   if (activePlayer == playerOnesName) {
     activePlayer = playerTwosName;
+    activePlayerScore = player2Score;
     console.log("Player's turn:",activePlayer)
     win = null;
   } else if (activePlayer == playerTwosName) {
     activePlayer = playerOnesName;
+    activePlayerScore = player1Score;
     console.log("Player's turn:",activePlayer)
     win = null;
   }
   displayPlayerTurnMessage();
 }
 
-function setActivePlayerScore() {
-  if (activePlayer == playerOnesName) {
-    activePlayerScore = player1Score;
-  } else if (activePlayer == playerTwosName) {
-    activePlayerScore = player2Score;
+function setActivePlayerScore(pointsAvailable) {
+  if (activePlayer === playerOnesName) {
+    console.log("pointsAvailable:",pointsAvailable)
+    console.log("activePlayerScore:", activePlayerScore)
+    console.log("round1ArrayScore",roundOneArray[index].score)
+    player1Score = activePlayerScore += pointsAvailable;
+  } else if (activePlayer === playerTwosName) {
+    player2Score = activePlayerScore += pointsAvailable;
+    console.log("pointsAvailable:",pointsAvailable)
+    console.log("activePlayerScore:", activePlayerScore)
+    console.log("round1ArrayScore",roundOneArray[index].score)
   }
 }
 
@@ -358,28 +365,45 @@ function closeTextDisplayWindow() {
 //!----------------------------------------- Correct / Incorrect Functions -----------------------------------------
 
 const correct = () => {
-  console.log("...correct has been called")
   playerGuess = "";
   textDispCont.textContent = `Congratulations ${activePlayer}, you answered correctly!`;
   textDisplayBtn.style.display = "inline-block";
-  setActivePlayerScore();
-  activePlayerScore += 200; //! Change this to reflect the actual amount
+  let pointsAvailable;
+  if (round === "round1") {
+    pointsAvailable = roundOneArray[index].score;
+  }
+  if (round === "round2" ) {
+    pointsAvailable = roundTwoArray[index].score;
+  }
+  if (round === "final") {
+    console.log("implement this later")
+  }
+  setActivePlayerScore(pointsAvailable);
   p1Score.textContent = player1Score;
   p2Score.textContent = player2Score;
   guessBtn.removeEventListener("click", submitGuess);
   deactivateButtons();
-  console.log("end of correct function...")
 }
 
 const incorrect = () => {
-  console.log("...incorrect function has been called")
   playerGuess = "";
+  let pointsAvailable;
+  if (round === "round1") {
+    pointsAvailable = (roundOneArray[index].score *-1);
+  }
+  if (round === "round2" ) {
+    pointsAvailable = (roundTwoArray[index].score * -1);
+  }
+  if (round === "final") {
+    console.log("implement this later")
+  }
   if (passed == false || passed == undefined) {
+    // activePlayerScore = 0;
+    setActivePlayerScore(pointsAvailable);
     switchPlayer();
+    console.log("activePlayerScore:",activePlayerScore)
     passed = true;
     textDispCont.textContent = `Wrong answer. ${activePlayer}, would you like to play?`;
-    setActivePlayerScore();
-    activePlayerScore -= 200;
     p1Score.textContent = player1Score;
     p2Score.textContent = player2Score;
     // passed = true;
@@ -406,13 +430,11 @@ const incorrect = () => {
     //   textDispCont.textContent = roundOneArray[i].question;
     // }, 2000);
   } else {
-    console.log("passed is true")
-    setActivePlayerScore();
+    // activePlayerScore = 0;
+    setActivePlayerScore(pointsAvailable);
     textDispCont.textContent = `I'm sorry, ${activePlayer} that's the wrong answer.`;
-    activePlayerScore -= 200;
     p1Score.textContent = player1Score;
     p2Score.textContent = player2Score;
-    console.log("end turn")
     switchPlayer();
     setTimeout(() => {
       // textDisplay.style.display = "none";
@@ -421,15 +443,9 @@ const incorrect = () => {
       hideCloseBtn();
     }, 2000);
   }
-  console.log("end of incorrect function...")
 }
 
-let submitCounter = 0;
-
 function submitGuess() {
-  submitCounter ++
-  console.log("submitCounter:",submitCounter)
-  console.log("submitting guess")
   // Set the playerGuess Variable
   playerGuess = inputFieldForAnswer.value;
 
@@ -437,23 +453,15 @@ function submitGuess() {
   inputFieldForAnswer.value = "";
 
   // Check the Round
-  console.log("checking round...")
   if (round === "round1") {
     if (roundOneArray[index].answer.toLowerCase() === playerGuess.toLowerCase()) {
-      console.log("playerGuess:",playerGuess.toLowerCase())
-      console.log("answer:",roundOneArray[index].answer.toLowerCase())
       win = true;
-      console.log("calling correct...")
       correct();
     } else {
-      console.log("playerGuess:",playerGuess.toLowerCase())
-      console.log("answer:",roundOneArray[index].answer.toLowerCase())
       win = false;
-      console.log("calling incorrect...")
       incorrect()
     }
   }
-  console.log("round function has completed...")
   // if (round === "round2") {
   //   if (roundTwoArray[i].answer.toLowerCase() === playerGuess.toLowerCase()) {
   //     win = true;
@@ -542,7 +550,6 @@ async function roundOne() {
   for (let i = 0; i < answerSquares.length; i++) {
     answerSquares[i].addEventListener("click", function clicked() {
       passed = false;
-      console.log("clicked", i)
       index = i;
       // console.log("passed",passed)
       if (round === "round1") {
