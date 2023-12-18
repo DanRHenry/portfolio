@@ -462,24 +462,24 @@ function submitGuess() {
       incorrect()
     }
   }
-  // if (round === "round2") {
-  //   if (roundTwoArray[i].answer.toLowerCase() === playerGuess.toLowerCase()) {
-  //     win = true;
-  //     correct();
-  //   } else {
-  //     win = false;
-  //     incorrect()
-  //   }
-  // }
-  // if (round === "final") {
-  //   if (finalJeopardyCategory[i].answer.toLowerCase() == playerGuess.toLowerCase()) {
-  //     win = true;
-  //     correct();
-  //   } else {
-  //     win = false;
-  //     incorrect()
-  //   }
-  // }
+  if (round === "round2") {
+    if (roundTwoArray[index].answer.toLowerCase() === playerGuess.toLowerCase()) {
+      win = true;
+      correct();
+    } else {
+      win = false;
+      incorrect()
+    }
+  }
+  if (round === "final") {
+    if (finalJeopardyCategory[i].answer.toLowerCase() == playerGuess.toLowerCase()) {
+      win = true;
+      correct();
+    } else {
+      win = false;
+      incorrect()
+    }
+  }
 }
 
 //! Round One Function
