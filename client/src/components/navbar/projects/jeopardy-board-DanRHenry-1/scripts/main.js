@@ -333,6 +333,19 @@ function openTextDisplayWindow() {
   setTimeout(() => {
     textDisplay.style.color = "white";
   }, "200");
+  setTimeout(() => {
+    deactivateButtons()
+    if (round === "round1") {
+      textDispCont.innerText = "Time Up! The Answer Was "+`${roundOneArray[index].answer}"`
+    }
+    if (round === "round2") {
+      textDispCont.innerText = "Time Up! The Answer Was "+`"${roundTwoArray[index].answer}"`
+    }
+    if (round === "final") {
+      textDispCont.innerText = "Time Up! The Answer Was "+`"${finalJeopardyCategory[index].answer}"`
+    }
+    textDisplayBtn.style.display = "inline-block"; 
+  }, "2000")
 }
 
 function closeTextDisplayWindow() {
