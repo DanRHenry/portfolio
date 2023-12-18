@@ -301,7 +301,7 @@ aside div{
     top: 5em;
 }
 
-#textDisplayBtn {
+#textDisplayBtn, #riskBtn {
     display: none;
     position: absolute;
     bottom: 1em;

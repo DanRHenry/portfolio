@@ -330,13 +330,26 @@ function openTextDisplayWindow() {
   textDisplay.style.width = "60%";
   textDisplay.style.top = "7em";
   textDisplay.style.left = "20%";
+  textDisplayBtn.innerText = "Risk";
+  setTimeout(() => {
+    textDisplayBtn.style.display = "inline-block";
+    textDisplayBtn.id = "riskBtn"
+    document.getElementById("riskBtn").addEventListener("click", () => {
+      console.log("click")
+    })
+  },200)
+
   setTimeout(() => {
     textDisplay.style.color = "white";
   }, "200");
   setTimeout(() => {
     deactivateButtons()
+    textDisplayBtn.id = "textDisplayBtn"
+    textDisplayBtn.innerText = "Close";
+    // textDisplayBtn.innerHTML = `<button id="textDisplayBtn">Risk</button>`
+
     if (round === "round1") {
-      textDispCont.innerText = "Time Up! The Answer Was "+`${roundOneArray[index].answer}"`
+      textDispCont.innerText = "Time Up! The Answer Was "+`"${roundOneArray[index].answer}"`
     }
     if (round === "round2") {
       textDispCont.innerText = "Time Up! The Answer Was "+`"${roundTwoArray[index].answer}"`
@@ -345,7 +358,7 @@ function openTextDisplayWindow() {
       textDispCont.innerText = "Time Up! The Answer Was "+`"${finalJeopardyCategory[index].answer}"`
     }
     textDisplayBtn.style.display = "inline-block"; 
-  }, "2000")
+  }, "5000")
 }
 
 function closeTextDisplayWindow() {
