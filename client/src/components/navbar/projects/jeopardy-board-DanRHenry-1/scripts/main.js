@@ -144,6 +144,54 @@ let fetchAnswers = async () => {
     questionArray.push(data);
   }
 };
+
+//TODO
+// ----------------------------------------------------------- Fetch on Click -----------------------------------------------------------
+// When the buzzer button is clicked,
+// Send the username / email address 
+// Send the correct answer
+// Send the points amount
+// Send the player's answer and check it against the correct answer
+// Send the 
+// Add the username to an array on the back end to set the buzz in position.
+// 
+
+const handleSubmit = (e) => {
+  const emailBody =
+    "Name: " +
+    `${name.current.value}` +
+    "<br/>" +
+    "Organization: " +
+    `${organization.current.value}` +
+    "<br/>" +
+    "Email Address:" +
+    "<br/>" +
+    `<a href="mailto:${address.current.value}">${address.current.value}</a>` +
+    "<br/>" +
+    "<br/>" +
+    "Message Body:" +
+    "<br/>" +
+    message.current.value;
+  const fulladdress = `https://api.elasticemail.com/v2/email/send?apikey=${key}&subject=${subject.current.value}&from=${fromAddress}&fromName=&sender=${address.current.value}&senderName=${name.current.value}&msgFrom=&msgFromName=&replyTo=&replyToName=&to=${toAddress}&msgTo=&msgCC=&msgBcc=&lists=&segments=&mergeSourceFilename=&dataSource=&channel=&bodyHtml=${emailBody}&bodyText=&charset=&charsetBodyHtml=&charsetBodyText=&template=&headers_firstname=firstname: myValueHere&postBack=&merge_firstname=John&timeOffSetMinutes=&poolName=My Custom Pool&isTransactional=false&attachments=&trackOpens=true&trackClicks=true&utmSource=source1&utmMedium=medium1&utmCampaign=campaign1&utmContent=content1&bodyAmp=&charsetBodyAmp=`;
+  const sendEmail = async () => {
+    let res = await fetch(fulladdress);
+    let result = await res.json();
+    let data = result;
+    console.log("data", data);
+  };
+
+  e.preventDefault();
+  setActive(!active);
+  sendEmail();
+  address.current.value = "";
+  subject.current.value = "";
+  message.current.value = "";
+  setTimeout(() => {
+    setActive(false);
+  }, 3000);
+};
+
+
 // fetchAnswers(); --- Commented out for now. Use JSON
 
 //?
