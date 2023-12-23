@@ -156,6 +156,15 @@ let fetchAnswers = async () => {
 // Add the username to an array on the back end to set the buzz in position.
 // 
 
+const url = "https://danhenrydev.com/jeopardyApi/questions";
+const fetchQuestions = async function () {
+  let response = await fetch (url);
+  let data = await response.json();
+  console.log('data:',data)
+}
+
+const testFetchButton = document.getElementById("testFetchButton");
+testFetchButton.addEventListener("click", fetchQuestions);
 const handleSubmit = (e) => {
   const emailBody =
     "Name: " +
