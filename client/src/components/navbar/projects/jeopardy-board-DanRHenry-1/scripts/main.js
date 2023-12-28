@@ -112,7 +112,6 @@ if (round === "final") {
 }
 //---------------------------------------------- Event Listeners ----------------------------------------------
 
-//! Sloppy fix applied and commented back in (index.html)
 passBtn.addEventListener("click", function listener() {
   if (passed == undefined || passed == false) {
     console.log("passed value:", passed);
@@ -316,11 +315,55 @@ function setActivePlayerScore(pointsAvailable) {
   }
 }
 
+function playQuestion (textDisplayBtn) {
+  textDisplayBtn.innerText = "Close"
+
+  setTimeout(() => {
+  }, "10000");
+}
+const setToRiskButton = () => {
+  // Change the text display button to  "buzz in"
+  const textDisplayBtn = document.getElementById("textDisplayBtn");
+  textDisplayBtn.innerText = "Buzz In"
+
+  textDisplayBtn.addEventListener("click", () => playQuestion(textDisplayBtn))
+    textDisplayBtn.innerText = "Close"
+    setTimeout(() => {
+    }, "10000");
+}
+
+const removeRiskButton = () => {
+  const textDisplayBtn = document.getElementById("textDisplayBtn")
+  textDisplayBtn.removeEventListener("click", () => {
+    console.log("click");
+    setTimeout(() => {
+      console.log("Wrong!!!")
+      // incorrect();
+    }, "10000");
+    // On buzzing in, clear the timer and add a new timer for the player to answer.
+    // if (questionTimerActive) {
+      // clearTimeout(questionTimerActive);
+    // }
+  })
+}
+
+const setToCloseBtn = () => {
+  const textDisplayBtn = document.getElementById("textDisplayBtn");
+  textDisplayBtn.innerText = "Close"
 textDisplayBtn.addEventListener("click", function () {
   closeTextDisplayWindow();
   deactivateButtons();
   hideCloseBtn();
 });
+}
+
+const removeCloseBtn = () => {
+  textDisplayBtn.removeEventListener("click", function () {
+    closeTextDisplayWindow();
+    deactivateButtons();
+    hideCloseBtn();
+});
+}
 
 function openTextDisplayWindow() {
   textDisplay.style.display = "block";
@@ -330,35 +373,39 @@ function openTextDisplayWindow() {
   textDisplay.style.width = "60%";
   textDisplay.style.top = "7em";
   textDisplay.style.left = "20%";
-  textDisplayBtn.innerText = "Risk";
-  setTimeout(() => {
+  textDisplayBtn.innerText = "Buzz In";
+  // setTimeout(() => {
     textDisplayBtn.style.display = "inline-block";
-    textDisplayBtn.id = "riskBtn"
-    document.getElementById("riskBtn").addEventListener("click", () => {
-      console.log("click")
-    })
-  },200)
+    // textDisplayBtn.id = "riskBtn"
+    setToRiskButton()
+
+    // Set a timeout while the "answer" is being read for people to buzz in.
+    const questionTimerActive = setTimeout(() => {
+      deactivateButtons();
+      textDisplayBtn.id = "textDisplayBtn";
+      removeRiskButton();
+      setToCloseBtn();
+      textDisplayBtn.innerText = "Close";
+      // textDisplayBtn.innerHTML = `<button id="textDisplayBtn">Risk</button>`
+    
+      if (round === "round1") {
+        textDispCont.innerText = "Time Up! The Answer Was "+`"${roundOneArray[index].answer}"`
+      }
+      if (round === "round2") {
+        textDispCont.innerText = "Time Up! The Answer Was "+`"${roundTwoArray[index].answer}"`
+      }
+      if (round === "final") {
+        textDispCont.innerText = "Time Up! The Answer Was "+`"${finalJeopardyCategory[index].answer}"`
+      }
+      textDisplayBtn.style.display = "inline-block"; 
+    }, "7500")
+    removeCloseBtn();
+    setToRiskButton();
+  // },200)
 
   setTimeout(() => {
     textDisplay.style.color = "white";
   }, "200");
-  setTimeout(() => {
-    deactivateButtons()
-    textDisplayBtn.id = "textDisplayBtn"
-    textDisplayBtn.innerText = "Close";
-    // textDisplayBtn.innerHTML = `<button id="textDisplayBtn">Risk</button>`
-
-    if (round === "round1") {
-      textDispCont.innerText = "Time Up! The Answer Was "+`"${roundOneArray[index].answer}"`
-    }
-    if (round === "round2") {
-      textDispCont.innerText = "Time Up! The Answer Was "+`"${roundTwoArray[index].answer}"`
-    }
-    if (round === "final") {
-      textDispCont.innerText = "Time Up! The Answer Was "+`"${finalJeopardyCategory[index].answer}"`
-    }
-    textDisplayBtn.style.display = "inline-block"; 
-  }, "5000")
 }
 
 function closeTextDisplayWindow() {
