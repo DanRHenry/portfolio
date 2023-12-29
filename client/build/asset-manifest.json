@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/static/css/main.beac6567.css",
+    "main.js": "/static/js/main.2e7fb0d5.js",
+    "static/media/pankaj-patel-u2Ru4QBXA5Q-unsplash.jpg": "/static/media/pankaj-patel-u2Ru4QBXA5Q-unsplash.598a7ad847c57a0d7b6c.jpg",
+    "static/media/Headshot.png": "/static/media/Headshot.0f43e266ad1c1186ae04.png",
+    "index.html": "/index.html",
+    "main.beac6567.css.map": "/static/css/main.beac6567.css.map",
+    "main.2e7fb0d5.js.map": "/static/js/main.2e7fb0d5.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.beac6567.css",
+    "static/js/main.2e7fb0d5.js"
+  ]
+}
