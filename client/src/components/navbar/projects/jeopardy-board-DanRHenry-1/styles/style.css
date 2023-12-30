@@ -131,6 +131,7 @@ aside div{
     grid-template-rows: repeat(6, 1fr);
     background-color: blue;
     border: .1vw solid white;
+    max-height: 15em;
 }
 
 .finalAnswerBoard{
@@ -258,10 +259,14 @@ aside div{
 }
 
 .category {
+    font-size: clamp(8px,12px,1.15vw);
     font-size: 1.25vw;
+    font-weight: 620;
+    /* min-height: 3em; */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     padding-top: 1em;
     padding-bottom: 1em;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     border: .2vw solid white;
     color: black;
     background-color: rgba(255, 255, 255, 0.473);
@@ -273,6 +278,7 @@ aside div{
     margin: 0;
     font-weight: bold;
     font-size: 1.15vw;
+    max-height: 3em;
 }
 
 .answer:hover {
@@ -293,12 +299,18 @@ aside div{
     transition: height .25s, width .25s, left .25s, top .25s;
     top: 12em;
     left: 50%;
+    display: flex;
+    align-items: center;
+    /* background-color: red; */
+    /* margin: 0; */
+    /* padding: 0; */
     /* right: 20%; */
 }
 
 #textDispCont {
     position: relative;
     top: 5em;
+    text-align: center;
 }
 
 #textDisplayBtn, #riskBtn {
