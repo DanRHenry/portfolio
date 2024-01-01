@@ -103,34 +103,37 @@ const fetchStudentList = async () => {
   let data = await result.json();
   console.log("data:", data);
 };
-const classList = {};
+
+const fetchQuestionsList = async () => {
+  const url = "https://danhenrydev.com/jeopardyApi/questions/";
+  let result = await fetch (url);
+  let data = await result.json();
+  console.log("data:", data);
+
+}
+
+document.getElementById("questionsList").addEventListener("click", fetchQuestionsList);
+
+const classList = [];
 
 const fetchInformation = async () => {
   const url = "https://danhenrydev.com/jeopardyApi/questions/";
   let result = await fetch(url);
   let data = await result.json();
   console.log("data:", data.getAllQuestions);
-  classList[data.getAllQuestions[i].className] = []
+
   for (let i = 0; i < data.getAllQuestions.length; i++) {
     const gameAnswers = data.getAllQuestions[i].answer.split("\r\n");
     const gameQuestions = data.getAllQuestions[i].question.split("\r\n");
     const gameCategories = data.getAllQuestions[i].category.split("\r\n");
     const gameClassName = data.getAllQuestions[i].className.split("\r\n");
-    const id = data.getAllQuestions[i]._id;
 
-    console.log("data...", data.getAllQuestions[i].className)
-    console.log("i:",i)
+    console.log("data...", data.getAllQuestions[i])
 
-    classList[data.getAllQuestions[i].className] = [i][{
-      "className": data.getAllQuestions[i].className,
-      "id": id
-    }]
-    console.log("id:", id);
-    let cat = data.getAllQuestions[i].category
+    classList.push({"className": data.getAllQuestions[i].className,
+    "id": data.getAllQuestions[i]._id})
+
     console.log("classlist:",classList)
-    // classList[i]["category"] = cat;
-    console.log(cat)
-    // classList[i].id = id;
 
     for (let index = 0; index < gameAnswers.length; index++) {
       customContentArray.push({
@@ -142,6 +145,24 @@ const fetchInformation = async () => {
       });
     }
   }
+
+// Fill the class list in the admin page
+  const fillClassListDropdown = () => {
+    for (let i = 0; i < classList.length; i++) {
+      const element = document.createElement("option");
+      element.value = classList[i].className
+      element.innerText = classList[i].className
+      element.id = classList[i].id
+      document.getElementById("class-names")?.append(element)
+    }
+  }
+
+  fillClassListDropdown();
+
+  console.log("selected value:", document.getElementById("class-names").value)
+  console.log("option information:", document.getElementsByTagName("option"))
+
+
   for (let i = 0; i < 5; i++) {
     for (let n = 0; n < 6; n++) {
       customRoundOneArray.push(customContentArray[i + 6 * n]);
@@ -439,7 +460,7 @@ function setActivePlayerScore(pointsAvailable) {
   }
 }
 
-textDisplayBtn.addEventListener("click", function () {
+textDisplayBtn?.addEventListener("click", function () {
   closeTextDisplayWindow();
   deactivateButtons();
   hideCloseBtn();
