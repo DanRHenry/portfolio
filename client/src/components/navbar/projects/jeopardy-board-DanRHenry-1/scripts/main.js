@@ -112,7 +112,7 @@ const fetchQuestionsList = async () => {
 
 }
 
-document.getElementById("questionsList").addEventListener("click", fetchQuestionsList);
+document.getElementById("questionsListBtn").addEventListener("click", fetchQuestionsList);
 
 const classList = [];
 
@@ -120,7 +120,7 @@ const fetchInformation = async () => {
   const url = "https://danhenrydev.com/jeopardyApi/questions/";
   let result = await fetch(url);
   let data = await result.json();
-  console.log("data:", data.getAllQuestions);
+  // console.log("data:", data.getAllQuestions);
 
   for (let i = 0; i < data.getAllQuestions.length; i++) {
     const gameAnswers = data.getAllQuestions[i].answer.split("\r\n");
@@ -128,12 +128,12 @@ const fetchInformation = async () => {
     const gameCategories = data.getAllQuestions[i].category.split("\r\n");
     const gameClassName = data.getAllQuestions[i].className.split("\r\n");
 
-    console.log("data...", data.getAllQuestions[i])
+    // console.log("data...", data.getAllQuestions[i])
 
     classList.push({"className": data.getAllQuestions[i].className,
     "id": data.getAllQuestions[i]._id})
 
-    console.log("classlist:",classList)
+    // console.log("classlist:",classList)
 
     for (let index = 0; index < gameAnswers.length; index++) {
       customContentArray.push({
@@ -157,10 +157,46 @@ const fetchInformation = async () => {
     }
   }
 
+// Fill in the category options for the class lists
+
+const fillCategoryOptionsDropdown = () => {
+  const results = [];
+  let resultsHTML = "";
+  for (let i = 0; i < data.getAllQuestions.length; i++) {
+    // console.log("data.getAllQuestions[i].className:", data.getAllQuestions[i].className)
+    if (data.getAllQuestions[i].className === document.getElementById("class-names").value) {
+      // console.log("results:", results)
+      results.push(data.getAllQuestions[i].question)
+      resultsHTML += `<br><h1 class = "displayCategories">Category:</h1><br>`+ data.getAllQuestions[i].category;
+      resultsHTML += `<br><div class="displayQuestions">Questions:`+ `<h6>`+data.getAllQuestions[i].question.replaceAll("\r\n","<br>")+`</h6></div>`;
+      resultsHTML += `<br><div class="displayAnswers">Answers:<br>`+`<h6>`+data.getAllQuestions[i].answer.replaceAll("\r\n", "<br>")+`</h6></div>`;
+    }
+
+    // console.log("data.getAllQuestions",data.getAllQuestions)
+    // for (let i = 0; i < results.length; i++) {
+    //   resultsHTML += results[i].replaceAll("\r\n", "<br>");
+    //   // console.log("results:",results)
+    //   // console.log("resultsHTML:", resultsHTML)
+    // }
+    const element = document.createElement("div");
+    element.value = classList[i].className
+    element.innerText = classList[i].className
+    element.id = classList[i].id
+    element.innerText = data.getAllQuestions[i].question
+    // document.getElementById("questionList").innerHTML = data.getAllQuestions[i].question;
+    for (let i = 0; i < results.length; i++) {
+      document.getElementById("questionList").innerHTML = resultsHTML;
+    }
+    // document.getElementById("questionList").innerHTML = data.getAllQuestions[i].question.replaceAll("\r\n", "<br>");
+    // console.log("data:",data.getAllQuestions)
+  }
+}
   fillClassListDropdown();
 
-  console.log("selected value:", document.getElementById("class-names").value)
-  console.log("option information:", document.getElementsByTagName("option"))
+  document.getElementById("questionsListBtn").addEventListener("click", fillCategoryOptionsDropdown);
+
+  // console.log("selected value:", document.getElementById("class-names").value)
+  // console.log("option information:", document.getElementsByTagName("option"))
 
 
   for (let i = 0; i < 5; i++) {

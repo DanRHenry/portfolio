@@ -399,3 +399,18 @@ aside div{
 #finalFooter > .previousRound {
     padding-right: 0;
 }
+
+#questionList {
+    display: flex;
+    flex-direction: column;
+}
+
+.displayQuestions > * {
+    display: none;
+    /* color: blue; */
+}
+
+.displayAnswers > *{
+    /* color: orange; */
+    display: none;
+}
