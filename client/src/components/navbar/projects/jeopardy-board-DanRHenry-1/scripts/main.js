@@ -213,6 +213,7 @@ const fillCategoryOptionsDropdown = () => {
     // console.log("data:",data.getAllQuestions)
   }
 }
+
   fillClassListDropdown();
 
   document.getElementById("questionsListBtn")?.addEventListener("click", fillCategoryOptionsDropdown);
@@ -227,12 +228,16 @@ const fillCategoryOptionsDropdown = () => {
     }
   }
 };
-if (customRoundOneArray.length > 28) {
-  roundOneArray = customRoundOneArray;
-}
+
+
+// Now replace placeholder informatiom with the fetched information
+roundOneArray = customRoundOneArray;
+
 
 await fetchInformation();
 
+console.log(customRoundOneArray)
+console.log(roundOneArray)
 // Pull category names from round arrays
 
 if (round === "round1") {
