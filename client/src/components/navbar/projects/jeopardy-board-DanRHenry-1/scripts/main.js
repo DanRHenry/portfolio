@@ -167,9 +167,31 @@ const fillCategoryOptionsDropdown = () => {
     if (data.getAllQuestions[i].className === document.getElementById("class-names").value) {
       // console.log("results:", results)
       results.push(data.getAllQuestions[i].question)
-      resultsHTML += `<br><h1 class = "displayCategories">Category:</h1><br>`+ data.getAllQuestions[i].category;
-      resultsHTML += `<br><div class="displayQuestions">Questions:`+ `<h6>`+data.getAllQuestions[i].question.replaceAll("\r\n","<br>")+`</h6></div>`;
-      resultsHTML += `<br><div class="displayAnswers">Answers:<br>`+`<h6>`+data.getAllQuestions[i].answer.replaceAll("\r\n", "<br>")+`</h6></div>`;
+      //  `<br><h1 class = "displayCategories">Category:</h1><br>`+ data.getAllQuestions[i].category;
+      // resultsHTML += `<br><div class="displayQuestions">`+`<h6>`+data.getAllQuestions[i].question.replaceAll("\r\n","<br>")+`</h6></div>`;
+      // resultsHTML += `<br><div class="displayAnswers"><br>`+`<h6>`+data.getAllQuestions[i].answer.replaceAll("\r\n", "<br>")+`</h6></div>`;
+
+      resultsHTML +=`
+<div class="accordion" id="accordionExample">
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+      <strong>${data.getAllQuestions[i].category}</strong>
+    </button>
+  </h2>
+  <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+    <div class="accordion-body">
+      <strong>Questions:</strong>
+      <div>${data.getAllQuestions[i].question.replaceAll("\r\n","<br>")}</div> 
+      <strong>Answers:</strong>
+      <div>${data.getAllQuestions[i].answer.replaceAll("\r\n", "<br>")}</div>
+    </div>
+  </div>
+</div>
+<br>
+`
+
+
     }
 
     // console.log("data.getAllQuestions",data.getAllQuestions)
