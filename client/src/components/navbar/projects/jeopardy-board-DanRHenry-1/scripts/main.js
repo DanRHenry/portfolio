@@ -112,7 +112,7 @@ const fetchQuestionsList = async () => {
 
 }
 
-document.getElementById("questionsListBtn").addEventListener("click", fetchQuestionsList);
+document.getElementById("questionsListBtn")?.addEventListener("click", fetchQuestionsList);
 
 const classList = [];
 
@@ -215,7 +215,7 @@ const fillCategoryOptionsDropdown = () => {
 }
   fillClassListDropdown();
 
-  document.getElementById("questionsListBtn").addEventListener("click", fillCategoryOptionsDropdown);
+  document.getElementById("questionsListBtn")?.addEventListener("click", fillCategoryOptionsDropdown);
 
   // console.log("selected value:", document.getElementById("class-names").value)
   // console.log("option information:", document.getElementsByTagName("option"))
