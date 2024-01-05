@@ -117,9 +117,11 @@ const fetchInformation = async () => {
   let result = await fetch(url);
   let data = await result.json();
 
+
+  //Todo - Figure out how to add numbers to the questions and answers
   for (let i = 0; i < data.getAllQuestions.length; i++) {
-    const gameAnswers = data.getAllQuestions[i].answer.split("\r\n");
-    const gameQuestions = data.getAllQuestions[i].question.split("\r\n");
+    const gameAnswers = `${i}data.getAllQuestions[i].answer.split("\r\n");`
+    const gameQuestions = `${i}data.getAllQuestions[i].question.split("\r\n");`
     const gameCategories = data.getAllQuestions[i].category.split("\r\n");
     const gameClassName = data.getAllQuestions[i].className.split("\r\n");
 
@@ -190,7 +192,8 @@ const fetchInformation = async () => {
       }
     }
     let i;
-    // Primary Category: Add the first category information from the results array to the resultsHTML string
+    // ----------------------------------------------------- Primary Category -------------------------------------------
+    // Add the first category information from the results array to the resultsHTML string
     if (results.length >= 1) {
       i = 0;
       resultsHTML += `
@@ -199,7 +202,7 @@ const fetchInformation = async () => {
       <h2 class="accordion-header">
         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
           <strong>${data.getAllQuestions[i].category}</strong>
-          <button class = "categorySelectBtn" id = "categorySelectBtn${i}" onClick="loggit()">Add</button>
+        <!--  <button class = "categorySelectBtn" id = "categorySelectBtn${i}" onClick="loggit()">Add</button> -->
         </button>
       </h2>
       <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
@@ -240,7 +243,7 @@ const fetchInformation = async () => {
     }
     // }
 
-    // ! Secondary categories:
+    // ! -------------------------------------------- Secondary categories: ---------------------------------------------
 
     for (let i = 1; i < results.length; i++) {
 
@@ -253,7 +256,7 @@ const fetchInformation = async () => {
         <h2 class="accordion-header">
             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse${dataBsTarget}" aria-expanded="false" aria-controls="collapse${dataBsTarget}">
               <strong>${data.getAllQuestions[i].category}</strong>
-              <button class = "categorySelectBtn" id = "categorySelectBtn${i}">Add</button>
+            <!--  <div class = "categorySelectBtn" id = "categorySelectBtn${i}">Add</div> -->
               </button>
           </h2>
           <div id="collapse${dataBsTarget}" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
