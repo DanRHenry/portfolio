@@ -43,7 +43,6 @@ let answer1000 = document.createElement("div");
 
 const activeStudentsList = document.getElementById("activeStudentsList");
 
-
 // Global State Variables
 let playerGuess;
 let win;
@@ -64,8 +63,6 @@ let finalJeopardyCategory = [];
 let customContentArray = [];
 let customRoundOneArray = [];
 let customRoundTwoArray = [];
-
-// console.log("placeholderQuestions", placeholderQuestions);
 
 // Fill Round One, Two, and final Arrays
 for (let m = 0; roundTwoArray.length < 30; m++) {
@@ -101,18 +98,17 @@ const fetchStudentList = async () => {
   const url = "https://danhenrydev.com/jeopardyApi/user/";
   let result = await fetch(url);
   let data = await result.json();
-  console.log("data:", data);
 };
 
 const fetchQuestionsList = async () => {
   const url = "https://danhenrydev.com/jeopardyApi/questions/";
-  let result = await fetch (url);
+  let result = await fetch(url);
   let data = await result.json();
-  console.log("data:", data);
+};
 
-}
-
-document.getElementById("questionsListBtn")?.addEventListener("click", fetchQuestionsList);
+document
+  .getElementById("questionsListBtn")
+  ?.addEventListener("click", fetchQuestionsList);
 
 const classList = [];
 
@@ -120,7 +116,6 @@ const fetchInformation = async () => {
   const url = "https://danhenrydev.com/jeopardyApi/questions/";
   let result = await fetch(url);
   let data = await result.json();
-  // console.log("data:", data.getAllQuestions);
 
   for (let i = 0; i < data.getAllQuestions.length; i++) {
     const gameAnswers = data.getAllQuestions[i].answer.split("\r\n");
@@ -128,12 +123,10 @@ const fetchInformation = async () => {
     const gameCategories = data.getAllQuestions[i].category.split("\r\n");
     const gameClassName = data.getAllQuestions[i].className.split("\r\n");
 
-    // console.log("data...", data.getAllQuestions[i])
-
-    classList.push({"className": data.getAllQuestions[i].className,
-    "id": data.getAllQuestions[i]._id})
-
-    // console.log("classlist:",classList)
+    classList.push({
+      className: data.getAllQuestions[i].className,
+      id: data.getAllQuestions[i]._id,
+    });
 
     for (let index = 0; index < gameAnswers.length; index++) {
       customContentArray.push({
@@ -146,81 +139,149 @@ const fetchInformation = async () => {
     }
   }
 
-// Fill the class list in the admin page
+  // Fill the class list in the admin page
   const fillClassListDropdown = () => {
     for (let i = 0; i < classList.length; i++) {
       const element = document.createElement("option");
-      element.value = classList[i].className
-      element.innerText = classList[i].className
-      element.id = classList[i].id
-      document.getElementById("class-names")?.append(element)
+      element.value = classList[i].className;
+      element.innerText = classList[i].className;
+      element.id = classList[i].id;
+      document.getElementById("class-names")?.append(element);
     }
-  }
+  };
 
-// Fill in the category options for the class lists
+  // Fill in the category options for the class lists
+  const numbers = [
+    "One",
+    "Two",
+    "Three",
+    "Four",
+    "Five",
+    "Six",
+    "Seven",
+    "Eight",
+    "Nine",
+    "Ten",
+    "Eleven",
+    "Twelve",
+    "Thirteen",
+    "Fourteen",
+    "Fifteen",
+    "Sixteen",
+    "Seventeen",
+    "Eighteen",
+    "Nineteen",
+    "Twenty",
+    "Twenty-One",
+  ];
 
-const fillCategoryOptionsDropdown = () => {
-  const results = [];
-  let resultsHTML = "";
-  for (let i = 0; i < data.getAllQuestions.length; i++) {
-    // console.log("data.getAllQuestions[i].className:", data.getAllQuestions[i].className)
-    if (data.getAllQuestions[i].className === document.getElementById("class-names").value) {
-      // console.log("results:", results)
-      results.push(data.getAllQuestions[i].question)
-      //  `<br><h1 class = "displayCategories">Category:</h1><br>`+ data.getAllQuestions[i].category;
-      // resultsHTML += `<br><div class="displayQuestions">`+`<h6>`+data.getAllQuestions[i].question.replaceAll("\r\n","<br>")+`</h6></div>`;
-      // resultsHTML += `<br><div class="displayAnswers"><br>`+`<h6>`+data.getAllQuestions[i].answer.replaceAll("\r\n", "<br>")+`</h6></div>`;
+  const fillCategoryOptionsDropdown = () => {
+    const results = [];
+    let resultsHTML = "";
 
-      resultsHTML +=`
-<div class="accordion" id="accordionExample">
-<div class="accordion-item">
-  <h2 class="accordion-header">
-    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-      <strong>${data.getAllQuestions[i].category}</strong>
-    </button>
-  </h2>
-  <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
-    <div class="accordion-body">
-      <strong>Questions:</strong>
-      <div>${data.getAllQuestions[i].question.replaceAll("\r\n","<br>")}</div> 
-      <strong>Answers:</strong>
-      <div>${data.getAllQuestions[i].answer.replaceAll("\r\n", "<br>")}</div>
+    // Fill the results with categories of the same class name
+    for (let i = 0; i < data.getAllQuestions.length; i++) {
+      if (
+        data.getAllQuestions[i].className ===
+        document.getElementById("class-names").value
+      ) {
+        results.push(data.getAllQuestions[i].question);
+      }
+    }
+    let i;
+    // Primary Category: Add the first category information from the results array to the resultsHTML string
+    if (results.length >= 1) {
+      i = 0;
+      resultsHTML += `
+    <div class="accordion" id="accordionExample">
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+          <strong>${data.getAllQuestions[i].category}</strong>
+        </button>
+      </h2>
+      <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+        <div class="accordion-body">
+          <strong>Questions:</strong>
+          <div>${data.getAllQuestions[i].question.replaceAll(
+            "\r\n",
+            "<br>"
+          )}</div> 
+          <strong>Answers:</strong>
+          <div>${data.getAllQuestions[i].answer.replaceAll(
+            "\r\n",
+            "<br>"
+          )}</div>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
-<br>
-`
-
-
+    <br>
+    `;
     }
 
-    // console.log("data.getAllQuestions",data.getAllQuestions)
-    // for (let i = 0; i < results.length; i++) {
-    //   resultsHTML += results[i].replaceAll("\r\n", "<br>");
-    //   // console.log("results:",results)
-    //   // console.log("resultsHTML:", resultsHTML)
-    // }
+    let dataBsTarget = `collapse${numbers[i]}`;
+
     const element = document.createElement("div");
-    element.value = classList[i].className
-    element.innerText = classList[i].className
-    element.id = classList[i].id
-    element.innerText = data.getAllQuestions[i].question
+    element.value = classList[i].className;
+    element.innerText = classList[i].className;
+    element.id = classList[i].id;
+    element.innerText = data.getAllQuestions[i].question;
     // document.getElementById("questionList").innerHTML = data.getAllQuestions[i].question;
     for (let i = 0; i < results.length; i++) {
       document.getElementById("questionList").innerHTML = resultsHTML;
     }
-    // document.getElementById("questionList").innerHTML = data.getAllQuestions[i].question.replaceAll("\r\n", "<br>");
-    // console.log("data:",data.getAllQuestions)
-  }
-}
+    // }
+
+    // ! Secondary categories:
+
+    for (let i = 1; i < results.length; i++) {
+
+      if (results.length > 1) {
+        let dataBsTarget = `collapse${numbers[i]}`;
+
+        // resultsHTML = ""
+        resultsHTML += `
+<div class = "accordion-item">
+        <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse${dataBsTarget}" aria-expanded="false" aria-controls="collapse${dataBsTarget}">
+              <strong>${data.getAllQuestions[i].category}</strong>
+              </button>
+          </h2>
+          <div id="collapse${dataBsTarget}" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+            <div class="accordion-body">
+              <strong>Questions:</strong>
+              <div>${data.getAllQuestions[i].question.replaceAll(
+                "\r\n",
+                "<br>"
+              )}</div> 
+              <strong>Answers:</strong>
+              <div>${data.getAllQuestions[i].answer.replaceAll(
+                "\r\n",
+                "<br>"
+              )}</div>
+            </div>
+          </div>
+        </div>
+        <br>
+        `;
+      }
+      const element = document.createElement("div");
+      element.value = classList[i].className;
+      element.innerText = classList[i].className;
+      element.id = classList[i].id;
+      element.innerText = data.getAllQuestions[i].question;
+      // document.getElementById("questionList").innerHTML = data.getAllQuestions[i].question;
+      for (let i = 0; i < results.length; i++) {
+        document.getElementById("questionList").innerHTML = resultsHTML;
+      }
+    }
+  };
 
   fillClassListDropdown();
 
-  document.getElementById("questionsListBtn")?.addEventListener("click", fillCategoryOptionsDropdown);
-
-  // console.log("selected value:", document.getElementById("class-names").value)
-  // console.log("option information:", document.getElementsByTagName("option"))
-
+  document
+    .getElementById("questionsListBtn")
+    ?.addEventListener("click", fillCategoryOptionsDropdown);
 
   for (let i = 0; i < 5; i++) {
     for (let n = 0; n < 6; n++) {
@@ -229,15 +290,11 @@ const fillCategoryOptionsDropdown = () => {
   }
 };
 
-
 // Now replace placeholder informatiom with the fetched information
 roundOneArray = customRoundOneArray;
 
-
 await fetchInformation();
 
-console.log(customRoundOneArray)
-console.log(roundOneArray)
 // Pull category names from round arrays
 
 if (round === "round1") {
@@ -320,40 +377,39 @@ const fetchQuestions = async function () {
 
 const testFetchButton = document.getElementById("testFetchButton");
 testFetchButton?.addEventListener("click", fetchQuestions);
-const handleSubmit = (e) => {
-  const emailBody =
-    "Name: " +
-    `${name.current.value}` +
-    "<br/>" +
-    "Organization: " +
-    `${organization.current.value}` +
-    "<br/>" +
-    "Email Address:" +
-    "<br/>" +
-    `<a href="mailto:${address.current.value}">${address.current.value}</a>` +
-    "<br/>" +
-    "<br/>" +
-    "Message Body:" +
-    "<br/>" +
-    message.current.value;
-  const fulladdress = `https://api.elasticemail.com/v2/email/send?apikey=${key}&subject=${subject.current.value}&from=${fromAddress}&fromName=&sender=${address.current.value}&senderName=${name.current.value}&msgFrom=&msgFromName=&replyTo=&replyToName=&to=${toAddress}&msgTo=&msgCC=&msgBcc=&lists=&segments=&mergeSourceFilename=&dataSource=&channel=&bodyHtml=${emailBody}&bodyText=&charset=&charsetBodyHtml=&charsetBodyText=&template=&headers_firstname=firstname: myValueHere&postBack=&merge_firstname=John&timeOffSetMinutes=&poolName=My Custom Pool&isTransactional=false&attachments=&trackOpens=true&trackClicks=true&utmSource=source1&utmMedium=medium1&utmCampaign=campaign1&utmContent=content1&bodyAmp=&charsetBodyAmp=`;
-  const sendEmail = async () => {
-    let res = await fetch(fulladdress);
-    let result = await res.json();
-    let data = result;
-    console.log("data", data);
-  };
+// const handleSubmit = (e) => {
+//   const emailBody =
+//     "Name: " +
+//     `${name.current.value}` +
+//     "<br/>" +
+//     "Organization: " +
+//     `${organization.current.value}` +
+//     "<br/>" +
+//     "Email Address:" +
+//     "<br/>" +
+//     `<a href="mailto:${address.current.value}">${address.current.value}</a>` +
+//     "<br/>" +
+//     "<br/>" +
+//     "Message Body:" +
+//     "<br/>" +
+//     message.current.value;
+//   const fulladdress = `https://api.elasticemail.com/v2/email/send?apikey=${key}&subject=${subject.current.value}&from=${fromAddress}&fromName=&sender=${address.current.value}&senderName=${name.current.value}&msgFrom=&msgFromName=&replyTo=&replyToName=&to=${toAddress}&msgTo=&msgCC=&msgBcc=&lists=&segments=&mergeSourceFilename=&dataSource=&channel=&bodyHtml=${emailBody}&bodyText=&charset=&charsetBodyHtml=&charsetBodyText=&template=&headers_firstname=firstname: myValueHere&postBack=&merge_firstname=John&timeOffSetMinutes=&poolName=My Custom Pool&isTransactional=false&attachments=&trackOpens=true&trackClicks=true&utmSource=source1&utmMedium=medium1&utmCampaign=campaign1&utmContent=content1&bodyAmp=&charsetBodyAmp=`;
+//   const sendEmail = async () => {
+//     let res = await fetch(fulladdress);
+//     let result = await res.json();
+//     let data = result;
+//   };
 
-  e.preventDefault();
-  setActive(!active);
-  sendEmail();
-  address.current.value = "";
-  subject.current.value = "";
-  message.current.value = "";
-  setTimeout(() => {
-    setActive(false);
-  }, 3000);
-};
+//   e.preventDefault();
+//   setActive(!active);
+//   sendEmail();
+//   address.current.value = "";
+//   subject.current.value = "";
+//   message.current.value = "";
+//   setTimeout(() => {
+//     setActive(false);
+//   }, 3000);
+// };
 
 // fetchAnswers(); --- Commented out for now. Use JSON
 
