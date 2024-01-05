@@ -139,6 +139,7 @@ const fetchInformation = async () => {
     }
   }
 
+
   // Fill the class list in the admin page
   const fillClassListDropdown = () => {
     for (let i = 0; i < classList.length; i++) {
@@ -196,11 +197,12 @@ const fetchInformation = async () => {
     <div class="accordion" id="accordionExample">
     <div class="accordion-item">
       <h2 class="accordion-header">
-        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
           <strong>${data.getAllQuestions[i].category}</strong>
+          <button class = "categorySelectBtn" id = "categorySelectBtn${i}" onClick="loggit()">Add</button>
         </button>
       </h2>
-      <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+      <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
         <div class="accordion-body">
           <strong>Questions:</strong>
           <div>${data.getAllQuestions[i].question.replaceAll(
@@ -216,7 +218,13 @@ const fetchInformation = async () => {
       </div>
     </div>
     <br>
+    <script> 
+    function loggit() {
+      console.log("it")
+    }
+    </script>
     `;
+
     }
 
     let dataBsTarget = `collapse${numbers[i]}`;
@@ -245,6 +253,7 @@ const fetchInformation = async () => {
         <h2 class="accordion-header">
             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse${dataBsTarget}" aria-expanded="false" aria-controls="collapse${dataBsTarget}">
               <strong>${data.getAllQuestions[i].category}</strong>
+              <button class = "categorySelectBtn" id = "categorySelectBtn${i}">Add</button>
               </button>
           </h2>
           <div id="collapse${dataBsTarget}" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
@@ -274,6 +283,11 @@ const fetchInformation = async () => {
       for (let i = 0; i < results.length; i++) {
         document.getElementById("questionList").innerHTML = resultsHTML;
       }
+      const categorySelectBtn = document.getElementById(`categorySelectBtn${i}`)
+  
+      categorySelectBtn?.addEventListener("click", () => {
+        console.log("click")
+      })
     }
   };
 
@@ -878,5 +892,5 @@ async function roundOne() {
       answerSquares[i].removeEventListener("click", clicked);
     });
   }
-  console.log("round1 array:", roundOneArray);
+  // console.log("round1 array:", roundOneArray);
 }
