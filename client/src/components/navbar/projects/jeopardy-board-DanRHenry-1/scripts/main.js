@@ -55,6 +55,7 @@ let activePlayerScore = 0;
 let activePlayer;
 let round;
 let index;
+let resultsHTML = "";
 
 let randomResultArray = [];
 let roundOneArray = [];
@@ -63,6 +64,10 @@ let finalJeopardyCategory = [];
 let customContentArray = [];
 let customRoundOneArray = [];
 let customRoundTwoArray = [];
+const classList = [];
+let results = [];
+
+
 
 // Fill Round One, Two, and final Arrays
 for (let m = 0; roundTwoArray.length < 30; m++) {
@@ -94,23 +99,24 @@ if (roundName[0]?.innerText == "Jeopardy!") {
   round = "final";
 }
 
+
+// --------------------------------------- API Calls -----------------------------------------
 const fetchStudentList = async () => {
   const url = "https://danhenrydev.com/jeopardyApi/user/";
   let result = await fetch(url);
   let data = await result.json();
 };
 
-const fetchQuestionsList = async () => {
-  const url = "https://danhenrydev.com/jeopardyApi/questions/";
-  let result = await fetch(url);
-  let data = await result.json();
-};
+// const fetchQuestionsList = async () => {
+//   const url = "https://danhenrydev.com/jeopardyApi/questions/";
+//   let result = await fetch(url);
+//   let data = await result.json();
+// };
 
-document
-  .getElementById("questionsListBtn")
-  ?.addEventListener("click", fetchQuestionsList);
+// document
+//   .getElementById("questionsListBtn")
+//   ?.addEventListener("click", fetchQuestionsList);
 
-const classList = [];
 
 const fetchInformation = async () => {
   const url = "https://danhenrydev.com/jeopardyApi/questions/";
@@ -120,8 +126,8 @@ const fetchInformation = async () => {
 
   //Todo - Figure out how to add numbers to the questions and answers
   for (let i = 0; i < data.getAllQuestions.length; i++) {
-    const gameAnswers = `${i}data.getAllQuestions[i].answer.split("\r\n");`
-    const gameQuestions = `${i}data.getAllQuestions[i].question.split("\r\n");`
+    const gameAnswers = data.getAllQuestions[i].answer.split("\r\n");
+    const gameQuestions = data.getAllQuestions[i].question.split("\r\n");
     const gameCategories = data.getAllQuestions[i].category.split("\r\n");
     const gameClassName = data.getAllQuestions[i].className.split("\r\n");
 
@@ -130,6 +136,8 @@ const fetchInformation = async () => {
       id: data.getAllQuestions[i]._id,
     });
 
+
+    // Information for the Gameplay Categories/Class/Questions/Answers/Scores
     for (let index = 0; index < gameAnswers.length; index++) {
       customContentArray.push({
         category: gameCategories[0],
@@ -178,11 +186,13 @@ const fetchInformation = async () => {
     "Twenty-One",
   ];
 
-  const fillCategoryOptionsDropdown = () => {
-    const results = [];
-    let resultsHTML = "";
 
-    // Fill the results with categories of the same class name
+// ------------------------------------------------ Function to fill the Category Options List ---------------------------------
+  const fillCategoryOptionsDropdown = () => {
+    results = [];
+    resultsHTML = "";
+
+    //! Fill the results with categories of the same class name
     for (let i = 0; i < data.getAllQuestions.length; i++) {
       if (
         data.getAllQuestions[i].className ===
@@ -191,18 +201,19 @@ const fetchInformation = async () => {
         results.push(data.getAllQuestions[i].question);
       }
     }
-    let i;
+
+      console.log("results Length:", results.length, "results:", results)
     // ----------------------------------------------------- Primary Category -------------------------------------------
-    // Add the first category information from the results array to the resultsHTML string
-    if (results.length >= 1) {
-      i = 0;
+    // Add the first category information from the results array to the resultsHTML string. This is done separately from the rest to accomidate the bootstrap differences.
+    for (let i = 0; i < results.length; i++) {
+    if (i === 0) {
       resultsHTML += `
+      <div>${i} Primary:<div>
     <div class="accordion" id="accordionExample">
     <div class="accordion-item">
       <h2 class="accordion-header">
         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-          <strong>${data.getAllQuestions[i].category}</strong>
-        <!--  <button class = "categorySelectBtn" id = "categorySelectBtn${i}" onClick="loggit()">Add</button> -->
+         <strong>${data.getAllQuestions[i].category}</strong>
         </button>
       </h2>
       <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
@@ -221,14 +232,8 @@ const fetchInformation = async () => {
       </div>
     </div>
     <br>
-    <script> 
-    function loggit() {
-      console.log("it")
-    }
-    </script>
     `;
-
-    }
+  }
 
     let dataBsTarget = `collapse${numbers[i]}`;
 
@@ -241,33 +246,33 @@ const fetchInformation = async () => {
     for (let i = 0; i < results.length; i++) {
       document.getElementById("questionList").innerHTML = resultsHTML;
     }
+
     // }
 
     // ! -------------------------------------------- Secondary categories: ---------------------------------------------
 
-    for (let i = 1; i < results.length; i++) {
-
-      if (results.length > 1) {
+      if (results.length > 1 && i >= 1) {
+        console.log("secondary:")
         let dataBsTarget = `collapse${numbers[i]}`;
-
         // resultsHTML = ""
         resultsHTML += `
+        <div>${i} Secondary:<div>
 <div class = "accordion-item">
         <h2 class="accordion-header">
             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse${dataBsTarget}" aria-expanded="false" aria-controls="collapse${dataBsTarget}">
-              <strong>${data.getAllQuestions[i].category}</strong>
+              <strong>${data.getAllQuestions[i+1].category}</strong>
             <!--  <div class = "categorySelectBtn" id = "categorySelectBtn${i}">Add</div> -->
               </button>
           </h2>
           <div id="collapse${dataBsTarget}" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
             <div class="accordion-body">
               <strong>Questions:</strong>
-              <div>${data.getAllQuestions[i].question.replaceAll(
+              <div>${data.getAllQuestions[i+1].question.replaceAll(
                 "\r\n",
                 "<br>"
               )}</div> 
               <strong>Answers:</strong>
-              <div>${data.getAllQuestions[i].answer.replaceAll(
+              <div>${data.getAllQuestions[i+1].answer.replaceAll(
                 "\r\n",
                 "<br>"
               )}</div>
@@ -276,7 +281,7 @@ const fetchInformation = async () => {
         </div>
         <br>
         `;
-      }
+
       const element = document.createElement("div");
       element.value = classList[i].className;
       element.innerText = classList[i].className;
@@ -291,10 +296,13 @@ const fetchInformation = async () => {
       categorySelectBtn?.addEventListener("click", () => {
         console.log("click")
       })
-    }
   };
+}
+}
 
   fillClassListDropdown();
+
+// ------------------------------------------------ Event Listener for the Questions List Button -----------------------------
 
   document
     .getElementById("questionsListBtn")
@@ -391,6 +399,7 @@ const fetchQuestions = async function () {
   let data = await response.json();
   console.log("data:", data);
 };
+
 
 const testFetchButton = document.getElementById("testFetchButton");
 testFetchButton?.addEventListener("click", fetchQuestions);
