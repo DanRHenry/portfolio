@@ -414,12 +414,6 @@ aside div {
   padding-right: 0;
 }
 
-#questionList {
-  display: flex;
-  flex-direction: column;
-  margin-top: 1em;
-}
-
 .displayQuestions > * {
   display: none;
   /* color: blue; */
@@ -432,8 +426,12 @@ aside div {
 
 #editContentBody {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   margin-top: 1em;
+}
+
+#newCatTitle{
+  text-align: center;
 }
 
 #classNameInputField {
@@ -448,6 +446,7 @@ aside div {
   width: clamp(fit-content, 40vw, 100vw);
   display: flex;
   margin-left: 5vw;
+  margin-right: 5vw;
   background-color: gray;
   border-radius: 1em;
   border: 3px solid black;
@@ -466,7 +465,7 @@ aside div {
   background-color: white;
 }
 
-#questionsListBtn:hover, #class-names:hover, #newInformationSubmitButton > button:hover{
+#questionsListBtn:hover, #newInformationSubmitButton > button:hover{
     background-color: rgb(164, 164, 164);
 }
 
@@ -474,16 +473,36 @@ aside div {
     margin-right: 1em;
     border-top-left-radius: .25em;
     border-top-right-radius: .25em;
+    background-color: white;
 }
 
-#class-names:hover {
-
-}
 #classLists {
-  width: 40vw;
+  /* width: 40vw; */
   border: 3px solid black;
   border-radius: 1em;
   padding: 1em;
-  margin-left: 10vw;
-  background-color: gray;
+  margin-left: 5vw;
+  margin-right: 5vw;
+  /* background-color: gray; */
+  height: fit-content;
+}
+
+.categoryItems{
+  font-size: medium;
+}
+
+#questionsDisplay{
+  display: flex;
+  flex-direction: row;
+  margin-top: 1em;
+}
+
+#questionList {
+  /* margin-top: 1em; */
+  width: 90%;
+}
+
+#questionsListCheckbox{
+  background-color: purple;
+  width: 10%;
 }
