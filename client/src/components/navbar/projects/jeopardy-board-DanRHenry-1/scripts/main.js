@@ -196,6 +196,7 @@ const fetchInformation = async () => {
           className: data.getAllQuestions[i].className,
           category: data.getAllQuestions[i].category,
           score: data.getAllQuestions[i].score,
+          unit: data.getAllQuestions[i].unit,
         });
       }
     }
@@ -210,20 +211,23 @@ const fetchInformation = async () => {
     <div class="accordion-item">
       <h2 class="accordion-header">
         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-<!--         <strong>${results[i].category}</strong> -->
-         <strong>${results[i].category}</strong>
+<!--         <b>${results[i].category}</b> -->
+         <div>
+          <strong>Unit: </strong>${results[i].unit}
+          <br> 
+          <strong>Category: </strong> ${results[i].category}
+          </div>
         </button>
       </h2>
       <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
         <div class="accordion-body">
-          <strong>Questions:</strong>
-          <div>${results[i].question.replaceAll("\r\n", "<br>")}</div> 
-          <strong>Answers:</strong>
-          <div>${results[i].answer.replaceAll("\r\n", "<br>")}</div>
+          <b>Questions:</b>
+          <div class="categoryItems">${results[i].question.replaceAll("\r\n", "<br>")}</div> 
+          <b>Answers:</b>
+          <div class="categoryItems">${results[i].answer.replaceAll("\r\n", "<br>")}</div>
         </div>
       </div>
     </div>
-    <br>
     `;
       }
 
@@ -237,6 +241,7 @@ const fetchInformation = async () => {
       // document.getElementById("questionList").innerHTML = data.getAllQuestions[i].question;
       for (let i = 0; i < results.length; i++) {
         document.getElementById("questionList").innerHTML = resultsHTML;
+        document.getElementById("questionsListCheckbox").innerHTML = `<input type = "checkbox"></input>`
       }
 
       // }
@@ -249,21 +254,24 @@ const fetchInformation = async () => {
         // resultsHTML = ""
         resultsHTML += `
 <div class = "accordion-item">
-        <h2 class="accordion-header">
+<h2 class="accordion-header">
             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse${dataBsTarget}" aria-expanded="false" aria-controls="collapse${dataBsTarget}">
-              <strong>${results[i].category}</strong>
+            <div>
+              <strong>Unit: </strong>${results[i].unit}
+              <br>
+              <strong>Category: </strong>${results[i].category}
+            </div>
               </button>
           </h2>
           <div id="collapse${dataBsTarget}" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
             <div class="accordion-body">
               <strong>Questions:</strong>
-              <div>${results[i].question.replaceAll("\r\n", "<br>")}</div> 
+              <div class="categoryItems">${results[i].question.replaceAll("\r\n", "<br>")}</div> 
               <strong>Answers:</strong>
-              <div>${results[i].answer.replaceAll("\r\n", "<br>")}</div>
+              <div class="categoryItems">${results[i].answer.replaceAll("\r\n", "<br>")}</div>
             </div>
           </div>
         </div>
-        <br>
         `;
 
         const element = document.createElement("div");
