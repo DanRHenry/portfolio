@@ -486,7 +486,7 @@ function deactivateButtons() {
 }
 
 // Disable the close button
-function hideCloseBtn() {
+function hideTextDisplayBtn() {
   textDisplayBtn.style.display = "none";
 }
 
@@ -593,9 +593,11 @@ function setActivePlayerScore(pointsAvailable) {
 textDisplayBtn?.addEventListener("click", function () {
   closeTextDisplayWindow();
   deactivateButtons();
-  hideCloseBtn();
+  hideTextDisplayBtn();
 });
 
+
+//! --------------------------------------- Open the Clue Window -----------------------
 function openTextDisplayWindow() {
   textDisplay.style.display = "block";
   textDisplay.style.border = ".5em solid black";
@@ -606,21 +608,24 @@ function openTextDisplayWindow() {
   textDisplay.style.width = "60%";
   textDisplay.style.top = "7em";
   textDisplay.style.left = "20%";
-  textDisplayBtn.innerText = "Risk";
+  textDisplayBtn.innerText = "Buzz In";
   setTimeout(() => {
     textDisplayBtn.style.display = "inline-block";
-    textDisplayBtn.id = "riskBtn";
-    document.getElementById("riskBtn").addEventListener("click", () => {
+    textDisplayBtn.id = "riskBtn"; //todo maybe change this later to remove the id change
+    document.getElementById("riskBtn").addEventListener("click", () => { //todo maybe change this later to remove the id change
       console.log("click");
     });
   }, 200);
 
+  //! --------------------------------- Hide the Clue Window text until the animation finishes -----------------
   setTimeout(() => {
     textDisplay.style.color = "white";
   }, "200");
+
+  //!---------------------------------------------- Timer for Buzzing in ---------------------------------------
   setTimeout(() => {
     deactivateButtons();
-    textDisplayBtn.id = "textDisplayBtn";
+    textDisplayBtn.id = "textDisplayBtn"; //todo maybe change this later to remove the id change
     textDisplayBtn.innerText = "Close";
     // textDisplayBtn.innerHTML = `<button id="textDisplayBtn">Risk</button>`
 
@@ -640,6 +645,9 @@ function openTextDisplayWindow() {
   }, "5000");
 }
 
+
+
+//! ---------------------------------------- Function to Close the Clue Window ----------------------------------
 function closeTextDisplayWindow() {
   textDisplay.style.color = "rgb(92, 107, 160)";
   textDisplay.style.height = "0em";
@@ -663,6 +671,8 @@ function closeTextDisplayWindow() {
     console.log("activePlayer", activePlayer);
   }
 }
+
+
 
 //!----------------------------------------- Correct / Incorrect Functions -----------------------------------------
 
@@ -742,7 +752,7 @@ const incorrect = () => {
       // textDisplay.style.display = "none";
       closeTextDisplayWindow();
       deactivateButtons();
-      hideCloseBtn();
+      hideTextDisplayBtn();
     }, 2000);
   }
 };
