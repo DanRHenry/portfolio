@@ -67,8 +67,6 @@ let customRoundTwoArray = [];
 const classList = [];
 let results = [];
 
-
-
 // Fill Round One, Two, and final Arrays
 for (let m = 0; roundTwoArray.length < 30; m++) {
   for (let questionPosition = m; questionPosition < 60; questionPosition++) {
@@ -99,7 +97,6 @@ if (roundName[0]?.innerText == "Jeopardy!") {
   round = "final";
 }
 
-
 // --------------------------------------- API Calls -----------------------------------------
 const fetchStudentList = async () => {
   const url = "https://danhenrydev.com/jeopardyApi/user/";
@@ -117,12 +114,10 @@ const fetchStudentList = async () => {
 //   .getElementById("questionsListBtn")
 //   ?.addEventListener("click", fetchQuestionsList);
 
-
 const fetchInformation = async () => {
   const url = "https://danhenrydev.com/jeopardyApi/questions/";
   let result = await fetch(url);
   let data = await result.json();
-
 
   //Todo - Figure out how to add numbers to the questions and answers
   for (let i = 0; i < data.getAllQuestions.length; i++) {
@@ -136,7 +131,6 @@ const fetchInformation = async () => {
       id: data.getAllQuestions[i]._id,
     });
 
-
     // Information for the Gameplay Categories/Class/Questions/Answers/Scores
     for (let index = 0; index < gameAnswers.length; index++) {
       customContentArray.push({
@@ -148,7 +142,6 @@ const fetchInformation = async () => {
       });
     }
   }
-
 
   // Fill the class list in the admin page
   const fillClassListDropdown = () => {
@@ -186,8 +179,7 @@ const fetchInformation = async () => {
     "Twenty-One",
   ];
 
-
-// ------------------------------------------------ Function to fill the Category Options List ---------------------------------
+  // ------------------------------------------------ Function to fill the Category Options List ---------------------------------
   const fillCategoryOptionsDropdown = () => {
     results = [];
     resultsHTML = "";
@@ -199,22 +191,21 @@ const fetchInformation = async () => {
         document.getElementById("class-names").value
       ) {
         results.push({
-          "question": data.getAllQuestions[i].question,
-          "answer": data.getAllQuestions[i].answer,
-          "className": data.getAllQuestions[i].className,
-          "category": data.getAllQuestions[i].category,
-          "score": data.getAllQuestions[i].score
-        });        
+          question: data.getAllQuestions[i].question,
+          answer: data.getAllQuestions[i].answer,
+          className: data.getAllQuestions[i].className,
+          category: data.getAllQuestions[i].category,
+          score: data.getAllQuestions[i].score,
+        });
       }
     }
 
-      console.log("results Length:", results.length, "results:", results)
+    console.log("results Length:", results.length, "results:", results);
     // ----------------------------------------------------- Primary Category -------------------------------------------
     // Add the first category information from the results array to the resultsHTML string. This is done separately from the rest to accomidate the bootstrap differences.
     for (let i = 0; i < results.length; i++) {
-    if (i === 0) {
-      resultsHTML += `
-      <div>${i} Primary:<div>
+      if (i === 0) {
+        resultsHTML += `
     <div class="accordion" id="accordionExample">
     <div class="accordion-item">
       <h2 class="accordion-header">
@@ -226,68 +217,17 @@ const fetchInformation = async () => {
       <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
         <div class="accordion-body">
           <strong>Questions:</strong>
-          <div>${results[i].question.replaceAll(
-            "\r\n",
-            "<br>"
-          )}</div> 
+          <div>${results[i].question.replaceAll("\r\n", "<br>")}</div> 
           <strong>Answers:</strong>
-          <div>${results[i].answer.replaceAll(
-            "\r\n",
-            "<br>"
-          )}</div>
+          <div>${results[i].answer.replaceAll("\r\n", "<br>")}</div>
         </div>
       </div>
     </div>
     <br>
     `;
-  }
+      }
 
-    let dataBsTarget = `collapse${numbers[i]}`;
-
-    const element = document.createElement("div");
-    element.value = classList[i].className;
-    element.innerText = classList[i].className;
-    element.id = classList[i].id;
-    element.innerText = data.getAllQuestions[i].question;
-    // document.getElementById("questionList").innerHTML = data.getAllQuestions[i].question;
-    for (let i = 0; i < results.length; i++) {
-      document.getElementById("questionList").innerHTML = resultsHTML;
-    }
-
-    // }
-
-    // ! -------------------------------------------- Secondary categories: ---------------------------------------------
-
-      if (results.length > 1 && i >= 1) {
-        console.log("secondary:")
-        let dataBsTarget = `collapse${numbers[i]}`;
-        // resultsHTML = ""
-        resultsHTML += `
-        <div>${i} Secondary:<div>
-<div class = "accordion-item">
-        <h2 class="accordion-header">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse${dataBsTarget}" aria-expanded="false" aria-controls="collapse${dataBsTarget}">
-              <strong>${results[i].category}</strong>
-            <!--  <div class = "categorySelectBtn" id = "categorySelectBtn${i}">Add</div> -->
-              </button>
-          </h2>
-          <div id="collapse${dataBsTarget}" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-            <div class="accordion-body">
-              <strong>Questions:</strong>
-              <div>${results[i].question.replaceAll(
-                "\r\n",
-                "<br>"
-              )}</div> 
-              <strong>Answers:</strong>
-              <div>${results[i].answer.replaceAll(
-                "\r\n",
-                "<br>"
-              )}</div>
-            </div>
-          </div>
-        </div>
-        <br>
-        `;
+      let dataBsTarget = `collapse${numbers[i]}`;
 
       const element = document.createElement("div");
       element.value = classList[i].className;
@@ -298,18 +238,57 @@ const fetchInformation = async () => {
       for (let i = 0; i < results.length; i++) {
         document.getElementById("questionList").innerHTML = resultsHTML;
       }
-      const categorySelectBtn = document.getElementById(`categorySelectBtn${i}`)
-  
-      categorySelectBtn?.addEventListener("click", () => {
-        console.log("click")
-      })
+
+      // }
+
+      // ! -------------------------------------------- Secondary categories: ---------------------------------------------
+
+      if (results.length > 1 && i >= 1) {
+        console.log("secondary:");
+        let dataBsTarget = `collapse${numbers[i]}`;
+        // resultsHTML = ""
+        resultsHTML += `
+<div class = "accordion-item">
+        <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse${dataBsTarget}" aria-expanded="false" aria-controls="collapse${dataBsTarget}">
+              <strong>${results[i].category}</strong>
+              </button>
+          </h2>
+          <div id="collapse${dataBsTarget}" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+            <div class="accordion-body">
+              <strong>Questions:</strong>
+              <div>${results[i].question.replaceAll("\r\n", "<br>")}</div> 
+              <strong>Answers:</strong>
+              <div>${results[i].answer.replaceAll("\r\n", "<br>")}</div>
+            </div>
+          </div>
+        </div>
+        <br>
+        `;
+
+        const element = document.createElement("div");
+        element.value = classList[i].className;
+        element.innerText = classList[i].className;
+        element.id = classList[i].id;
+        element.innerText = data.getAllQuestions[i].question;
+        // document.getElementById("questionList").innerHTML = data.getAllQuestions[i].question;
+        for (let i = 0; i < results.length; i++) {
+          document.getElementById("questionList").innerHTML = resultsHTML;
+        }
+        const categorySelectBtn = document.getElementById(
+          `categorySelectBtn${i}`
+        );
+
+        categorySelectBtn?.addEventListener("click", () => {
+          console.log("click");
+        });
+      }
+    }
   };
-}
-}
 
   fillClassListDropdown();
 
-// ------------------------------------------------ Event Listener for the Questions List Button -----------------------------
+  // ------------------------------------------------ Event Listener for the Questions List Button -----------------------------
 
   document
     .getElementById("questionsListBtn")
@@ -406,7 +385,6 @@ const fetchQuestions = async function () {
   let data = await response.json();
   console.log("data:", data);
 };
-
 
 const testFetchButton = document.getElementById("testFetchButton");
 testFetchButton?.addEventListener("click", fetchQuestions);

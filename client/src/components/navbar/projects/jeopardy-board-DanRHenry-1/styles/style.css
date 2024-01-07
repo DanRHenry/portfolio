@@ -418,3 +418,27 @@ aside div{
     /* color: orange; */
     display: none;
 }
+
+#editContentBody {
+    display: flex;
+    flex-direction: row;
+    margin-top: 1em;
+}
+
+#newCategory {
+    width: clamp(fit-content, 40vw, 100vw);
+    display: flex;
+    margin-left: 5vw;
+    background-color: gray;
+    border-radius: 1em;
+    padding: 1em;
+}
+
+#classLists {
+    width: 40vw;
+    border: 3px solid black;
+    border-radius: 1em;
+    padding: 1em;
+    margin-left: 10vw;
+    background-color: gray;
+}
