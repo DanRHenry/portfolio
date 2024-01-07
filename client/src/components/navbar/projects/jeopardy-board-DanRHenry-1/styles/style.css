@@ -463,6 +463,11 @@ aside div {
   border-radius: 1em;
   padding-left: 0.5em;
   padding-right: 0.5em;
+  background-color: white;
+}
+
+#questionsListBtn:hover, #class-names:hover, #newInformationSubmitButton > button:hover{
+    background-color: rgb(164, 164, 164);
 }
 
 #class-names {
@@ -471,6 +476,9 @@ aside div {
     border-top-right-radius: .25em;
 }
 
+#class-names:hover {
+
+}
 #classLists {
   width: 40vw;
   border: 3px solid black;
