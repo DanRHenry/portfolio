@@ -198,7 +198,13 @@ const fetchInformation = async () => {
         data.getAllQuestions[i].className ===
         document.getElementById("class-names").value
       ) {
-        results.push(data.getAllQuestions[i].question);
+        results.push({
+          "question": data.getAllQuestions[i].question,
+          "answer": data.getAllQuestions[i].answer,
+          "className": data.getAllQuestions[i].className,
+          "category": data.getAllQuestions[i].category,
+          "score": data.getAllQuestions[i].score
+        });        
       }
     }
 
@@ -213,18 +219,19 @@ const fetchInformation = async () => {
     <div class="accordion-item">
       <h2 class="accordion-header">
         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-         <strong>${data.getAllQuestions[i].category}</strong>
+<!--         <strong>${results[i].category}</strong> -->
+         <strong>${results[i].category}</strong>
         </button>
       </h2>
       <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
         <div class="accordion-body">
           <strong>Questions:</strong>
-          <div>${data.getAllQuestions[i].question.replaceAll(
+          <div>${results[i].question.replaceAll(
             "\r\n",
             "<br>"
           )}</div> 
           <strong>Answers:</strong>
-          <div>${data.getAllQuestions[i].answer.replaceAll(
+          <div>${results[i].answer.replaceAll(
             "\r\n",
             "<br>"
           )}</div>
@@ -260,19 +267,19 @@ const fetchInformation = async () => {
 <div class = "accordion-item">
         <h2 class="accordion-header">
             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse${dataBsTarget}" aria-expanded="false" aria-controls="collapse${dataBsTarget}">
-              <strong>${data.getAllQuestions[i+1].category}</strong>
+              <strong>${results[i].category}</strong>
             <!--  <div class = "categorySelectBtn" id = "categorySelectBtn${i}">Add</div> -->
               </button>
           </h2>
           <div id="collapse${dataBsTarget}" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
             <div class="accordion-body">
               <strong>Questions:</strong>
-              <div>${data.getAllQuestions[i+1].question.replaceAll(
+              <div>${results[i].question.replaceAll(
                 "\r\n",
                 "<br>"
               )}</div> 
               <strong>Answers:</strong>
-              <div>${data.getAllQuestions[i+1].answer.replaceAll(
+              <div>${results[i].answer.replaceAll(
                 "\r\n",
                 "<br>"
               )}</div>

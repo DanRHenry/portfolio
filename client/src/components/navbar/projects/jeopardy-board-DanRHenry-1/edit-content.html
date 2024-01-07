@@ -15,13 +15,15 @@
   </head>
   <!-- Post From HTML Form To MongoDB Atlas | Javascript Tutorial https://www.youtube.com/watch?v=ZhqOp1Dkuso -->
   <body>
-    <form
+    <input
       class="container"
       method="post"
       action="https://danhenrydev.com/jeopardyApi/questions/storeQuestion/"
     >
+      <div class = "form-group" name = "className"></div>
+        <input name="className">Class Name</input>
       <div class="form-group">
-        <input class="form-control" name="question" />
+        <textarea class="form-control" name="question"> </textarea>
       </div>
       <div class="form-group">
         <textarea class="form-control" name="answer"></textarea>
