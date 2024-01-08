@@ -88,21 +88,19 @@
       <button id="questionsListBtn">Find Categories</button>
       <div id="questionsDisplay">
         <div id="questionList"></div>
-
-
-
-
-        
-        <!-- Checkbox -->
-        <form
+        <div>Checkbox</div>
+          <form
         class="container"
         method="post"
-        action="https://danhenrydev.com/jeopardyApi/questions/storeQuestion/"
-      >      <h1 id="newCatTitle">Add a New Category</h1>
-
-        <label for="className">Class Name:</label>
+        action="https://danhenrydev.com/jeopardyApi/gameplay/gameplayInformation/"
+      >      
+      
+      
+        <!-- <label for="className">Class Name:</label> -->
         <div class="form-group" name="className">
-          <input id="questionsListCheckbox"></div>
+          <input id="questionsListCheckbox">
+        
+        </div>
 
           <input
             id="questionsListCheckboxField"
@@ -110,53 +108,10 @@
             required="true"
           />
         </div>
-        <label for="unitName">Unit Name:</label>
-        <div class="form-group" name="unitName">
-          <input
-            id="unitNameInputField"
-            name="unitName"
-            required="true"
-          />
-        </div>
-        <label for="category">Jeopardy Category:</label>
-        <div class="form-group" name="category">
-          <input
-            style="
-              width: fit-content;
-              height: 2em;
-              padding-top: 1em;
-              padding-bottom: 1em;
-              text-align: center;
-            "
-            name="category"
-            required="true"
-          />
-        </div>
-        <label for="question">Questions</label>
-        <div class="form-group">
-          <textarea
-            class="form-control"
-            name="question"
-            style="height: 10em"
-            required="true"
-            placeholder=" One question for each line."
-          ></textarea>
-        </div>
-        <label for="answer">Answers</label>
-        <div class="form-group">
-          <textarea
-            class="form-control"
-            name="answer"
-            style="height: 10em"
-            required="true"
-            placeholder=" One answer for each line."
-          ></textarea>
-        </div>
-        <div id="newInformationSubmitButton">
-        <button>Submit</button>
-      </div>
-      </form>
-      </div>
+
+
+
+
 
 
 

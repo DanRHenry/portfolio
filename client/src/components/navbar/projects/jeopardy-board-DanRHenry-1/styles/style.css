@@ -472,7 +472,7 @@ aside div {
 #class-names {
     margin-right: 1em;
     border-top-left-radius: .25em;
-    border-top-right-radius: .25em;
+    /* border-top-right-radius: .25em; */
     background-color: white;
 }
 
@@ -483,7 +483,7 @@ aside div {
   padding: 1em;
   margin-left: 5vw;
   margin-right: 5vw;
-  /* background-color: gray; */
+  background-color: gray;
   height: fit-content;
 }
 
