@@ -498,11 +498,11 @@ aside div {
 }
 
 #questionList {
-  /* margin-top: 1em; */
   width: 90%;
+  min-width: 90%;
 }
 
-#questionsListCheckbox{
+/* #questionsListCheckbox{
   background-color: purple;
   width: 10%;
-}
+} */

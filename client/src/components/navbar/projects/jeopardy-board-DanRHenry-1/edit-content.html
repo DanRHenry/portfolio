@@ -83,31 +83,25 @@
   </div> -->
 
     <div id="classLists">
-      <div>Choose a Class:</div>
+      <h1>Choose a Class:</h1>
       <select name="class-names" id="class-names"></select>
       <button id="questionsListBtn">Find Categories</button>
-      <div id="questionsDisplay">
+      <span id="questionsDisplay">
         <div id="questionList"></div>
-        <div>Checkbox</div>
-          <form
-        class="container"
-        method="post"
-        action="https://danhenrydev.com/jeopardyApi/gameplay/gameplayInformation/"
-      >      
-      
-      
-        <!-- <label for="className">Class Name:</label> -->
-        <div class="form-group" name="className">
-          <input id="questionsListCheckbox">
+        <form
+      class="container"
+      id="checkBoxes"
+      method="post"
+      action="https://danhenrydev.com/jeopardyApi/gameplay/gameplayInformation/"
+    >  </form>
+        <!-- <span>Checkbox</span> -->
         
-        </div>
 
-          <input
-            id="questionsListCheckboxField"
-            name="classSelect"
-            required="true"
-          />
-        </div>
+        <!-- <label for="className">Class Name:</label> -->
+        <!-- <div class="form-group" name="className">
+          <div id="questionsListCheckbox"></div>
+        </div> -->
+          </span>
 
 
 

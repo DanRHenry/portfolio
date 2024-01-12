@@ -181,6 +181,9 @@ const fetchInformation = async () => {
 
   // ------------------------------------------------ Function to fill the Category Options List ---------------------------------
   const fillCategoryOptionsDropdown = () => {
+    if (document.getElementById(`checkBoxes`)) {
+      document.getElementById(`checkBoxes`).innerHTML = "";
+    }
     results = [];
     resultsHTML = "";
 
@@ -212,11 +215,11 @@ const fetchInformation = async () => {
       <h2 class="accordion-header">
         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
 <!--         <b>${results[i].category}</b> -->
-         <div>
+         <span>
           <strong>Unit: </strong>${results[i].unit}
           <br> 
           <strong>Category: </strong> ${results[i].category}
-          </div>
+          </span>
         </button>
       </h2>
       <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
@@ -232,17 +235,38 @@ const fetchInformation = async () => {
       }
 
       let dataBsTarget = `collapse${numbers[i]}`;
-
+      console.log("classlist:", classList[i])
       const element = document.createElement("div");
       element.value = classList[i].className;
       element.innerText = classList[i].className;
       element.id = classList[i].id;
       element.innerText = data.getAllQuestions[i].question;
-      // document.getElementById("questionList").innerHTML = data.getAllQuestions[i].question;
+
+      console.log("reslength",results.length,results)
       for (let i = 0; i < results.length; i++) {
-        document.getElementById("questionList").innerHTML = resultsHTML;
-        document.getElementById("questionsListCheckbox").innerHTML = `<input type = "checkbox"></input>`
-      }
+
+
+        document.getElementById("questionList").innerHTML = "<span>"+resultsHTML+`
+
+        <div class="form-group" name="className">
+      </span>`
+
+      // }
+      // }
+// -------------------------------------------- Bootstrap Checkbox Template ----------------------------
+
+// <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
+//   <input type="checkbox" class="btn-check" id="btncheck1" autocomplete="off">
+//   <label class="btn btn-outline-primary" for="btncheck1">Checkbox 1</label>
+
+//   <input type="checkbox" class="btn-check" id="btncheck2" autocomplete="off">
+//   <label class="btn btn-outline-primary" for="btncheck2">Checkbox 2</label>
+
+//   <input type="checkbox" class="btn-check" id="btncheck3" autocomplete="off">
+//   <label class="btn btn-outline-primary" for="btncheck3">Checkbox 3</label>
+// </div>
+
+}
 
       // }
 
@@ -290,7 +314,32 @@ const fetchInformation = async () => {
         categorySelectBtn?.addEventListener("click", () => {
           console.log("click");
         });
+        // checkBoxes.appendChild(element)
       }
+
+      // Basically working, but needs to reset checkboxes when the button is clicked
+      const checkBoxes = document.getElementById(`checkBoxes`);
+
+      const checkboxToggleButtonGroup = document.createElement("div");
+      checkboxToggleButtonGroup.classList = "btn-group"; 
+      checkboxToggleButtonGroup.role="group";
+      checkboxToggleButtonGroup["aria-label"]="Basic checkbox toggle button group"
+      checkBoxes.appendChild (checkboxToggleButtonGroup)
+
+      const checkboxInput = document.createElement("input");
+      checkboxInput.type = "checkbox";
+      checkboxInput.className= "btn-check";
+      checkboxInput.id = `btncheck${i+1}`;
+      checkboxInput.autocomplete = "off";
+      checkBoxes.appendChild (checkboxInput)
+
+      const checkboxLabel = document.createElement("label");
+      checkboxLabel.classList = ("btn btn-outline-primary");
+      checkboxLabel.for = (`btncheck${i+1}`);
+      checkboxLabel.innerText = `Checkbox ${i+1}`
+      checkBoxes.appendChild(checkboxLabel)
+
+      console.log("logging i:", i)
     }
   };
 
