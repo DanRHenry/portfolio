@@ -181,6 +181,9 @@ const fetchInformation = async () => {
 
   // ------------------------------------------------ Function to fill the Category Options List ---------------------------------
   const fillCategoryOptionsDropdown = () => {
+    if (document.getElementById(`checkBoxes`)) {
+      document.getElementById(`checkBoxes`).innerHTML = "";
+    }
     results = [];
     resultsHTML = "";
 
@@ -196,6 +199,7 @@ const fetchInformation = async () => {
           className: data.getAllQuestions[i].className,
           category: data.getAllQuestions[i].category,
           score: data.getAllQuestions[i].score,
+          unit: data.getAllQuestions[i].unit,
         });
       }
     }
@@ -208,36 +212,46 @@ const fetchInformation = async () => {
         resultsHTML += `
     <div class="accordion" id="accordionExample">
     <div class="accordion-item">
-      <h2 class="accordion-header">
+      <h2 class="accordion-header" id="accordionHeader_${i}">
         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-<!--         <strong>${results[i].category}</strong> -->
-         <strong>${results[i].category}</strong>
+<!--         <b>${results[i].category}</b> -->
+         <span>
+          <strong>Unit: </strong>${results[i].unit}
+          <br> 
+          <strong>Category: </strong> ${results[i].category}
+          </span>
         </button>
       </h2>
       <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
         <div class="accordion-body">
-          <strong>Questions:</strong>
-          <div>${results[i].question.replaceAll("\r\n", "<br>")}</div> 
-          <strong>Answers:</strong>
-          <div>${results[i].answer.replaceAll("\r\n", "<br>")}</div>
+          <b>Questions:</b>
+          <div class="categoryItems">${results[i].question.replaceAll("\r\n", "<br>")}</div> 
+          <b>Answers:</b>
+          <div class="categoryItems">${results[i].answer.replaceAll("\r\n", "<br>")}</div>
         </div>
       </div>
     </div>
-    <br>
     `;
       }
 
       let dataBsTarget = `collapse${numbers[i]}`;
-
+      console.log("classlist:", classList[i])
       const element = document.createElement("div");
       element.value = classList[i].className;
       element.innerText = classList[i].className;
       element.id = classList[i].id;
       element.innerText = data.getAllQuestions[i].question;
-      // document.getElementById("questionList").innerHTML = data.getAllQuestions[i].question;
+
+      console.log("reslength",results.length,results)
       for (let i = 0; i < results.length; i++) {
-        document.getElementById("questionList").innerHTML = resultsHTML;
-      }
+
+
+        document.getElementById("questionList").innerHTML = "<span>"+resultsHTML+`
+
+        <div class="form-group" name="className">
+      </span>`
+
+}
 
       // }
 
@@ -249,21 +263,24 @@ const fetchInformation = async () => {
         // resultsHTML = ""
         resultsHTML += `
 <div class = "accordion-item">
-        <h2 class="accordion-header">
+<h2 class="accordion-header" id="accordionHeader_${i}">
             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse${dataBsTarget}" aria-expanded="false" aria-controls="collapse${dataBsTarget}">
-              <strong>${results[i].category}</strong>
+            <div>
+              <strong>Unit: </strong>${results[i].unit}
+              <br>
+              <strong>Category: </strong>${results[i].category}
+            </div>
               </button>
           </h2>
           <div id="collapse${dataBsTarget}" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
             <div class="accordion-body">
               <strong>Questions:</strong>
-              <div>${results[i].question.replaceAll("\r\n", "<br>")}</div> 
+              <div class="categoryItems">${results[i].question.replaceAll("\r\n", "<br>")}</div> 
               <strong>Answers:</strong>
-              <div>${results[i].answer.replaceAll("\r\n", "<br>")}</div>
+              <div class="categoryItems">${results[i].answer.replaceAll("\r\n", "<br>")}</div>
             </div>
           </div>
         </div>
-        <br>
         `;
 
         const element = document.createElement("div");
@@ -282,11 +299,76 @@ const fetchInformation = async () => {
         categorySelectBtn?.addEventListener("click", () => {
           console.log("click");
         });
+        // checkBoxes.appendChild(element)
       }
-    }
+
+
+      //<input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
+
+
+      const checkboxToggleButtonGroup = document.createElement("div");
+      checkboxToggleButtonGroup.classList = "btn-group"; 
+      checkboxToggleButtonGroup.role="group";
+      checkboxToggleButtonGroup.ariaLabel="Basic checkbox toggle button group"
+      checkBoxes.appendChild (checkboxToggleButtonGroup)
+
+      // const checkboxInput = document.createElement("input");
+      // checkboxInput.type = "checkbox";
+      // checkboxInput.className= "btn-check";
+      // checkboxInput.id = `btncheck${i+1}`;
+      // checkboxInput.autocomplete = "off";
+      // checkboxToggleButtonGroup.appendChild (checkboxInput)
+
+      // const checkboxLabel = document.createElement("label");
+      // checkboxLabel.classList = ("btn btn-outline-primary");
+      // checkboxLabel.for = (`btncheck${i+1}`);
+      // checkboxLabel.innerText = `Checkbox ${i+1}`
+      // checkboxToggleButtonGroup.appendChild(checkboxLabel)
+
+      // console.log("logging i:", i)
+
+      // -------------------------------------------- Bootstrap Checkbox Template ----------------------------
+
+// <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
+//   <input type="checkbox" class="btn-check" id="btncheck1" autocomplete="off">
+//   <label class="btn btn-outline-primary" for="btncheck1">Checkbox 1</label>
+
+//   <input type="checkbox" class="btn-check" id="btncheck2" autocomplete="off">
+//   <label class="btn btn-outline-primary" for="btncheck2">Checkbox 2</label>
+
+//   <input type="checkbox" class="btn-check" id="btncheck3" autocomplete="off">
+//   <label class="btn btn-outline-primary" for="btncheck3">Checkbox 3</label>
+// </div>
+  }
+  addCheckboxes()
   };
 
   fillClassListDropdown();
+
+
+  // ! --------------------------------------- Add Checkboxes to Categories List --------------------------
+  const addCheckboxes = () => {
+    if (document.getElementsByClassName("accordion-header")) {
+      const accordionHeaders = document.getElementsByClassName("accordion-header")
+      for (let i = 0; i < accordionHeaders.length; i++) {
+  const accordionHeader = document.getElementById(`accordionHeader_${i}`);
+    
+  const checkboxLabel = document.createElement("label");
+  checkboxLabel.htmlFor = `btncheck${i+1}`
+  checkboxLabel.innerText = "Add Category to Game"
+  checkboxLabel.className = "checkboxLabel"
+
+  const checkBoxInput = document.createElement("input");
+  checkBoxInput.type = "checkbox";
+  checkBoxInput.className = "checkboxInput"
+  checkBoxInput.id = `btncheck${i+1}`;
+  checkBoxInput.autocomplete = "off";
+  
+  accordionHeader.appendChild(checkboxLabel)
+  accordionHeader.appendChild(checkBoxInput);
+  }
+    }
+  }
 
   // ------------------------------------------------ Event Listener for the Questions List Button -----------------------------
 
@@ -486,7 +568,7 @@ function deactivateButtons() {
 }
 
 // Disable the close button
-function hideCloseBtn() {
+function hideTextDisplayBtn() {
   textDisplayBtn.style.display = "none";
 }
 
@@ -593,9 +675,11 @@ function setActivePlayerScore(pointsAvailable) {
 textDisplayBtn?.addEventListener("click", function () {
   closeTextDisplayWindow();
   deactivateButtons();
-  hideCloseBtn();
+  hideTextDisplayBtn();
 });
 
+
+//! --------------------------------------- Open the Clue Window -----------------------
 function openTextDisplayWindow() {
   textDisplay.style.display = "block";
   textDisplay.style.border = ".5em solid black";
@@ -606,21 +690,24 @@ function openTextDisplayWindow() {
   textDisplay.style.width = "60%";
   textDisplay.style.top = "7em";
   textDisplay.style.left = "20%";
-  textDisplayBtn.innerText = "Risk";
+  textDisplayBtn.innerText = "Buzz In";
   setTimeout(() => {
     textDisplayBtn.style.display = "inline-block";
-    textDisplayBtn.id = "riskBtn";
-    document.getElementById("riskBtn").addEventListener("click", () => {
+    textDisplayBtn.id = "riskBtn"; //todo maybe change this later to remove the id change
+    document.getElementById("riskBtn").addEventListener("click", () => { //todo maybe change this later to remove the id change
       console.log("click");
     });
   }, 200);
 
+  //! --------------------------------- Hide the Clue Window text until the animation finishes -----------------
   setTimeout(() => {
     textDisplay.style.color = "white";
   }, "200");
+
+  //!---------------------------------------------- Timer for Buzzing in ---------------------------------------
   setTimeout(() => {
     deactivateButtons();
-    textDisplayBtn.id = "textDisplayBtn";
+    textDisplayBtn.id = "textDisplayBtn"; //todo maybe change this later to remove the id change
     textDisplayBtn.innerText = "Close";
     // textDisplayBtn.innerHTML = `<button id="textDisplayBtn">Risk</button>`
 
@@ -640,6 +727,9 @@ function openTextDisplayWindow() {
   }, "5000");
 }
 
+
+
+//! ---------------------------------------- Function to Close the Clue Window ----------------------------------
 function closeTextDisplayWindow() {
   textDisplay.style.color = "rgb(92, 107, 160)";
   textDisplay.style.height = "0em";
@@ -663,6 +753,8 @@ function closeTextDisplayWindow() {
     console.log("activePlayer", activePlayer);
   }
 }
+
+
 
 //!----------------------------------------- Correct / Incorrect Functions -----------------------------------------
 
@@ -742,7 +834,7 @@ const incorrect = () => {
       // textDisplay.style.display = "none";
       closeTextDisplayWindow();
       deactivateButtons();
-      hideCloseBtn();
+      hideTextDisplayBtn();
     }, 2000);
   }
 };

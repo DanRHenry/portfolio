@@ -414,12 +414,6 @@ aside div {
   padding-right: 0;
 }
 
-#questionList {
-  display: flex;
-  flex-direction: column;
-  margin-top: 1em;
-}
-
 .displayQuestions > * {
   display: none;
   /* color: blue; */
@@ -432,8 +426,12 @@ aside div {
 
 #editContentBody {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   margin-top: 1em;
+}
+
+#newCatTitle{
+  text-align: center;
 }
 
 #classNameInputField {
@@ -448,6 +446,7 @@ aside div {
   width: clamp(fit-content, 40vw, 100vw);
   display: flex;
   margin-left: 5vw;
+  margin-right: 5vw;
   background-color: gray;
   border-radius: 1em;
   border: 3px solid black;
@@ -463,19 +462,61 @@ aside div {
   border-radius: 1em;
   padding-left: 0.5em;
   padding-right: 0.5em;
+  background-color: white;
+}
+
+#questionsListBtn:hover, #newInformationSubmitButton > button:hover{
+    background-color: rgb(164, 164, 164);
 }
 
 #class-names {
     margin-right: 1em;
     border-top-left-radius: .25em;
-    border-top-right-radius: .25em;
+    /* border-top-right-radius: .25em; */
+    background-color: white;
 }
 
 #classLists {
-  width: 40vw;
+  /* width: 40vw; */
   border: 3px solid black;
   border-radius: 1em;
   padding: 1em;
-  margin-left: 10vw;
+  margin-left: 5vw;
+  margin-right: 5vw;
   background-color: gray;
+  height: fit-content;
+}
+
+.categoryItems{
+  font-size: medium;
+}
+
+#questionsDisplay{
+  display: flex;
+  flex-direction: row;
+  margin-top: 1em;
+}
+
+#questionList {
+  width: 100%;
+  min-width: 100%;
+}
+
+.btn {
+  background-color: white;
+  position: absolute;
+}
+
+.checkboxLabel {
+    font-size: clamp(10px, 14px, 2.15vw);;
+    height: 3em;
+    position: relative;
+    top: -.75rem;
+    margin-left: 1em;
+}
+
+.checkboxInput {
+    display: inline-block;
+    margin-left: 1em;
+    margin-top: 1em;
 }
