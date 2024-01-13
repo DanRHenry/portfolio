@@ -498,15 +498,25 @@ aside div {
 }
 
 #questionList {
-  width: 90%;
-  min-width: 90%;
+  width: 100%;
+  min-width: 100%;
 }
-
-/* #questionsListCheckbox{
-  background-color: purple;
-  width: 10%;
-} */
 
 .btn {
   background-color: white;
+  position: absolute;
+}
+
+.checkboxLabel {
+    font-size: clamp(10px, 14px, 2.15vw);;
+    height: 3em;
+    position: relative;
+    top: -.75rem;
+    margin-left: 1em;
+}
+
+.checkboxInput {
+    display: inline-block;
+    margin-left: 1em;
+    margin-top: 1em;
 }
