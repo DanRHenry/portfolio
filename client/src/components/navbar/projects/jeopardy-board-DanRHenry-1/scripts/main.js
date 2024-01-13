@@ -212,7 +212,7 @@ const fetchInformation = async () => {
         resultsHTML += `
     <div class="accordion" id="accordionExample">
     <div class="accordion-item">
-      <h2 class="accordion-header">
+      <h2 class="accordion-header" id="accordionHeader_${i}">
         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
 <!--         <b>${results[i].category}</b> -->
          <span>
@@ -263,7 +263,7 @@ const fetchInformation = async () => {
         // resultsHTML = ""
         resultsHTML += `
 <div class = "accordion-item">
-<h2 class="accordion-header">
+<h2 class="accordion-header" id="accordionHeader_${i}">
             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse${dataBsTarget}" aria-expanded="false" aria-controls="collapse${dataBsTarget}">
             <div>
               <strong>Unit: </strong>${results[i].unit}
@@ -339,28 +339,36 @@ const fetchInformation = async () => {
 //   <input type="checkbox" class="btn-check" id="btncheck3" autocomplete="off">
 //   <label class="btn btn-outline-primary" for="btncheck3">Checkbox 3</label>
 // </div>
-
-
-//! Traditional Checkboxes
-// const checkBoxes = document.getElementById(`checkBoxes`);
-// const accordionButton = document.getElementsByClassName("accordion-button")
-
-
-// const checkBoxInput = document.createElement("input");
-
-// checkBoxInput.type = "checkbox";
-// checkBoxInput.id = `btncheck${i+1}`;
-// checkBoxInput.autocomplete = "off";
-// checkBoxes.appendChild(checkBoxInput);
-// console.log("accordionButton:",accordionButton[i].innerText)
-// // accordionButton[i].appendChild(checkBoxInput);
-// console.log("i:",i)
-
   }
+  addCheckboxes()
   };
 
   fillClassListDropdown();
 
+
+  // ! --------------------------------------- Add Checkboxes to Categories List --------------------------
+  const addCheckboxes = () => {
+    if (document.getElementsByClassName("accordion-header")) {
+      const accordionHeaders = document.getElementsByClassName("accordion-header")
+      for (let i = 0; i < accordionHeaders.length; i++) {
+  const accordionHeader = document.getElementById(`accordionHeader_${i}`);
+    
+  const checkboxLabel = document.createElement("label");
+  checkboxLabel.htmlFor = `btncheck${i+1}`
+  checkboxLabel.innerText = "Add Category to Game"
+  checkboxLabel.className = "checkboxLabel"
+
+  const checkBoxInput = document.createElement("input");
+  checkBoxInput.type = "checkbox";
+  checkBoxInput.className = "checkboxInput"
+  checkBoxInput.id = `btncheck${i+1}`;
+  checkBoxInput.autocomplete = "off";
+  
+  accordionHeader.appendChild(checkboxLabel)
+  accordionHeader.appendChild(checkBoxInput);
+  }
+    }
+  }
 
   // ------------------------------------------------ Event Listener for the Questions List Button -----------------------------
 
