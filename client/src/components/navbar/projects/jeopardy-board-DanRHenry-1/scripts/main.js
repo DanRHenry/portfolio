@@ -251,21 +251,6 @@ const fetchInformation = async () => {
         <div class="form-group" name="className">
       </span>`
 
-      // }
-      // }
-// -------------------------------------------- Bootstrap Checkbox Template ----------------------------
-
-// <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
-//   <input type="checkbox" class="btn-check" id="btncheck1" autocomplete="off">
-//   <label class="btn btn-outline-primary" for="btncheck1">Checkbox 1</label>
-
-//   <input type="checkbox" class="btn-check" id="btncheck2" autocomplete="off">
-//   <label class="btn btn-outline-primary" for="btncheck2">Checkbox 2</label>
-
-//   <input type="checkbox" class="btn-check" id="btncheck3" autocomplete="off">
-//   <label class="btn btn-outline-primary" for="btncheck3">Checkbox 3</label>
-// </div>
-
 }
 
       // }
@@ -317,33 +302,65 @@ const fetchInformation = async () => {
         // checkBoxes.appendChild(element)
       }
 
-      // Basically working, but needs to reset checkboxes when the button is clicked
-      const checkBoxes = document.getElementById(`checkBoxes`);
+
+      //<input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
+
 
       const checkboxToggleButtonGroup = document.createElement("div");
       checkboxToggleButtonGroup.classList = "btn-group"; 
       checkboxToggleButtonGroup.role="group";
-      checkboxToggleButtonGroup["aria-label"]="Basic checkbox toggle button group"
+      checkboxToggleButtonGroup.ariaLabel="Basic checkbox toggle button group"
       checkBoxes.appendChild (checkboxToggleButtonGroup)
 
-      const checkboxInput = document.createElement("input");
-      checkboxInput.type = "checkbox";
-      checkboxInput.className= "btn-check";
-      checkboxInput.id = `btncheck${i+1}`;
-      checkboxInput.autocomplete = "off";
-      checkBoxes.appendChild (checkboxInput)
+      // const checkboxInput = document.createElement("input");
+      // checkboxInput.type = "checkbox";
+      // checkboxInput.className= "btn-check";
+      // checkboxInput.id = `btncheck${i+1}`;
+      // checkboxInput.autocomplete = "off";
+      // checkboxToggleButtonGroup.appendChild (checkboxInput)
 
-      const checkboxLabel = document.createElement("label");
-      checkboxLabel.classList = ("btn btn-outline-primary");
-      checkboxLabel.for = (`btncheck${i+1}`);
-      checkboxLabel.innerText = `Checkbox ${i+1}`
-      checkBoxes.appendChild(checkboxLabel)
+      // const checkboxLabel = document.createElement("label");
+      // checkboxLabel.classList = ("btn btn-outline-primary");
+      // checkboxLabel.for = (`btncheck${i+1}`);
+      // checkboxLabel.innerText = `Checkbox ${i+1}`
+      // checkboxToggleButtonGroup.appendChild(checkboxLabel)
 
-      console.log("logging i:", i)
-    }
+      // console.log("logging i:", i)
+
+      // -------------------------------------------- Bootstrap Checkbox Template ----------------------------
+
+// <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
+//   <input type="checkbox" class="btn-check" id="btncheck1" autocomplete="off">
+//   <label class="btn btn-outline-primary" for="btncheck1">Checkbox 1</label>
+
+//   <input type="checkbox" class="btn-check" id="btncheck2" autocomplete="off">
+//   <label class="btn btn-outline-primary" for="btncheck2">Checkbox 2</label>
+
+//   <input type="checkbox" class="btn-check" id="btncheck3" autocomplete="off">
+//   <label class="btn btn-outline-primary" for="btncheck3">Checkbox 3</label>
+// </div>
+
+
+//! Traditional Checkboxes
+// const checkBoxes = document.getElementById(`checkBoxes`);
+// const accordionButton = document.getElementsByClassName("accordion-button")
+
+
+// const checkBoxInput = document.createElement("input");
+
+// checkBoxInput.type = "checkbox";
+// checkBoxInput.id = `btncheck${i+1}`;
+// checkBoxInput.autocomplete = "off";
+// checkBoxes.appendChild(checkBoxInput);
+// console.log("accordionButton:",accordionButton[i].innerText)
+// // accordionButton[i].appendChild(checkBoxInput);
+// console.log("i:",i)
+
+  }
   };
 
   fillClassListDropdown();
+
 
   // ------------------------------------------------ Event Listener for the Questions List Button -----------------------------
 
