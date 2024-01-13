@@ -204,7 +204,7 @@ const fetchInformation = async () => {
       }
     }
 
-    console.log("results Length:", results.length, "results:", results);
+    // console.log("results Length:", results.length, "results:", results);
     // ----------------------------------------------------- Primary Category -------------------------------------------
     // Add the first category information from the results array to the resultsHTML string. This is done separately from the rest to accomidate the bootstrap differences.
     for (let i = 0; i < results.length; i++) {
@@ -223,26 +223,28 @@ const fetchInformation = async () => {
         </button>
       </h2>
       <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-        <div class="accordion-body">
-          <b>Questions:</b>
-          <div class="categoryItems">${results[i].question.replaceAll("\r\n", "<br>")}</div> 
-          <b>Answers:</b>
-          <div class="categoryItems">${results[i].answer.replaceAll("\r\n", "<br>")}</div>
-        </div>
+      <div class="accordion-body">
+      <strong class="questions">Questions:</strong>
+      <div>
+      <ol class="categoryItems"><li>${results[i].question.replaceAll("\r\n", "</li><li>")}</ol> 
+      <strong class="answers">Answers:</strong>
+      <ol class="categoryItems"><li>${results[i].answer.replaceAll("\r\n", "</li><li>")}</ol>
+      </div>
+    </div>
       </div>
     </div>
     `;
       }
 
       let dataBsTarget = `collapse${numbers[i]}`;
-      console.log("classlist:", classList[i])
+      // console.log("classlist:", classList[i])
       const element = document.createElement("div");
       element.value = classList[i].className;
       element.innerText = classList[i].className;
       element.id = classList[i].id;
       element.innerText = data.getAllQuestions[i].question;
 
-      console.log("reslength",results.length,results)
+      // console.log("reslength",results.length,results)
       for (let i = 0; i < results.length; i++) {
 
 
@@ -258,7 +260,7 @@ const fetchInformation = async () => {
       // ! -------------------------------------------- Secondary categories: ---------------------------------------------
 
       if (results.length > 1 && i >= 1) {
-        console.log("secondary:");
+        // console.log("secondary:");
         let dataBsTarget = `collapse${numbers[i]}`;
         // resultsHTML = ""
         resultsHTML += `
@@ -274,10 +276,12 @@ const fetchInformation = async () => {
           </h2>
           <div id="collapse${dataBsTarget}" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
             <div class="accordion-body">
-              <strong>Questions:</strong>
-              <div class="categoryItems">${results[i].question.replaceAll("\r\n", "<br>")}</div> 
-              <strong>Answers:</strong>
-              <div class="categoryItems">${results[i].answer.replaceAll("\r\n", "<br>")}</div>
+              <strong class="questions">Questions:</strong>
+              <div>
+              <ol class="categoryItems"><li>${results[i].question.replaceAll("\r\n", "</li><li>")}</ol> 
+              <strong class = "answers">Answers:</strong>
+              <ol class="categoryItems"><li>${results[i].answer.replaceAll("\r\n", "</li><li>")}</ol>
+              </div>
             </div>
           </div>
         </div>
@@ -341,6 +345,17 @@ const fetchInformation = async () => {
 // </div>
   }
   addCheckboxes()
+
+  // !---------------------------------- Checkbox Functionality -------------------------------------------------
+  for (let i = 0; i < document.getElementsByClassName("checkboxInput").length; i++) {
+  document.getElementsByClassName("checkboxInput")[i].addEventListener("change", () => {
+    if (document.getElementsByClassName("checkboxInput")[i].checked) {
+      console.log("checkboxInput",i,"Checked")
+    } else {
+      console.log("checkboxInput",i,"Not checked")
+    }
+  })
+}
   };
 
   fillClassListDropdown();
@@ -355,7 +370,7 @@ const fetchInformation = async () => {
     
   const checkboxLabel = document.createElement("label");
   checkboxLabel.htmlFor = `btncheck${i+1}`
-  checkboxLabel.innerText = "Add Category to Game"
+  checkboxLabel.innerText = "Add Category to Game:"
   checkboxLabel.className = "checkboxLabel"
 
   const checkBoxInput = document.createElement("input");
@@ -363,9 +378,26 @@ const fetchInformation = async () => {
   checkBoxInput.className = "checkboxInput"
   checkBoxInput.id = `btncheck${i+1}`;
   checkBoxInput.autocomplete = "off";
-  
+
+  const deleteSection = document.createElement("div")
+  deleteSection.id = `deleteSection_${i}`
+
+  const deleteCategoryLabel = document.createElement("label");
+  deleteCategoryLabel.htmlFor = `deleteCategoryCheck${i+1}`
+  deleteCategoryLabel.innerText = "Delete Category:"
+  deleteCategoryLabel.className = "deleteCatLabel"
+
+  const deleteCategoryInput = document.createElement("input");
+  deleteCategoryInput.type = "input";
+  deleteCategoryInput.className = "deleteCatInput"
+  deleteCategoryInput.id = `deleteCatInput${i+1}`;
+  deleteCategoryInput.autocomplete = "off";
+  deleteCategoryInput.placeholder = `type "delete" to delete`
+
   accordionHeader.appendChild(checkboxLabel)
   accordionHeader.appendChild(checkBoxInput);
+  accordionHeader.appendChild(deleteCategoryLabel)
+  accordionHeader.appendChild(deleteCategoryInput);
   }
     }
   }
