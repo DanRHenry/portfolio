@@ -275,7 +275,7 @@ const fetchInformation = async () => {
               </button>
           </h2>
           <div id="collapse${dataBsTarget}" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-            <div class="accordion-body">
+          <div class="accordion-body">
               <strong class="questions">Questions:</strong>
               <div>
               <ol class="categoryItems"><li>${results[i].question.replaceAll("\r\n", "</li><li>")}</ol> 
@@ -303,46 +303,7 @@ const fetchInformation = async () => {
         categorySelectBtn?.addEventListener("click", () => {
           console.log("click");
         });
-        // checkBoxes.appendChild(element)
       }
-
-
-      //<input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
-
-
-      const checkboxToggleButtonGroup = document.createElement("div");
-      checkboxToggleButtonGroup.classList = "btn-group"; 
-      checkboxToggleButtonGroup.role="group";
-      checkboxToggleButtonGroup.ariaLabel="Basic checkbox toggle button group"
-      checkBoxes.appendChild (checkboxToggleButtonGroup)
-
-      // const checkboxInput = document.createElement("input");
-      // checkboxInput.type = "checkbox";
-      // checkboxInput.className= "btn-check";
-      // checkboxInput.id = `btncheck${i+1}`;
-      // checkboxInput.autocomplete = "off";
-      // checkboxToggleButtonGroup.appendChild (checkboxInput)
-
-      // const checkboxLabel = document.createElement("label");
-      // checkboxLabel.classList = ("btn btn-outline-primary");
-      // checkboxLabel.for = (`btncheck${i+1}`);
-      // checkboxLabel.innerText = `Checkbox ${i+1}`
-      // checkboxToggleButtonGroup.appendChild(checkboxLabel)
-
-      // console.log("logging i:", i)
-
-      // -------------------------------------------- Bootstrap Checkbox Template ----------------------------
-
-// <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
-//   <input type="checkbox" class="btn-check" id="btncheck1" autocomplete="off">
-//   <label class="btn btn-outline-primary" for="btncheck1">Checkbox 1</label>
-
-//   <input type="checkbox" class="btn-check" id="btncheck2" autocomplete="off">
-//   <label class="btn btn-outline-primary" for="btncheck2">Checkbox 2</label>
-
-//   <input type="checkbox" class="btn-check" id="btncheck3" autocomplete="off">
-//   <label class="btn btn-outline-primary" for="btncheck3">Checkbox 3</label>
-// </div>
   }
   addCheckboxes()
 
@@ -389,16 +350,55 @@ const fetchInformation = async () => {
 
   const deleteCategoryInput = document.createElement("input");
   deleteCategoryInput.type = "input";
-  deleteCategoryInput.className = "deleteCatInput"
+  deleteCategoryInput.className = "deleteCatInput";
   deleteCategoryInput.id = `deleteCatInput${i+1}`;
   deleteCategoryInput.autocomplete = "off";
-  deleteCategoryInput.placeholder = `type "delete" to delete`
+  deleteCategoryInput.placeholder = `enter "delete" to delete`;
+  
+  const deleteArea = document.createElement("div");
+  deleteArea.id = "deleteArea";
 
-  accordionHeader.appendChild(checkboxLabel)
+  const deleteImage = document.createElement("img");
+  deleteImage.type = "button";
+  deleteImage.src = "./assets/delete.png";
+  deleteImage.alt = "Del Img";
+  deleteImage.className = "deleteImg";
+  deleteImage.id = `deleteImg${i}`;
+  // if (deleteCategoryInput.innerText.toLocaleLowerCase() = "delete")
+
+
+  accordionHeader.appendChild(checkboxLabel);
   accordionHeader.appendChild(checkBoxInput);
-  accordionHeader.appendChild(deleteCategoryLabel)
-  accordionHeader.appendChild(deleteCategoryInput);
-  }
+  accordionHeader.appendChild(deleteArea);
+  deleteArea.appendChild(deleteCategoryLabel);
+  deleteArea.appendChild(deleteCategoryInput);
+  deleteArea.appendChild(deleteImage);
+  deleteCategoryInput.addEventListener("change", () => {
+    let deleteCategoryValue = deleteCategoryInput.value.toLocaleLowerCase();
+    if (deleteCategoryValue === "delete") {
+      console.log("deletebuttonwillappear");
+      deleteImage.style.visibility = ("visible");
+    } else {
+      deleteImage.style.visibility = ("hidden");
+      console.log("nodeletebutton");
+    }
+  })
+
+
+  deleteImage.addEventListener("click", () => {
+    let deleteCategoryValue = deleteCategoryInput.value.toLocaleLowerCase();
+    if (deleteCategoryValue === "delete") {
+      console.log(`ready to delete ${i}`)
+
+      if (confirm(`Are you sure you want to delete ${i}?`) === true) {
+        console.log(`${i} has been deleted.`);
+        deleteImage.style.visibility = ("hidden");
+      }
+    } else {
+        console.log(`clicked delete ${i}, but no text`);
+    }
+  })
+}
     }
   }
 
