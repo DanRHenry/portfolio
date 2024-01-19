@@ -559,3 +559,7 @@ aside div {
   max-height: 1.25em;
   visibility: hidden;
 }
+
+li {
+  user-select: all;
+}

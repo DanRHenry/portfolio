@@ -1,7 +1,7 @@
 import placeholderQuestions from "./placeholder-questions.js";
 
 // Global DOM Variables
-
+const apiServer = "https://danhenrydev.com/api/jeopardy"
 // Title Page
 let inputFieldForP1Name = document.getElementById("inputFieldForP1Name");
 let inputFieldForP2Name = document.getElementById("inputFieldForP2Name");
@@ -99,13 +99,13 @@ if (roundName[0]?.innerText == "Jeopardy!") {
 
 // --------------------------------------- API Calls -----------------------------------------
 const fetchStudentList = async () => {
-  const url = "https://danhenrydev.com/jeopardyApi/user/";
+  const url = `${apiServer}/user/`;
   let result = await fetch(url);
   let data = await result.json();
 };
 
 // const fetchQuestionsList = async () => {
-//   const url = "https://danhenrydev.com/jeopardyApi/questions/";
+//   const url = `${apiServer}/questions/`;
 //   let result = await fetch(url);
 //   let data = await result.json();
 // };
@@ -115,7 +115,7 @@ const fetchStudentList = async () => {
 //   ?.addEventListener("click", fetchQuestionsList);
 
 const fetchInformation = async () => {
-  const url = "https://danhenrydev.com/jeopardyApi/questions/";
+  const url = `${apiServer}/questions/`;
   let result = await fetch(url);
   let data = await result.json();
 
@@ -146,11 +146,15 @@ const fetchInformation = async () => {
   // Fill the class list in the admin page
   const fillClassListDropdown = () => {
     for (let i = 0; i < classList.length; i++) {
-      const element = document.createElement("option");
-      element.value = classList[i].className;
-      element.innerText = classList[i].className;
-      element.id = classList[i].id;
-      document.getElementById("class-names")?.append(element);
+      const listing = document.createElement("option");
+      // Check for consecutive duplicate classes (//todo:  come up with a solution to deal with non-consecutive duplicates: either sort alphabetically and keep the same logic, or search through the array)
+      if (classList[i-1]?.className != classList[i].className) {
+        listing.value = classList[i].className;
+        listing.innerText = classList[i].className;
+        // listing.id = classList[i].id;
+        document.getElementById("class-names")?.append(listing);
+      }
+
     }
   };
 
@@ -320,7 +324,9 @@ const fetchInformation = async () => {
   };
 
   fillClassListDropdown();
-
+  document.getElementById("class-names").addEventListener("change", () => {
+    fillCategoryOptionsDropdown()
+  })
 
   // ! --------------------------------------- Add Checkboxes to Categories List --------------------------
   const addCheckboxes = () => {
@@ -393,6 +399,7 @@ const fetchInformation = async () => {
       if (confirm(`Are you sure you want to delete ${i}?`) === true) {
         console.log(`${i} has been deleted.`);
         deleteImage.style.visibility = ("hidden");
+        fillCategoryOptionsDropdown()
       }
     } else {
         console.log(`clicked delete ${i}, but no text`);
@@ -419,7 +426,7 @@ const fetchInformation = async () => {
 roundOneArray = customRoundOneArray;
 
 await fetchInformation();
-
+// console.log("classList:",classList)
 // Pull category names from round arrays
 
 if (round === "round1") {
@@ -441,7 +448,23 @@ if (round === "round2") {
 
 if (round === "final") {
 }
+
+function clearInputs (e) {
+  e.preventDefault()
+  document.getElementById("classNameInputField").value = "";
+  document.getElementById("unitNameInputField").value = "";
+  document.getElementById("categoryInputField").value = "";
+  document.getElementById("questionInputField").value = "";
+  document.getElementById("answerInputField").value = "";
+}
 //---------------------------------------------- Event Listeners ----------------------------------------------
+// document.getElementById("newInformationSubmitButton").addEventListener("click", ()=> {
+//   document.getElementById("classNameInputField").value = "";
+//   document.getElementById("unitNameInputField").value = "";
+//   document.getElementById("categoryInputField").value = "";
+//   document.getElementById("questionInputField").value = "";
+//   document.getElementById("answerInputField").value = "";
+// })
 
 passBtn?.addEventListener("click", function listener() {
   if (passed == undefined || passed == false) {
@@ -492,7 +515,7 @@ activeStudentsList?.addEventListener("click", fetchStudentList);
 // Add the username to an array on the back end to set the buzz in position.
 //
 
-const url = "https://danhenrydev.com/jeopardyApi/questions";
+const url = `${apiServer}/questions`;
 const fetchQuestions = async function () {
   console.log("fetching questions...");
   let response = await fetch(url);

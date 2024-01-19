@@ -19,6 +19,7 @@
         class="container"
         method="post"
         action="https://danhenrydev.com/jeopardyApi/questions/storeQuestion/"
+        onsubmit="clearInputs()"
       >      <h1 id="newCatTitle">Add a New Category</h1>
 
         <label for="className">Class Name:</label>
@@ -29,11 +30,11 @@
             required="true"
           />
         </div>
-        <label for="unitName">Unit Name:</label>
-        <div class="form-group" name="unitName">
+        <label for="unit">Unit Name:</label>
+        <div class="form-group" name="unit">
           <input
             id="unitNameInputField"
-            name="unitName"
+            name="unit"
             required="true"
           />
         </div>
@@ -49,6 +50,7 @@
             "
             name="category"
             required="true"
+            id="categoryInputField"
           />
         </div>
         <label for="question">Questions</label>
@@ -59,6 +61,7 @@
             style="height: 10em"
             required="true"
             placeholder=" One question for each line."
+            id="questionInputField"
           ></textarea>
         </div>
         <label for="answer">Answers</label>
@@ -69,6 +72,7 @@
             style="height: 10em"
             required="true"
             placeholder=" One answer for each line."
+            id="answerInputField"
           ></textarea>
         </div>
         <div id="newInformationSubmitButton">
@@ -85,7 +89,7 @@
     <div id="classLists">
       <h1>Choose a Class:</h1>
       <select name="class-names" id="class-names"></select>
-      <button id="questionsListBtn">Find Categories</button>
+      <!-- <button id="questionsListBtn">Find Categories</button> -->
       <span id="questionsDisplay">
         <div id="questionList"></div>
         <form
