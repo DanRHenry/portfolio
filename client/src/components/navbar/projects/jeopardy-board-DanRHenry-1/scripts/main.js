@@ -1,7 +1,7 @@
 import placeholderQuestions from "./placeholder-questions.js";
 
 // Global DOM Variables
-const apiServer = "https://danhenrydev.com/api/jeopardy"
+const apiServer = "https://danhenrydev.com/api/jeopardy";
 // Title Page
 let inputFieldForP1Name = document.getElementById("inputFieldForP1Name");
 let inputFieldForP2Name = document.getElementById("inputFieldForP2Name");
@@ -66,7 +66,7 @@ let customRoundOneArray = [];
 let customRoundTwoArray = [];
 const classList = [];
 let results = [];
-
+const gameplayCategories = {};
 // Fill Round One, Two, and final Arrays
 for (let m = 0; roundTwoArray.length < 30; m++) {
   for (let questionPosition = m; questionPosition < 60; questionPosition++) {
@@ -148,13 +148,12 @@ const fetchInformation = async () => {
     for (let i = 0; i < classList.length; i++) {
       const listing = document.createElement("option");
       // Check for consecutive duplicate classes (//todo:  come up with a solution to deal with non-consecutive duplicates: either sort alphabetically and keep the same logic, or search through the array)
-      if (classList[i-1]?.className != classList[i].className) {
+      if (classList[i - 1]?.className != classList[i].className) {
         listing.value = classList[i].className;
         listing.innerText = classList[i].className;
         // listing.id = classList[i].id;
         document.getElementById("class-names")?.append(listing);
       }
-
     }
   };
 
@@ -230,9 +229,15 @@ const fetchInformation = async () => {
       <div class="accordion-body">
       <strong class="questions">Questions:</strong>
       <div>
-      <ol class="categoryItems"><li>${results[i].question.replaceAll("\r\n", "</li><li>")}</ol> 
+      <ol class="categoryItems"><li>${results[i].question.replaceAll(
+        "\r\n",
+        "</li><li>"
+      )}</ol> 
       <strong class="answers">Answers:</strong>
-      <ol class="categoryItems"><li>${results[i].answer.replaceAll("\r\n", "</li><li>")}</ol>
+      <ol class="categoryItems"><li>${results[i].answer.replaceAll(
+        "\r\n",
+        "</li><li>"
+      )}</ol>
       </div>
     </div>
       </div>
@@ -250,14 +255,14 @@ const fetchInformation = async () => {
 
       // console.log("reslength",results.length,results)
       for (let i = 0; i < results.length; i++) {
-
-
-        document.getElementById("questionList").innerHTML = "<span>"+resultsHTML+`
+        document.getElementById("questionList").innerHTML =
+          "<span>" +
+          resultsHTML +
+          `
 
         <div class="form-group" name="className">
-      </span>`
-
-}
+      </span>`;
+      }
 
       // }
 
@@ -282,9 +287,15 @@ const fetchInformation = async () => {
           <div class="accordion-body">
               <strong class="questions">Questions:</strong>
               <div>
-              <ol class="categoryItems"><li>${results[i].question.replaceAll("\r\n", "</li><li>")}</ol> 
+              <ol class="categoryItems"><li>${results[i].question.replaceAll(
+                "\r\n",
+                "</li><li>"
+              )}</ol> 
               <strong class = "answers">Answers:</strong>
-              <ol class="categoryItems"><li>${results[i].answer.replaceAll("\r\n", "</li><li>")}</ol>
+              <ol class="categoryItems"><li>${results[i].answer.replaceAll(
+                "\r\n",
+                "</li><li>"
+              )}</ol>
               </div>
             </div>
           </div>
@@ -308,107 +319,176 @@ const fetchInformation = async () => {
           console.log("click");
         });
       }
-  }
-  addCheckboxes()
-
-  // !---------------------------------- Checkbox Functionality -------------------------------------------------
-  for (let i = 0; i < document.getElementsByClassName("checkboxInput").length; i++) {
-  document.getElementsByClassName("checkboxInput")[i].addEventListener("change", () => {
-    if (document.getElementsByClassName("checkboxInput")[i].checked) {
-      console.log("checkboxInput",i,"Checked")
-    } else {
-      console.log("checkboxInput",i,"Not checked")
     }
-  })
-}
+    addCheckboxes();
+
+    // !---------------------------------- Checkbox Functionality -------------------------------------------------
+    for (
+      let i = 0;
+      i < document.getElementsByClassName("checkboxInput").length;
+      i++
+    ) {
+      //! Listen to checkbox for checked or unchecked
+      document
+        .getElementsByClassName("checkboxInput")
+        [i].addEventListener("change", () => check(i));
+    }
   };
+
+  const check = (i) => {
+    // If checked...
+    if (document.getElementsByClassName("checkboxInput")[i].checked === true) {
+    // Check for existing gameplayItems list on the page.
+    const gameplayItems = document.getElementsByClassName("gameplayItems");
+
+    //If the length of gameplayItems is less than 6, allow the item to be appended
+    console.log("gameplayItems.length:", gameplayItems.length);
+    if (gameplayItems.length >= 6) {
+      alert("There's a maximum of 6 categories.\n Uncheck one to add this.");
+      document.getElementsByClassName("checkboxInput")[i].checked = false;
+      return;
+    }
+    if (gameplayItems.length < 6) {
+      console.log("less than 6");
+      // Add two new keys to gameplayCategories
+
+      if (document.getElementsByClassName("checkboxInput")[i].checked) {
+        gameplayCategories["id_" + i] = i;
+        gameplayCategories["content_" + i] = results[i];
+
+        // Create a new div element, gameplayItem, with a className "gameplayItems", and add text (results.category, .className, and .unit)
+        const gameplayItem = document.createElement("div");
+        gameplayItem.id = `gameplayItem_${i}`;
+        gameplayItem.className = "gameplayItems";
+        gameplayItem.innerText = `${results[i].category},${results[i].className}, ${results[i].unit}`;
+
+        // Append the new gameplayItem to "addedCategories" on the page
+        const addedCategories = document.getElementById("addedCategories");
+        addedCategories.appendChild(gameplayItem);
+      
+      // Check if the length of gameplayItems is equal to 6,
+      if (gameplayItems.length === 6) {
+        console.log("gameplayItems.length:", gameplayItems.length);
+        console.log(gameplayItems);
+        // Create a "Start Game" button
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.id = "startGameBtn";
+        btn.innerText = "Start Game";
+
+        // Add the "Start Game" button to "addedCategories"
+        addedCategories.appendChild(btn);
+
+        // Add an event listener for click
+        btn.addEventListener("click", function () {
+          console.log("submitting...");
+
+          //todo: Add fetch to backend
+          console.log('gameplayCategories:',gameplayCategories)
+        });
+      }
+    }
+      const startButton = document.getElementById("startGameBtn");
+    }
+  };
+
+  if (document.getElementsByClassName("checkboxInput")[i].checked === false) {
+    // console.log("gameplayItems:",gameplayItems)
+    console.log("gameplayCategories:",gameplayCategories)
+//todo remove gameplay item from the categories object
+    const gameplayItem = document.getElementById(`gameplayItem_${i}`)
+    gameplayItem.parentElement.removeChild(gameplayItem)
+  }
+}
 
   fillClassListDropdown();
   document.getElementById("class-names").addEventListener("change", () => {
-    fillCategoryOptionsDropdown()
-  })
+    fillCategoryOptionsDropdown();
+  });
 
   // ! --------------------------------------- Add Checkboxes to Categories List --------------------------
   const addCheckboxes = () => {
     if (document.getElementsByClassName("accordion-header")) {
-      const accordionHeaders = document.getElementsByClassName("accordion-header")
+      const accordionHeaders =
+        document.getElementsByClassName("accordion-header");
       for (let i = 0; i < accordionHeaders.length; i++) {
-  const accordionHeader = document.getElementById(`accordionHeader_${i}`);
-    
-  const checkboxLabel = document.createElement("label");
-  checkboxLabel.htmlFor = `btncheck${i+1}`
-  checkboxLabel.innerText = "Add Category to Game:"
-  checkboxLabel.className = "checkboxLabel"
+        const accordionHeader = document.getElementById(`accordionHeader_${i}`);
 
-  const checkBoxInput = document.createElement("input");
-  checkBoxInput.type = "checkbox";
-  checkBoxInput.className = "checkboxInput"
-  checkBoxInput.id = `btncheck${i+1}`;
-  checkBoxInput.autocomplete = "off";
+        const checkboxLabel = document.createElement("label");
+        checkboxLabel.htmlFor = `btncheck${i + 1}`;
+        checkboxLabel.innerText = "Add Category to Game:";
+        checkboxLabel.className = "checkboxLabel";
 
-  const deleteSection = document.createElement("div")
-  deleteSection.id = `deleteSection_${i}`
+        const checkBoxInput = document.createElement("input");
+        checkBoxInput.type = "checkbox";
+        checkBoxInput.className = "checkboxInput";
+        checkBoxInput.id = `btncheck${i + 1}`;
+        checkBoxInput.autocomplete = "off";
 
-  const deleteCategoryLabel = document.createElement("label");
-  deleteCategoryLabel.htmlFor = `deleteCategoryCheck${i+1}`
-  deleteCategoryLabel.innerText = "Delete Category:"
-  deleteCategoryLabel.className = "deleteCatLabel"
+        const deleteSection = document.createElement("div");
+        deleteSection.id = `deleteSection_${i}`;
 
-  const deleteCategoryInput = document.createElement("input");
-  deleteCategoryInput.type = "input";
-  deleteCategoryInput.className = "deleteCatInput";
-  deleteCategoryInput.id = `deleteCatInput${i+1}`;
-  deleteCategoryInput.autocomplete = "off";
-  deleteCategoryInput.placeholder = `enter "delete" to delete`;
-  
-  const deleteArea = document.createElement("div");
-  deleteArea.id = "deleteArea";
+        const deleteCategoryLabel = document.createElement("label");
+        deleteCategoryLabel.htmlFor = `deleteCategoryCheck${i + 1}`;
+        deleteCategoryLabel.innerText = "Delete Category:";
+        deleteCategoryLabel.className = "deleteCatLabel";
 
-  const deleteImage = document.createElement("img");
-  deleteImage.type = "button";
-  deleteImage.src = "./assets/delete.png";
-  deleteImage.alt = "Del Img";
-  deleteImage.className = "deleteImg";
-  deleteImage.id = `deleteImg${i}`;
-  // if (deleteCategoryInput.innerText.toLocaleLowerCase() = "delete")
+        const deleteCategoryInput = document.createElement("input");
+        deleteCategoryInput.type = "input";
+        deleteCategoryInput.className = "deleteCatInput";
+        deleteCategoryInput.id = `deleteCatInput${i + 1}`;
+        deleteCategoryInput.autocomplete = "off";
+        deleteCategoryInput.placeholder = `enter "delete" to delete`;
 
+        const deleteArea = document.createElement("div");
+        deleteArea.id = "deleteArea";
 
-  accordionHeader.appendChild(checkboxLabel);
-  accordionHeader.appendChild(checkBoxInput);
-  accordionHeader.appendChild(deleteArea);
-  deleteArea.appendChild(deleteCategoryLabel);
-  deleteArea.appendChild(deleteCategoryInput);
-  deleteArea.appendChild(deleteImage);
-  deleteCategoryInput.addEventListener("change", () => {
-    let deleteCategoryValue = deleteCategoryInput.value.toLocaleLowerCase();
-    if (deleteCategoryValue === "delete") {
-      console.log("deletebuttonwillappear");
-      deleteImage.style.visibility = ("visible");
-    } else {
-      deleteImage.style.visibility = ("hidden");
-      console.log("nodeletebutton");
-    }
-  })
+        const deleteImage = document.createElement("img");
+        deleteImage.type = "button";
+        deleteImage.src = "./assets/delete.png";
+        deleteImage.alt = "Del Img";
+        deleteImage.className = "deleteImg";
+        deleteImage.id = `deleteImg${i}`;
+        // if (deleteCategoryInput.innerText.toLocaleLowerCase() = "delete")
 
+        accordionHeader.appendChild(checkboxLabel);
+        accordionHeader.appendChild(checkBoxInput);
+        accordionHeader.appendChild(deleteArea);
+        deleteArea.appendChild(deleteCategoryLabel);
+        deleteArea.appendChild(deleteCategoryInput);
+        deleteArea.appendChild(deleteImage);
+        deleteCategoryInput.addEventListener("change", () => {
+          let deleteCategoryValue =
+            deleteCategoryInput.value.toLocaleLowerCase();
+          if (deleteCategoryValue === "delete") {
+            console.log("deletebuttonwillappear");
+            deleteImage.style.visibility = "visible";
+          } else {
+            deleteImage.style.visibility = "hidden";
+            console.log("nodeletebutton");
+          }
+        });
 
-  deleteImage.addEventListener("click", () => {
-    let deleteCategoryValue = deleteCategoryInput.value.toLocaleLowerCase();
-    if (deleteCategoryValue === "delete") {
-      console.log(`ready to delete ${i}`)
+        deleteImage.addEventListener("click", () => {
+          let deleteCategoryValue =
+            deleteCategoryInput.value.toLocaleLowerCase();
+          if (deleteCategoryValue === "delete") {
+            console.log(`ready to delete ${i}`);
 
-      if (confirm(`Are you sure you want to delete ${i}?`) === true) {
-        console.log(`${i} has been deleted.`);
-        deleteImage.style.visibility = ("hidden");
-        fillCategoryOptionsDropdown()
+            if (confirm(`Are you sure you want to delete ${i}?`) === true) {
+              console.log(`${i} has been deleted.`);
+              deleteImage.style.visibility = "hidden";
+              fillCategoryOptionsDropdown();
+            }
+          } else {
+            console.log(`clicked delete ${i}, but no text`);
+          }
+        });
       }
-    } else {
-        console.log(`clicked delete ${i}, but no text`);
     }
-  })
-}
-    }
-  }
+  };
 
+  fillCategoryOptionsDropdown();
   // ------------------------------------------------ Event Listener for the Questions List Button -----------------------------
 
   document
@@ -449,8 +529,8 @@ if (round === "round2") {
 if (round === "final") {
 }
 
-function clearInputs (e) {
-  e.preventDefault()
+function clearInputs(e) {
+  e.preventDefault();
   document.getElementById("classNameInputField").value = "";
   document.getElementById("unitNameInputField").value = "";
   document.getElementById("categoryInputField").value = "";
@@ -733,7 +813,6 @@ textDisplayBtn?.addEventListener("click", function () {
   hideTextDisplayBtn();
 });
 
-
 //! --------------------------------------- Open the Clue Window -----------------------
 function openTextDisplayWindow() {
   textDisplay.style.display = "block";
@@ -749,7 +828,8 @@ function openTextDisplayWindow() {
   setTimeout(() => {
     textDisplayBtn.style.display = "inline-block";
     textDisplayBtn.id = "riskBtn"; //todo maybe change this later to remove the id change
-    document.getElementById("riskBtn").addEventListener("click", () => { //todo maybe change this later to remove the id change
+    document.getElementById("riskBtn").addEventListener("click", () => {
+      //todo maybe change this later to remove the id change
       console.log("click");
     });
   }, 200);
@@ -782,8 +862,6 @@ function openTextDisplayWindow() {
   }, "5000");
 }
 
-
-
 //! ---------------------------------------- Function to Close the Clue Window ----------------------------------
 function closeTextDisplayWindow() {
   textDisplay.style.color = "rgb(92, 107, 160)";
@@ -808,8 +886,6 @@ function closeTextDisplayWindow() {
     console.log("activePlayer", activePlayer);
   }
 }
-
-
 
 //!----------------------------------------- Correct / Incorrect Functions -----------------------------------------
 
