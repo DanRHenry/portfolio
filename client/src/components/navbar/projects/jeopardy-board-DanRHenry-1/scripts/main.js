@@ -395,9 +395,15 @@ const fetchInformation = async () => {
   if (document.getElementsByClassName("checkboxInput")[i].checked === false) {
     // console.log("gameplayItems:",gameplayItems)
     console.log("gameplayCategories:",gameplayCategories)
-//todo remove gameplay item from the categories object
+    
     const gameplayItem = document.getElementById(`gameplayItem_${i}`)
+
     gameplayItem.parentElement.removeChild(gameplayItem)
+
+    console.log("gameplayCategoriesBefore:",gameplayCategories)
+    delete gameplayCategories["content_" + i]
+    delete gameplayCategories["id_"+ i]
+    console.log("gameplayCategoriesAfter:",gameplayCategories)
   }
 }
 
