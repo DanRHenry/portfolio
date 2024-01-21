@@ -67,6 +67,7 @@ let customRoundTwoArray = [];
 const classList = [];
 let results = [];
 const gameplayCategories = {};
+const customGameInformation = {};
 // Fill Round One, Two, and final Arrays
 for (let m = 0; roundTwoArray.length < 30; m++) {
   for (let questionPosition = m; questionPosition < 60; questionPosition++) {
@@ -103,6 +104,54 @@ const fetchStudentList = async () => {
   let result = await fetch(url);
   let data = await result.json();
 };
+
+const postGameplayInformation = async () => {
+
+  
+
+  console.log("customGameInformation:",customGameInformation)
+  /* 
+      question: {
+        type: String,
+        required: true
+    },
+    answer: {
+        type: String,
+        required: true
+    },
+    category: {
+        type: String,
+        required: true
+    },
+    gameName: {
+        type: String,
+        required: true
+    }
+  */
+
+
+
+  const url = `${apiServer}/gameplay/gameplayinformation/`
+
+  await fetch (url, {
+    method: "POST",
+    mode: "cors",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(gameplayCategories),
+  })
+
+
+
+  // {
+  //   console.log("submitting...");
+  //   //todo: Add fetch to backend
+  //   console.log('gameplayCategories:',gameplayCategories)
+  // }
+
+}
+
 
 // const fetchQuestionsList = async () => {
 //   const url = `${apiServer}/questions/`;
@@ -335,6 +384,9 @@ const fetchInformation = async () => {
     }
   };
 
+
+
+
   const check = (i) => {
     // If checked...
     if (document.getElementsByClassName("checkboxInput")[i].checked === true) {
@@ -361,7 +413,8 @@ const fetchInformation = async () => {
         gameplayItem.id = `gameplayItem_${i}`;
         gameplayItem.className = "gameplayItems";
         gameplayItem.innerText = `${results[i].category},${results[i].className}, ${results[i].unit}`;
-
+        console.log("results:",results)
+        customGameInformation[`index${i}:`]=[{"category": results[i].category},{"question":results[i].question}, {"answer": results[i].answer}]
         // Append the new gameplayItem to "addedCategories" on the page
         const addedCategories = document.getElementById("addedCategories");
         addedCategories.appendChild(gameplayItem);
@@ -380,12 +433,7 @@ const fetchInformation = async () => {
         addedCategories.appendChild(btn);
 
         // Add an event listener for click
-        btn.addEventListener("click", function () {
-          console.log("submitting...");
-
-          //todo: Add fetch to backend
-          console.log('gameplayCategories:',gameplayCategories)
-        });
+        btn.addEventListener("click", postGameplayInformation () );
       }
     }
       const startButton = document.getElementById("startGameBtn");
