@@ -109,27 +109,7 @@ const postGameplayInformation = async () => {
 
   
 
-  console.log("customGameInformation:",customGameInformation)
-  /* 
-      question: {
-        type: String,
-        required: true
-    },
-    answer: {
-        type: String,
-        required: true
-    },
-    category: {
-        type: String,
-        required: true
-    },
-    gameName: {
-        type: String,
-        required: true
-    }
-  */
-
-
+  // console.log("customGameInformation:",customGameInformation)
 
   const url = `${apiServer}/gameplay/gameplayinformation/`
 
@@ -139,8 +119,9 @@ const postGameplayInformation = async () => {
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(gameplayCategories),
+    body: JSON.stringify(customGameInformation),
   })
+  console.log("customGameInformation",customGameInformation)
 
 
 
@@ -413,8 +394,13 @@ const fetchInformation = async () => {
         gameplayItem.id = `gameplayItem_${i}`;
         gameplayItem.className = "gameplayItems";
         gameplayItem.innerText = `${results[i].category},${results[i].className}, ${results[i].unit}`;
-        console.log("results:",results)
-        customGameInformation[`index${i}:`]=[{"category": results[i].category},{"question":results[i].question}, {"answer": results[i].answer}]
+        // console.log("results:",results)
+        // const customGameInformation = {}
+          customGameInformation.category = results[i].category;
+          customGameInformation.question = results[i].question;
+          customGameInformation.answer = results[i].answer;
+          customGameInformation.gameName = "gameName";
+
         // Append the new gameplayItem to "addedCategories" on the page
         const addedCategories = document.getElementById("addedCategories");
         addedCategories.appendChild(gameplayItem);
@@ -433,7 +419,7 @@ const fetchInformation = async () => {
         addedCategories.appendChild(btn);
 
         // Add an event listener for click
-        btn.addEventListener("click", postGameplayInformation () );
+        btn.addEventListener("click", postGameplayInformation);
       }
     }
       const startButton = document.getElementById("startGameBtn");
