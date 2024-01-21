@@ -377,8 +377,6 @@ const fetchInformation = async () => {
           gameplayItem.id = `gameplayItem_${i}`;
           gameplayItem.className = "gameplayItems";
           gameplayItem.innerText = `${results[i].category},${results[i].className}, ${results[i].unit}`;
-          // console.log("results:",results)
-          // const customGameInformation = {}
 
           customCategories[`category_${i}`] = results[i].category;
           customGameNames[`gameName_${i}`] = "gameName";
@@ -388,25 +386,24 @@ const fetchInformation = async () => {
           // Append the new gameplayItem to "addedCategories" on the page
           const addedCategories = document.getElementById("addedCategories");
           addedCategories.appendChild(gameplayItem);
-
           // Check if the length of gameplayItems is equal to 6,
-          if (gameplayItems.length === 6) {
-            console.log("gameplayItems.length:", gameplayItems.length);
-            console.log(gameplayItems);
-            // Create a "Start Game" button
-            const btn = document.createElement("button");
-            btn.type = "button";
-            btn.id = "startGameBtn";
-            btn.innerText = "Start Game";
-
-            // Add the "Start Game" button to "addedCategories"
-            addedCategories.appendChild(btn);
-
-            // Add an event listener for click
-            btn.addEventListener("click", postGameplayInformation);
-          }
         }
-        const startButton = document.getElementById("startGameBtn");
+
+        if (gameplayItems.length === 6) {
+          console.log("gameplayItems.length:", gameplayItems.length);
+          console.log(gameplayItems);
+          // Create a "Start Game" button
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.id = "startGameBtn";
+          btn.innerText = "Start Game";
+
+          // Add the "Start Game" button to "addedCategories"
+          addedCategories.appendChild(btn);
+
+          // Add an event listener for click
+          btn.addEventListener("click", postGameplayInformation);
+        }
       }
     }
 
@@ -417,9 +414,6 @@ const fetchInformation = async () => {
       const gameplayItem = document.getElementById(`gameplayItem_${i}`);
 
       gameplayItem.parentElement.removeChild(gameplayItem);
-
-      // console.log("gameplayCategoriesBefore:", gameplayCategories);
-      // console.log('customCategoriesBefore:',customCategories)
       delete gameplayCategories["content_" + i];
       delete gameplayCategories["id_" + i];
 
@@ -427,8 +421,11 @@ const fetchInformation = async () => {
       delete customGameNames[`gameName_${i}`];
       delete customQuestions[`question_${i}`];
       delete customAnswers[`answer_${i}`];
-      // console.log('customCategoriesAfter:',customCategories)
-      // console.log("gameplayCategoriesAfter:", gameplayCategories);
+
+      const startbtn = document.getElementById("startGameBtn");
+      if (startbtn){
+        startbtn.remove()
+      }
     }
     customGameInformation.question = customQuestions;
     customGameInformation.answer = customAnswers;
