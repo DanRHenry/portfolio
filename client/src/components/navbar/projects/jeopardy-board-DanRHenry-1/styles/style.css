@@ -95,6 +95,13 @@ hr {
   padding-right: 0.5em;
 }
 
+#addBtnPosition{
+  /* display: flex; */
+  /* align-items: center; */
+  text-align: center;
+  /* background-color: red; */
+}
+
 #startGame:hover,
 .previousRound > button:hover,
 .nextRound > button:hover {
@@ -522,6 +529,10 @@ aside div {
 }
 .categoryItems{
   font-size: medium;
+}
+
+#gamesLists *{
+  user-select: none;
 }
 
 #questionsDisplay{

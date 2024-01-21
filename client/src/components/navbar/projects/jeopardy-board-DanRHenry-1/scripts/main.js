@@ -69,7 +69,7 @@ let customGameInformation = {};
 let customCategories = {};
 let customQuestions = {};
 let customAnswers = {};
-let customGameNames = {};
+let customGameName = "";
 // Fill Round One, Two, and final Arrays
 for (let m = 0; roundTwoArray.length < 30; m++) {
   for (let questionPosition = m; questionPosition < 60; questionPosition++) {
@@ -201,10 +201,13 @@ const fetchInformation = async () => {
     customCategories = {};
     customQuestions = {};
     customAnswers = {};
-    customGameNames = {};
+    customGameName = "";
     const addedCategories = document.getElementById("addedCategories");
 
-    addedCategories.innerHTML = "\n      <h1>Gameplay Categories:</h1>\n    ";
+    addedCategories.innerHTML = `\n          
+    <h1>Gameplay Categories:</h1>      <ol id="tempCategories">
+        
+    </ol>\n    `;
     console.log("customGameInformationAfter:",customGameInformation)
     //! Fill the results with categories of the same class name
     for (let i = 0; i < data.getAllQuestions.length; i++) {
@@ -373,33 +376,37 @@ const fetchInformation = async () => {
           gameplayCategories["content_" + i] = results[i];
 
           // Create a new div element, gameplayItem, with a className "gameplayItems", and add text (results.category, .className, and .unit)
-          const gameplayItem = document.createElement("div");
+          const gameplayItem = document.createElement("li");
           gameplayItem.id = `gameplayItem_${i}`;
           gameplayItem.className = "gameplayItems";
           gameplayItem.innerText = `${results[i].category},${results[i].className}, ${results[i].unit}`;
 
           customCategories[`category_${i}`] = results[i].category;
-          customGameNames[`gameName_${i}`] = "gameName";
+          customGameName = "gameName";
           customQuestions[`question_${i}`] = results[i].question;
           customAnswers[`answer_${i}`] = results[i].answer;
 
-          // Append the new gameplayItem to "addedCategories" on the page
-          const addedCategories = document.getElementById("addedCategories");
-          addedCategories.appendChild(gameplayItem);
+          // Append the new gameplayItem to "tempCategories" on the page
+          const tempCategories = document.getElementById("tempCategories");
+          tempCategories.appendChild(gameplayItem);
           // Check if the length of gameplayItems is equal to 6,
         }
 
         if (gameplayItems.length === 6) {
-          console.log("gameplayItems.length:", gameplayItems.length);
-          console.log(gameplayItems);
+
           // Create a "Start Game" button
+          const addBtnPosition = document.createElement("div")
+          addBtnPosition.id = "addBtnPosition"
+          
           const btn = document.createElement("button");
           btn.type = "button";
-          btn.id = "startGameBtn";
-          btn.innerText = "Start Game";
+          btn.id = "addGameBtn";
+          btn.innerText = "Create Game";
 
+          // const addBtnPosition = document.getElementById("addBtnPosition");
           // Add the "Start Game" button to "addedCategories"
-          addedCategories.appendChild(btn);
+          document.getElementById("addedCategories").appendChild(addBtnPosition);
+          addBtnPosition.appendChild(btn);
 
           // Add an event listener for click
           btn.addEventListener("click", postGameplayInformation);
@@ -418,18 +425,18 @@ const fetchInformation = async () => {
       delete gameplayCategories["id_" + i];
 
       delete customCategories[`category_${i}`];
-      delete customGameNames[`gameName_${i}`];
+      customGameName = "";
       delete customQuestions[`question_${i}`];
       delete customAnswers[`answer_${i}`];
 
-      const startbtn = document.getElementById("startGameBtn");
+      const startbtn = document.getElementById("addGameBtn");
       if (startbtn){
         startbtn.remove()
       }
     }
     customGameInformation.question = customQuestions;
     customGameInformation.answer = customAnswers;
-    customGameInformation.gameName = customGameNames;
+    customGameInformation.gameName = customGameName;
     customGameInformation.category = customCategories;
   };
 
