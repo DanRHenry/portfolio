@@ -520,8 +520,12 @@ aside div {
   /* min-width: 45vw; */
       width: calc(100%/2);
       /* background-color: red; */
-
-  min-height: fit-content;
+  min-height: 28em;
+  height: fit-content;
+  width: 43vw;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 1em;
 }
 
 #addedCategories > h1, #availableGames > h1 {
