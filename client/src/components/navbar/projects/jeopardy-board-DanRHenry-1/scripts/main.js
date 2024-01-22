@@ -70,6 +70,7 @@ let customCategories = {};
 let customQuestions = {};
 let customAnswers = {};
 let customGameName = "";
+let savedGames;
 // Fill Round One, Two, and final Arrays
 for (let m = 0; roundTwoArray.length < 30; m++) {
   for (let questionPosition = m; questionPosition < 60; questionPosition++) {
@@ -106,6 +107,90 @@ const fetchStudentList = async () => {
   let result = await fetch(url);
   let data = await result.json();
 };
+
+const fetchGamesAvailable = async () => {
+  const url = `${apiServer}/gameplay/`;
+    let result = await fetch(url);
+    savedGames = await result.json();
+    console.log("savedGames:",savedGames);
+    populateAvailableGames()
+  }
+
+fetchGamesAvailable()
+
+const populateAvailableGames = () => {
+
+  const availableGames = document.getElementById("availableGames");
+
+  const availableGamesDisplay = document.createElement("span");
+  availableGamesDisplay.id = "availableGamesDisplay";
+  availableGames.appendChild(availableGamesDisplay);
+
+
+  const availableGamesList = document.createElement("div");
+  availableGamesList.id = "availableGamesList";
+  availableGamesDisplay.appendChild(availableGamesList);
+
+  const availableGamesAccordion = document.createElement("div");
+  availableGamesAccordion.className = "accordion";
+  availableGamesAccordion.id = "availableGamesAccordion";
+  availableGamesList.appendChild(availableGamesAccordion);
+
+  const accordionItem = document.createElement("div");
+  accordionItem.className = "accordion-item";
+  availableGamesAccordion.appendChild(accordionItem);
+
+  for (let i = 0; i < savedGames.length; i++) {
+  const availableGamesAccordionHeader = document.createElement("h2");
+  availableGamesAccordionHeader.className = "accordion-header";
+  availableGamesAccordionHeader.id = `accordionHeader_${i}` //todo pass the correct index for the fetched content
+  availableGames.appendChild(availableGamesAccordionHeader);
+
+  const availableGamesListButton = document.createElement("button");
+  if (i === 0) {
+    availableGamesListButton.className = "accordion-button collapsed";
+    availableGamesListButton.type = "button";
+    availableGamesListButton.setAttribute(`data-bs-toggle="collapse"`);
+    availableGamesListButton.setAttribute(`data-bs-target="#collapseOne"`);
+    availableGamesListButton.ariaExpanded = "false";
+    availableGamesListButton.setAttribute(`aria-controls = "collapseOne"`);
+  }
+  else {
+    availableGamesListButton.className = "accordion-button collapsed";
+    availableGamesListButton.type = "button";
+    availableGamesListButton.setAttribute(`data-bs-toggle="collapse"`);
+    availableGamesListButton.setAttribute(`data-bs-target="#collapseOne"`);
+    availableGamesListButton.ariaExpanded = "false";
+    availableGamesListButton.setAttribute(`aria-controls = "collapseOne"`);
+  }
+  availableGames.appendChild(availableGamesListButton);
+
+  const availableGamesListButtonHeader = document.createElement("span");
+  availableGames.appendChild(availableGamesListButtonHeader);
+
+  const availableGamesListButtonHeaderGameName = document.createElement("strong");
+  availableGames.appendChild(availableGamesListButtonHeaderGameName);
+
+  const br = document.createElement("br");
+  availableGames.appendChild(br);
+
+  //todo Pick up at <label> <input> <div id=deleteArea...
+
+  // ! ------------------------------ Available Game Body ----------------------------
+
+    const availableGamesBody = document.createElement("div");
+    availableGamesBody.id="collapseOne" //todo figure this out, see what happens;
+    availableGamesBody.className = "accordin-collapse collapse show"
+    availableGamesBody.setAttribute(`data-bs-parent = #accordionExample`) //todo Check this accordionExample against the actual parent.
+
+    const accordionBody = document.createElement("div");
+    accordionBody.className = "accordion-body";
+
+    const gameName = document.createElement("strong");
+    gameName.id = `gameName_${i}`;
+
+}
+}
 
 const postGameplayInformation = async () => {
   const url = `${apiServer}/gameplay/gameplayinformation/`;
