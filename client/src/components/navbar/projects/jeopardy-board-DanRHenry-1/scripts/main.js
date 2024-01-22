@@ -57,17 +57,19 @@ let round;
 let index;
 let resultsHTML = "";
 
-let randomResultArray = [];
-let roundOneArray = [];
+let roundOneArray = []; //this gets used by the game and defaults to placeholder questions
 let roundTwoArray = [];
 let finalJeopardyCategory = [];
 let customContentArray = [];
-let customRoundOneArray = [];
-let customRoundTwoArray = [];
+let customRoundOneArray = []; // this redefines roundOneArray to fetched content
 const classList = [];
 let results = [];
-const gameplayCategories = {};
-const customGameInformation = {};
+let gameplayCategories = {};
+let customGameInformation = {};
+let customCategories = {};
+let customQuestions = {};
+let customAnswers = {};
+let customGameName = "";
 // Fill Round One, Two, and final Arrays
 for (let m = 0; roundTwoArray.length < 30; m++) {
   for (let questionPosition = m; questionPosition < 60; questionPosition++) {
@@ -106,50 +108,24 @@ const fetchStudentList = async () => {
 };
 
 const postGameplayInformation = async () => {
+  const url = `${apiServer}/gameplay/gameplayinformation/`;
 
-  
-
-  // console.log("customGameInformation:",customGameInformation)
-
-  const url = `${apiServer}/gameplay/gameplayinformation/`
-
-  await fetch (url, {
+  await fetch(url, {
     method: "POST",
     mode: "cors",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(customGameInformation),
-  })
-  console.log("customGameInformation",customGameInformation)
-
-
-
-  // {
-  //   console.log("submitting...");
-  //   //todo: Add fetch to backend
-  //   console.log('gameplayCategories:',gameplayCategories)
-  // }
-
-}
-
-
-// const fetchQuestionsList = async () => {
-//   const url = `${apiServer}/questions/`;
-//   let result = await fetch(url);
-//   let data = await result.json();
-// };
-
-// document
-//   .getElementById("questionsListBtn")
-//   ?.addEventListener("click", fetchQuestionsList);
+  });
+  console.log("customGameInformation", customGameInformation);
+};
 
 const fetchInformation = async () => {
   const url = `${apiServer}/questions/`;
   let result = await fetch(url);
   let data = await result.json();
 
-  //Todo - Figure out how to add numbers to the questions and answers
   for (let i = 0; i < data.getAllQuestions.length; i++) {
     const gameAnswers = data.getAllQuestions[i].answer.split("\r\n");
     const gameQuestions = data.getAllQuestions[i].question.split("\r\n");
@@ -219,12 +195,25 @@ const fetchInformation = async () => {
     }
     results = [];
     resultsHTML = "";
+    console.log("customGameInformationBefore:",customGameInformation)
+    gameplayCategories = {};
+    customGameInformation = {};
+    customCategories = {};
+    customQuestions = {};
+    customAnswers = {};
+    customGameName = "";
+    const addedCategories = document.getElementById("addedCategories");
 
+    addedCategories.innerHTML = `\n          
+    <h1>Gameplay Categories:</h1>      <ol id="tempCategories">
+        
+    </ol>\n    `;
+    console.log("customGameInformationAfter:",customGameInformation)
     //! Fill the results with categories of the same class name
     for (let i = 0; i < data.getAllQuestions.length; i++) {
       if (
         data.getAllQuestions[i].className ===
-        document.getElementById("class-names").value
+        document.getElementById("class-names")?.value
       ) {
         results.push({
           question: data.getAllQuestions[i].question,
@@ -365,84 +354,94 @@ const fetchInformation = async () => {
     }
   };
 
-
-
-
   const check = (i) => {
     // If checked...
     if (document.getElementsByClassName("checkboxInput")[i].checked === true) {
-    // Check for existing gameplayItems list on the page.
-    const gameplayItems = document.getElementsByClassName("gameplayItems");
+      // Check for existing gameplayItems list on the page.
+      const gameplayItems = document.getElementsByClassName("gameplayItems");
 
-    //If the length of gameplayItems is less than 6, allow the item to be appended
-    console.log("gameplayItems.length:", gameplayItems.length);
-    if (gameplayItems.length >= 6) {
-      alert("There's a maximum of 6 categories.\n Uncheck one to add this.");
-      document.getElementsByClassName("checkboxInput")[i].checked = false;
-      return;
-    }
-    if (gameplayItems.length < 6) {
-      console.log("less than 6");
-      // Add two new keys to gameplayCategories
+      //If the length of gameplayItems is less than 6, allow the item to be appended
+      console.log("gameplayItems.length:", gameplayItems.length);
+      if (gameplayItems.length >= 6) {
+        alert("There's a maximum of 6 categories.\n Uncheck one to add this.");
+        document.getElementsByClassName("checkboxInput")[i].checked = false;
+        return;
+      }
+      if (gameplayItems.length < 6) {
+        console.log("less than 6");
+        // Add two new keys to gameplayCategories
 
-      if (document.getElementsByClassName("checkboxInput")[i].checked) {
-        gameplayCategories["id_" + i] = i;
-        gameplayCategories["content_" + i] = results[i];
+        if (document.getElementsByClassName("checkboxInput")[i].checked) {
+          gameplayCategories["id_" + i] = i;
+          gameplayCategories["content_" + i] = results[i];
 
-        // Create a new div element, gameplayItem, with a className "gameplayItems", and add text (results.category, .className, and .unit)
-        const gameplayItem = document.createElement("div");
-        gameplayItem.id = `gameplayItem_${i}`;
-        gameplayItem.className = "gameplayItems";
-        gameplayItem.innerText = `${results[i].category},${results[i].className}, ${results[i].unit}`;
-        // console.log("results:",results)
-        // const customGameInformation = {}
-          customGameInformation.category = results[i].category;
-          customGameInformation.question = results[i].question;
-          customGameInformation.answer = results[i].answer;
-          customGameInformation.gameName = "gameName";
+          // Create a new div element, gameplayItem, with a className "gameplayItems", and add text (results.category, .className, and .unit)
+          const gameplayItem = document.createElement("li");
+          gameplayItem.id = `gameplayItem_${i}`;
+          gameplayItem.className = "gameplayItems";
+          gameplayItem.innerText = `${results[i].category},${results[i].className}, ${results[i].unit}`;
 
-        // Append the new gameplayItem to "addedCategories" on the page
-        const addedCategories = document.getElementById("addedCategories");
-        addedCategories.appendChild(gameplayItem);
-      
-      // Check if the length of gameplayItems is equal to 6,
-      if (gameplayItems.length === 6) {
-        console.log("gameplayItems.length:", gameplayItems.length);
-        console.log(gameplayItems);
-        // Create a "Start Game" button
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.id = "startGameBtn";
-        btn.innerText = "Start Game";
+          customCategories[`category_${i}`] = results[i].category;
+          customGameName = "gameName";
+          customQuestions[`question_${i}`] = results[i].question;
+          customAnswers[`answer_${i}`] = results[i].answer;
 
-        // Add the "Start Game" button to "addedCategories"
-        addedCategories.appendChild(btn);
+          // Append the new gameplayItem to "tempCategories" on the page
+          const tempCategories = document.getElementById("tempCategories");
+          tempCategories.appendChild(gameplayItem);
+          // Check if the length of gameplayItems is equal to 6,
+        }
 
-        // Add an event listener for click
-        btn.addEventListener("click", postGameplayInformation);
+        if (gameplayItems.length === 6) {
+
+          // Create a "Start Game" button
+          const addBtnPosition = document.createElement("div")
+          addBtnPosition.id = "addBtnPosition"
+          
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.id = "addGameBtn";
+          btn.innerText = "Create Game";
+
+          // const addBtnPosition = document.getElementById("addBtnPosition");
+          // Add the "Start Game" button to "addedCategories"
+          document.getElementById("addedCategories").appendChild(addBtnPosition);
+          addBtnPosition.appendChild(btn);
+
+          // Add an event listener for click
+          btn.addEventListener("click", postGameplayInformation);
+        }
       }
     }
-      const startButton = document.getElementById("startGameBtn");
+
+    if (document.getElementsByClassName("checkboxInput")[i].checked === false) {
+      // console.log("gameplayItems:",gameplayItems)
+      console.log("gameplayCategories:", gameplayCategories);
+
+      const gameplayItem = document.getElementById(`gameplayItem_${i}`);
+
+      gameplayItem.parentElement.removeChild(gameplayItem);
+      delete gameplayCategories["content_" + i];
+      delete gameplayCategories["id_" + i];
+
+      delete customCategories[`category_${i}`];
+      customGameName = "";
+      delete customQuestions[`question_${i}`];
+      delete customAnswers[`answer_${i}`];
+
+      const startbtn = document.getElementById("addGameBtn");
+      if (startbtn){
+        startbtn.remove()
+      }
     }
+    customGameInformation.question = customQuestions;
+    customGameInformation.answer = customAnswers;
+    customGameInformation.gameName = customGameName;
+    customGameInformation.category = customCategories;
   };
 
-  if (document.getElementsByClassName("checkboxInput")[i].checked === false) {
-    // console.log("gameplayItems:",gameplayItems)
-    console.log("gameplayCategories:",gameplayCategories)
-    
-    const gameplayItem = document.getElementById(`gameplayItem_${i}`)
-
-    gameplayItem.parentElement.removeChild(gameplayItem)
-
-    console.log("gameplayCategoriesBefore:",gameplayCategories)
-    delete gameplayCategories["content_" + i]
-    delete gameplayCategories["id_"+ i]
-    console.log("gameplayCategoriesAfter:",gameplayCategories)
-  }
-}
-
   fillClassListDropdown();
-  document.getElementById("class-names").addEventListener("change", () => {
+  document.getElementById("class-names")?.addEventListener("change", () => {
     fillCategoryOptionsDropdown();
   });
 
@@ -546,7 +545,7 @@ const fetchInformation = async () => {
 roundOneArray = customRoundOneArray;
 
 await fetchInformation();
-// console.log("classList:",classList)
+
 // Pull category names from round arrays
 
 if (round === "round1") {
@@ -624,64 +623,19 @@ activeStudentsList?.addEventListener("click", fetchStudentList);
 // console.log("r:",r)
 // Fetch Questions and Answers from danhenrydev jeopardy api
 
-//TODO
 // ----------------------------------------------------------- Fetch on Click -----------------------------------------------------------
-// When the buzzer button is clicked,
-// Send the username / email address
-// Send the correct answer
-// Send the points amount
-// Send the player's answer and check it against the correct answer
-// Send the
-// Add the username to an array on the back end to set the buzz in position.
-//
 
-const url = `${apiServer}/questions`;
+// const url = `${apiServer}/questions`;
 const fetchQuestions = async function () {
   console.log("fetching questions...");
-  let response = await fetch(url);
+  let response = await fetch(`${url}/questions`);
   let data = await response.json();
   console.log("data:", data);
 };
 
 const testFetchButton = document.getElementById("testFetchButton");
 testFetchButton?.addEventListener("click", fetchQuestions);
-// const handleSubmit = (e) => {
-//   const emailBody =
-//     "Name: " +
-//     `${name.current.value}` +
-//     "<br/>" +
-//     "Organization: " +
-//     `${organization.current.value}` +
-//     "<br/>" +
-//     "Email Address:" +
-//     "<br/>" +
-//     `<a href="mailto:${address.current.value}">${address.current.value}</a>` +
-//     "<br/>" +
-//     "<br/>" +
-//     "Message Body:" +
-//     "<br/>" +
-//     message.current.value;
-//   const fulladdress = `https://api.elasticemail.com/v2/email/send?apikey=${key}&subject=${subject.current.value}&from=${fromAddress}&fromName=&sender=${address.current.value}&senderName=${name.current.value}&msgFrom=&msgFromName=&replyTo=&replyToName=&to=${toAddress}&msgTo=&msgCC=&msgBcc=&lists=&segments=&mergeSourceFilename=&dataSource=&channel=&bodyHtml=${emailBody}&bodyText=&charset=&charsetBodyHtml=&charsetBodyText=&template=&headers_firstname=firstname: myValueHere&postBack=&merge_firstname=John&timeOffSetMinutes=&poolName=My Custom Pool&isTransactional=false&attachments=&trackOpens=true&trackClicks=true&utmSource=source1&utmMedium=medium1&utmCampaign=campaign1&utmContent=content1&bodyAmp=&charsetBodyAmp=`;
-//   const sendEmail = async () => {
-//     let res = await fetch(fulladdress);
-//     let result = await res.json();
-//     let data = result;
-//   };
 
-//   e.preventDefault();
-//   setActive(!active);
-//   sendEmail();
-//   address.current.value = "";
-//   subject.current.value = "";
-//   message.current.value = "";
-//   setTimeout(() => {
-//     setActive(false);
-//   }, 3000);
-// };
-
-// fetchAnswers(); --- Commented out for now. Use JSON
-
-//?
 //! Commented Out Fetching from API for now.
 // Fetch Information For the Answer Board
 // let fetchRandomCategories = async () => {

@@ -95,6 +95,13 @@ hr {
   padding-right: 0.5em;
 }
 
+#addBtnPosition{
+  /* display: flex; */
+  /* align-items: center; */
+  text-align: center;
+  /* background-color: red; */
+}
+
 #startGame:hover,
 .previousRound > button:hover,
 .nextRound > button:hover {
@@ -481,24 +488,55 @@ aside div {
   border: 3px solid black;
   border-radius: 1em;
   padding: 1em;
+  margin-top: 1em;
   margin-left: 5vw;
   margin-right: 5vw;
   background-color: gray;
   height: fit-content;
 }
 
-#addedCategories {
+#classLists > h1, #selector {
+  text-align: center;
+}
+
+#gamesLists {
+  margin-top: 1em;
+  display: flex;
+  /* flex-direction: column; */
+  /* align-items: center; */
+  margin-left: 5vw;
+  margin-right: 5vw;
+  width: 90vw;
+  /* background-color: blue; */
+}
+
+#addedCategories, #availableGames{
+  display: inline;
   border: 3px solid black;
   border-radius: 1em;
   padding: 1em;
-  margin-left: 5vw;
-  margin-right: 5vw;
   background-color: gray;
+  height: 100%;
+  /* min-width: 45vw; */
+      width: calc(100%/2);
+      /* background-color: red; */
+  min-height: 28em;
   height: fit-content;
+  width: 43vw;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 1em;
 }
 
+#addedCategories > h1, #availableGames > h1 {
+  text-align: center;
+}
 .categoryItems{
   font-size: medium;
+}
+
+#gamesLists *{
+  user-select: none;
 }
 
 #questionsDisplay{
