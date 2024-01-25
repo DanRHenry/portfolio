@@ -57,6 +57,30 @@ let round;
 let index;
 let resultsHTML = "";
 
+  // Fill in the category options for the class lists
+  const numbers = [
+    "One",
+    "Two",
+    "Three",
+    "Four",
+    "Five",
+    "Six",
+    "Seven",
+    "Eight",
+    "Nine",
+    "Ten",
+    "Eleven",
+    "Twelve",
+    "Thirteen",
+    "Fourteen",
+    "Fifteen",
+    "Sixteen",
+    "Seventeen",
+    "Eighteen",
+    "Nineteen",
+    "Twenty",
+    "Twenty-One",
+  ];
 let roundOneArray = []; //this gets used by the game and defaults to placeholder questions
 let roundTwoArray = [];
 let finalJeopardyCategory = [];
@@ -110,22 +134,20 @@ const fetchStudentList = async () => {
 
 const fetchGamesAvailable = async () => {
   const url = `${apiServer}/gameplay/`;
-    let result = await fetch(url);
-    savedGames = await result.json();
-    console.log("savedGames:",savedGames);
-    populateAvailableGames()
-  }
+  let result = await fetch(url);
+  savedGames = await result.json();
+  console.log("savedGames:", savedGames);
+  populateAvailableGames();
+};
 
-fetchGamesAvailable()
+fetchGamesAvailable();
 
 const populateAvailableGames = () => {
-
   const availableGames = document.getElementById("availableGames");
 
   const availableGamesDisplay = document.createElement("span");
   availableGamesDisplay.id = "availableGamesDisplay";
   availableGames.appendChild(availableGamesDisplay);
-
 
   const availableGamesList = document.createElement("div");
   availableGamesList.id = "availableGamesList";
@@ -136,61 +158,104 @@ const populateAvailableGames = () => {
   availableGamesAccordion.id = "availableGamesAccordion";
   availableGamesList.appendChild(availableGamesAccordion);
 
-  const accordionItem = document.createElement("div");
-  accordionItem.className = "accordion-item";
-  availableGamesAccordion.appendChild(accordionItem);
+  console.log("savedGames:",savedGames.getAllGameplayInformation[0])
+  for (let i = 0; i < savedGames.getAllGameplayInformation.length; i++) {
+    const accordionItem = document.createElement("div");
+    accordionItem.className = "accordion-item";
+    availableGamesAccordion.appendChild(accordionItem);
+  
+    const availableGamesAccordionHeader = document.createElement("h2");
+    availableGamesAccordionHeader.className = `accordion-header`;
+    availableGamesAccordionHeader.id = `availableGamesAccordionHeader_${i}`; //todo pass the correct index for the fetched content
+    accordionItem.appendChild(availableGamesAccordionHeader);
 
-  for (let i = 0; i < savedGames.length; i++) {
-  const availableGamesAccordionHeader = document.createElement("h2");
-  availableGamesAccordionHeader.className = "accordion-header";
-  availableGamesAccordionHeader.id = `accordionHeader_${i}` //todo pass the correct index for the fetched content
-  availableGames.appendChild(availableGamesAccordionHeader);
+    const availableGamesListButton = document.createElement("button");
+    if (i === 0) {
+      availableGamesListButton.className = "accordion-button collapsed";
+      availableGamesListButton.type = "button";
+      availableGamesListButton.setAttribute(`data-bs-toggle`, "collapse");
+      availableGamesListButton.setAttribute(`data-bs-target`, `#collapseGames${numbers[i]}`);
+      availableGamesListButton.ariaExpanded = "false";
+      availableGamesListButton.setAttribute(`aria-controls`, `collapseGames${numbers[i]}`);
+    } else {
+      availableGamesListButton.className = "accordion-button collapsed";
+      availableGamesListButton.type = "button";
+      availableGamesListButton.setAttribute(`data-bs-toggle`,"collapse");
+      availableGamesListButton.setAttribute(`data-bs-target`,`#collapseGamesList${numbers[i]}`);
+      availableGamesListButton.ariaExpanded = "false";
+      availableGamesListButton.setAttribute(`aria-controls`, `collapseGamesList${numbers[i]}`);
+    }
+    availableGamesAccordionHeader.appendChild(availableGamesListButton);
 
-  const availableGamesListButton = document.createElement("button");
-  if (i === 0) {
-    availableGamesListButton.className = "accordion-button collapsed";
-    availableGamesListButton.type = "button";
-    availableGamesListButton.setAttribute(`data-bs-toggle="collapse"`);
-    availableGamesListButton.setAttribute(`data-bs-target="#collapseOne"`);
-    availableGamesListButton.ariaExpanded = "false";
-    availableGamesListButton.setAttribute(`aria-controls = "collapseOne"`);
-  }
-  else {
-    availableGamesListButton.className = "accordion-button collapsed";
-    availableGamesListButton.type = "button";
-    availableGamesListButton.setAttribute(`data-bs-toggle="collapse"`);
-    availableGamesListButton.setAttribute(`data-bs-target="#collapseOne"`);
-    availableGamesListButton.ariaExpanded = "false";
-    availableGamesListButton.setAttribute(`aria-controls = "collapseOne"`);
-  }
-  availableGames.appendChild(availableGamesListButton);
+    const availableGamesCheckboxLabel = document.createElement("div");
+    // availableGamesCheckboxLabel.class="checkboxLabel";
+    // availableGamesCheckboxLabel.htmlFor=`btncheck${i}`;
+    availableGamesCheckboxLabel.innerText = savedGames.getAllGameplayInformation[i].category[`category_${i}`];
+    availableGamesListButton.appendChild(availableGamesCheckboxLabel);
 
-  const availableGamesListButtonHeader = document.createElement("span");
-  availableGames.appendChild(availableGamesListButtonHeader);
 
-  const availableGamesListButtonHeaderGameName = document.createElement("strong");
-  availableGames.appendChild(availableGamesListButtonHeaderGameName);
+console.log("savedGames.getAllGameplayInformation[0][i]",savedGames.getAllGameplayInformation[i])
 
-  const br = document.createElement("br");
-  availableGames.appendChild(br);
+    const availableGamesListButtonHeader = document.createElement("span");
+    availableGames.appendChild(availableGamesListButtonHeader);
 
-  //todo Pick up at <label> <input> <div id=deleteArea...
+    const availableGamesListButtonHeaderGameName =
+      document.createElement("strong");
+    availableGames.appendChild(availableGamesListButtonHeaderGameName);
 
-  // ! ------------------------------ Available Game Body ----------------------------
+    const br = document.createElement("br");
+    availableGames.appendChild(br);
+
+    //todo Pick up at <label> <input> <div id=deleteArea...
+
+    /* 
+`
+    <div class="accordion" id="accordionExample">
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="accordionHeader_${i}">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+<!--         <b>${results[i].category}</b> -->
+         <span>
+          <strong>Unit: </strong>${results[i].unit}
+          <br> 
+          <strong>Category: </strong> ${results[i].category}
+          </span>
+        </button>
+      </h2>
+      <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+      <strong class="questions">Questions:</strong>
+      <div>
+      <ol class="categoryItems"><li>${results[i].question.replaceAll(
+        "\r\n",
+        "</li><li>"
+      )}</ol> 
+      <strong class="answers">Answers:</strong>
+      <ol class="categoryItems"><li>${results[i].answer.replaceAll(
+        "\r\n",
+        "</li><li>"
+      )}</ol>
+      </div>
+    </div>
+      </div>
+    </div>
+    `;
+*/
+
+    // ! ------------------------------ Available Game Body ----------------------------
 
     const availableGamesBody = document.createElement("div");
-    availableGamesBody.id="collapseOne" //todo figure this out, see what happens;
-    availableGamesBody.className = "accordin-collapse collapse show"
-    availableGamesBody.setAttribute(`data-bs-parent = #accordionExample`) //todo Check this accordionExample against the actual parent.
+    availableGamesBody.id = "collapseOne"; //todo figure this out, see what happens;
+    availableGamesBody.className = "accordin-collapse collapse show";
+    availableGamesBody.setAttribute(`data-bs-parent`, "#accordionExample"); //todo Check this accordionExample against the actual parent.
 
     const accordionBody = document.createElement("div");
     accordionBody.className = "accordion-body";
 
     const gameName = document.createElement("strong");
     gameName.id = `gameName_${i}`;
-
-}
-}
+  }
+};
 
 const postGameplayInformation = async () => {
   const url = `${apiServer}/gameplay/gameplayinformation/`;
@@ -248,30 +313,6 @@ const fetchInformation = async () => {
     }
   };
 
-  // Fill in the category options for the class lists
-  const numbers = [
-    "One",
-    "Two",
-    "Three",
-    "Four",
-    "Five",
-    "Six",
-    "Seven",
-    "Eight",
-    "Nine",
-    "Ten",
-    "Eleven",
-    "Twelve",
-    "Thirteen",
-    "Fourteen",
-    "Fifteen",
-    "Sixteen",
-    "Seventeen",
-    "Eighteen",
-    "Nineteen",
-    "Twenty",
-    "Twenty-One",
-  ];
 
   // ------------------------------------------------ Function to fill the Category Options List ---------------------------------
   const fillCategoryOptionsDropdown = () => {
@@ -280,7 +321,7 @@ const fetchInformation = async () => {
     }
     results = [];
     resultsHTML = "";
-    console.log("customGameInformationBefore:",customGameInformation)
+    console.log("customGameInformationBefore:", customGameInformation);
     gameplayCategories = {};
     customGameInformation = {};
     customCategories = {};
@@ -293,7 +334,7 @@ const fetchInformation = async () => {
     <h1>Gameplay Categories:</h1>      <ol id="tempCategories">
         
     </ol>\n    `;
-    console.log("customGameInformationAfter:",customGameInformation)
+    console.log("customGameInformationAfter:", customGameInformation);
     //! Fill the results with categories of the same class name
     for (let i = 0; i < data.getAllQuestions.length; i++) {
       if (
@@ -374,7 +415,7 @@ const fetchInformation = async () => {
 
       if (results.length > 1 && i >= 1) {
         // console.log("secondary:");
-        let dataBsTarget = `collapse${numbers[i]}`;
+        let dataBsTarget = `${numbers}Game${[i]}`;
         // resultsHTML = ""
         resultsHTML += `
 <div class = "accordion-item">
@@ -478,11 +519,10 @@ const fetchInformation = async () => {
         }
 
         if (gameplayItems.length === 6) {
-
           // Create a "Start Game" button
-          const addBtnPosition = document.createElement("div")
-          addBtnPosition.id = "addBtnPosition"
-          
+          const addBtnPosition = document.createElement("div");
+          addBtnPosition.id = "addBtnPosition";
+
           const btn = document.createElement("button");
           btn.type = "button";
           btn.id = "addGameBtn";
@@ -490,7 +530,9 @@ const fetchInformation = async () => {
 
           // const addBtnPosition = document.getElementById("addBtnPosition");
           // Add the "Start Game" button to "addedCategories"
-          document.getElementById("addedCategories").appendChild(addBtnPosition);
+          document
+            .getElementById("addedCategories")
+            .appendChild(addBtnPosition);
           addBtnPosition.appendChild(btn);
 
           // Add an event listener for click
@@ -515,8 +557,8 @@ const fetchInformation = async () => {
       delete customAnswers[`answer_${i}`];
 
       const startbtn = document.getElementById("addGameBtn");
-      if (startbtn){
-        startbtn.remove()
+      if (startbtn) {
+        startbtn.remove();
       }
     }
     customGameInformation.question = customQuestions;
