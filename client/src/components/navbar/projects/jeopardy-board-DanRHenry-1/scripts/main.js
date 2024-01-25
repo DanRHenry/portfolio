@@ -234,7 +234,7 @@ const fetchInformation = async () => {
         resultsHTML += `
     <div class="accordion" id="accordionExample">
     <div class="accordion-item">
-      <h2 class="accordion-header" id="accordionHeader_${i}">
+      <h2 class="accordion-header addingCategories" id="accordionHeader_${i}">
         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
 <!--         <b>${results[i].category}</b> -->
          <span>
@@ -293,7 +293,7 @@ const fetchInformation = async () => {
         // resultsHTML = ""
         resultsHTML += `
 <div class = "accordion-item">
-<h2 class="accordion-header" id="accordionHeader_${i}">
+<h2 class="accordion-header addingCategories" id="accordionHeader_${i}">
             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse${dataBsTarget}" aria-expanded="false" aria-controls="collapse${dataBsTarget}">
             <div>
               <strong>Unit: </strong>${results[i].unit}
@@ -447,10 +447,12 @@ const fetchInformation = async () => {
 
   // ! --------------------------------------- Add Checkboxes to Categories List --------------------------
   const addCheckboxes = () => {
-    if (document.getElementsByClassName("accordion-header")) {
-      const accordionHeaders =
-        document.getElementsByClassName("accordion-header");
-      for (let i = 0; i < accordionHeaders.length; i++) {
+    if (document.getElementsByClassName("addingCategories")) {
+      const addingCategories =
+        document.getElementsByClassName("addingCategories");
+      for (let i = 0; i < addingCategories.length; i++) {
+        // console.log("accordionHeaders.length",accordionHeaders.length);
+        // console.log("i:",i)
         const accordionHeader = document.getElementById(`accordionHeader_${i}`);
 
         const checkboxLabel = document.createElement("label");
