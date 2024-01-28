@@ -66,29 +66,29 @@ let customRoundOneArray = []; // this redefines roundOneArray to fetched content
 const classList = [];
 let results = [];
   // Fill in the category options for the class lists
-  const numbers = [
-    "One",
-    "Two",
-    "Three",
-    "Four",
-    "Five",
-    "Six",
-    "Seven",
-    "Eight",
-    "Nine",
-    "Ten",
-    "Eleven",
-    "Twelve",
-    "Thirteen",
-    "Fourteen",
-    "Fifteen",
-    "Sixteen",
-    "Seventeen",
-    "Eighteen",
-    "Nineteen",
-    "Twenty",
-    "Twenty-One",
-  ];
+  // const numbers = [
+  //   "One",
+  //   "Two",
+  //   "Three",
+  //   "Four",
+  //   "Five",
+  //   "Six",
+  //   "Seven",
+  //   "Eight",
+  //   "Nine",
+  //   "Ten",
+  //   "Eleven",
+  //   "Twelve",
+  //   "Thirteen",
+  //   "Fourteen",
+  //   "Fifteen",
+  //   "Sixteen",
+  //   "Seventeen",
+  //   "Eighteen",
+  //   "Nineteen",
+  //   "Twenty",
+  //   "Twenty-One",
+  // ];
 let gameplayCategories = {};
 let customGameInformation = {};
 let customCategories = {};
@@ -131,8 +131,14 @@ const fetchStudentList = async () => {
   let result = await fetch(url);
   let data = await result.json();
 };
-
+//Todo - delete gameNameInput when the number of checked boxes goes below 6
 const postGameplayInformation = async () => {
+  const gameNameInput = document.getElementById("gameNameField")
+  if (gameNameInput.value === "") {
+    console.log("needs a value");
+    return
+  }
+  customGameInformation.gameName = gameNameInput.value;
   const url = `${apiServer}/gameplay/gameplayinformation/`;
 
   await fetch(url, {
@@ -144,6 +150,7 @@ const postGameplayInformation = async () => {
     body: JSON.stringify(customGameInformation),
   });
   console.log("customGameInformation", customGameInformation);
+  fillAvailableGamesList()
 };
 
 const fetchGames = async () => {
@@ -203,7 +210,7 @@ const fetchInformation = async () => {
     }
     results = [];
     resultsHTML = "";
-    console.log("customGameInformationBefore:", customGameInformation);
+    // console.log("customGameInformationBefore:", customGameInformation);
     gameplayCategories = {};
     customGameInformation = {};
     customCategories = {};
@@ -216,7 +223,7 @@ const fetchInformation = async () => {
     <h1>Gameplay Categories:</h1>      <ol id="tempCategories">
         
     </ol>\n    `;
-    console.log("customGameInformationAfter:", customGameInformation);
+    // console.log("customGameInformationAfter:", customGameInformation);
     //! Fill the results with categories of the same class name
     for (let i = 0; i < data.getAllQuestions.length; i++) {
       if (
@@ -272,7 +279,7 @@ const fetchInformation = async () => {
     `;
       }
 
-      let dataBsTarget = `collapse${numbers[i]}`;
+      // let dataBsTarget = `collapse${numbers[i]}`;
       // console.log("classlist:", classList[i])
       const element = document.createElement("div");
       element.value = classList[i].className;
@@ -297,12 +304,12 @@ const fetchInformation = async () => {
 
       if (results.length > 1 && i >= 1) {
         // console.log("secondary:");
-        let dataBsTarget = `collapse${numbers[i]}`;
+        let dataBsTarget = `collapse${i}`;
         // resultsHTML = ""
         resultsHTML += `
 <div class = "accordion-item">
 <h2 class="accordion-header accordionClassListHeader" id="accordionHeader_${i}">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse${dataBsTarget}" aria-expanded="false" aria-controls="collapse${dataBsTarget}">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#${dataBsTarget}" aria-expanded="false" aria-controls="${dataBsTarget}">
             <div>
               <strong>Unit: </strong>${results[i].unit}
               <br>
@@ -310,7 +317,7 @@ const fetchInformation = async () => {
             </div>
               </button>
           </h2>
-          <div id="collapse${dataBsTarget}" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+          <div id="${dataBsTarget}" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
           <div class="accordion-body">
               <strong class="questions">Questions:</strong>
               <div>
@@ -400,25 +407,28 @@ const fetchInformation = async () => {
           // Check if the length of gameplayItems is equal to 6,
         }
 
-        if (gameplayItems.length === 6) {
+        if (gameplayItems.length === 1) {
           // Create a "Start Game" button
           const addBtnPosition = document.createElement("div");
           addBtnPosition.id = "addBtnPosition";
 
-          const btn = document.createElement("button");
-          btn.type = "button";
-          btn.id = "addGameBtn";
-          btn.innerText = "Create Game";
+          const addGameBtn = document.createElement("button");
+          addGameBtn.type = "button";
+          addGameBtn.id = "addGameBtn";
+          addGameBtn.innerText = "Create Game";
+
+          const gameNameField = document.createElement("input");
+          gameNameField.id = "gameNameField";
 
           // const addBtnPosition = document.getElementById("addBtnPosition");
           // Add the "Start Game" button to "addedCategories"
           document
             .getElementById("addedCategories")
             .appendChild(addBtnPosition);
-          addBtnPosition.appendChild(btn);
-
+          addBtnPosition.appendChild(addGameBtn);
+          addBtnPosition.appendChild(gameNameField);
           // Add an event listener for click
-          btn.addEventListener("click", postGameplayInformation);
+          addGameBtn.addEventListener("click", postGameplayInformation);
         }
       }
     }
@@ -559,6 +569,8 @@ await fetchInformation();
 //! ------------------------ Fill Available Games List ------------
 
 const fillAvailableGamesList = async () => {
+  const availableGamesList = document.getElementById("availableGamesList");
+  availableGamesList.innerHTML="";
   await fetchGames();
   //----------------------- First Games List Item -------------
 
@@ -567,8 +579,6 @@ const fillAvailableGamesList = async () => {
     i < availableGames.getAllGameplayInformation.length;
     i++
   ) {
-    const availableGamesList = document.getElementById("availableGamesList");
-
     const gamesListAccordionItem = document.createElement("div");
     gamesListAccordionItem.className = "accordion-item accordionGamesItems";
     availableGamesList.appendChild(gamesListAccordionItem)
@@ -584,12 +594,12 @@ const fillAvailableGamesList = async () => {
     gamesListAccordionButton.setAttribute("data-bs-toggle", "collapse");
     gamesListAccordionButton.setAttribute(
       "data-bs-target",
-      `#collapseGame${numbers[i]}`
+      `#collapseGame${i}`
     );
     gamesListAccordionButton.ariaExpanded = "true";
     gamesListAccordionButton.setAttribute(
       "aria-controls",
-      `collapseGame${numbers[i]}`
+      `collapseGame${i}`
     );
     console.log("gameName:",availableGames.getAllGameplayInformation[i].gameName)
     gamesListAccordionButton.innerText = availableGames.getAllGameplayInformation[i].gameName;
@@ -598,7 +608,7 @@ const fillAvailableGamesList = async () => {
 
     // Next up: collapseGameOne div
     const collapseGamei = document.createElement("div");
-      collapseGamei.id = `collapseGame${numbers[i]}`;
+      collapseGamei.id = `collapseGame${i}`;
       collapseGamei.className = "accordion-collapse collapse" //show
       collapseGamei.setAttribute("data-bs-parent", "#availableGamesList");
       gamesListAccordionItem.appendChild(collapseGamei);
