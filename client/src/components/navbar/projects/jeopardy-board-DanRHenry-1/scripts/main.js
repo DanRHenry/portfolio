@@ -65,30 +65,6 @@ let customContentArray = [];
 let customRoundOneArray = []; // this redefines roundOneArray to fetched content
 const classList = [];
 let results = [];
-  // Fill in the category options for the class lists
-  // const numbers = [
-  //   "One",
-  //   "Two",
-  //   "Three",
-  //   "Four",
-  //   "Five",
-  //   "Six",
-  //   "Seven",
-  //   "Eight",
-  //   "Nine",
-  //   "Ten",
-  //   "Eleven",
-  //   "Twelve",
-  //   "Thirteen",
-  //   "Fourteen",
-  //   "Fifteen",
-  //   "Sixteen",
-  //   "Seventeen",
-  //   "Eighteen",
-  //   "Nineteen",
-  //   "Twenty",
-  //   "Twenty-One",
-  // ];
 let gameplayCategories = {};
 let customGameInformation = {};
 let customCategories = {};
@@ -149,8 +125,12 @@ const postGameplayInformation = async () => {
     },
     body: JSON.stringify(customGameInformation),
   });
-  console.log("customGameInformation", customGameInformation);
+  // console.log("customGameInformation", customGameInformation);
   fillAvailableGamesList()
+  addedCategories.innerHTML = `\n          
+  <h1>Gameplay Categories:</h1>      <ol id="tempCategories">
+      
+  </ol>\n    `
 };
 
 const fetchGames = async () => {
@@ -407,7 +387,7 @@ const fetchInformation = async () => {
           // Check if the length of gameplayItems is equal to 6,
         }
 
-        if (gameplayItems.length === 1) {
+        if (gameplayItems.length === 6) {
           // Create a "Start Game" button
           const addBtnPosition = document.createElement("div");
           addBtnPosition.id = "addBtnPosition";
@@ -601,7 +581,7 @@ const fillAvailableGamesList = async () => {
       "aria-controls",
       `collapseGame${i}`
     );
-    console.log("gameName:",availableGames.getAllGameplayInformation[i].gameName)
+    // console.log("gameName:",availableGames.getAllGameplayInformation[i].question["question_6"])
     gamesListAccordionButton.innerText = availableGames.getAllGameplayInformation[i].gameName;
     accordionHeader.appendChild(gamesListAccordionButton);
 
@@ -617,10 +597,20 @@ const fillAvailableGamesList = async () => {
       accordionGamesListBody.className = "accordion-body";
       collapseGamei.appendChild(accordionGamesListBody);
 
-      const gamesListInnerText = document.createElement("strong")
-      gamesListInnerText.innerText = availableGames.getAllGameplayInformation[i].gameName;
-      accordionGamesListBody.appendChild(gamesListInnerText);
+      const gamesListInnerText = document.createElement("div")
+      gamesListInnerText.className = "gamesListInnerText"
 
+      const item =availableGames.getAllGameplayInformation[i].category;
+
+      let categories = ""
+      for (let c = 1; c < Object.values(item).length+1; c++) 
+      {
+        categories += `Category ${c}: `+Object.values(item)[c -1]
+        categories += "</br>"
+      }
+      gamesListInnerText.innerHTML = categories;
+      accordionGamesListBody.appendChild(gamesListInnerText);
+    
   }
 };
 

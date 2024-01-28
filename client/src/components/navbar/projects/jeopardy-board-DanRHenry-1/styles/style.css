@@ -423,11 +423,9 @@ aside div {
 
 .displayQuestions > * {
   display: none;
-  /* color: blue; */
 }
 
 .displayAnswers > * {
-  /* color: orange; */
   display: none;
 }
 
@@ -495,41 +493,42 @@ aside div {
   height: fit-content;
 }
 
+.accordion-item {
+  margin-left: 1.5em;
+  margin-right: 1.5em;
+}
 #classLists > h1, #selector {
   text-align: center;
 }
 
 #gamesLists {
   margin-top: 1em;
-  display: flex;
-  /* flex-direction: column; */
-  /* align-items: center; */
   margin-left: 5vw;
   margin-right: 5vw;
   width: 90vw;
-  /* background-color: blue; */
 }
 
 #addedCategories, #availableGames{
-  display: inline;
   border: 3px solid black;
   border-radius: 1em;
   padding: 1em;
   background-color: gray;
   height: 100%;
-  /* min-width: 45vw; */
-      width: calc(100%/2);
-      /* background-color: red; */
-  min-height: 28em;
+  min-height: fit-content;
   height: fit-content;
-  width: 43vw;
   margin-left: auto;
   margin-right: auto;
   margin-bottom: 1em;
+  padding-top: 3em;
+  padding-bottom: 3em;
 }
 
 #addedCategories > h1, #availableGames > h1 {
   text-align: center;
+}
+
+#availableGamesList {
+  padding-top: 1.5em;
 }
 .categoryItems{
   font-size: medium;
