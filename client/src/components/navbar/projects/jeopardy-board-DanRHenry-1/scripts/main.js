@@ -56,6 +56,7 @@ let activePlayer;
 let round;
 let index;
 let resultsHTML = "";
+let availableGames;
 
 let roundOneArray = []; //this gets used by the game and defaults to placeholder questions
 let roundTwoArray = [];
@@ -64,6 +65,30 @@ let customContentArray = [];
 let customRoundOneArray = []; // this redefines roundOneArray to fetched content
 const classList = [];
 let results = [];
+  // Fill in the category options for the class lists
+  const numbers = [
+    "One",
+    "Two",
+    "Three",
+    "Four",
+    "Five",
+    "Six",
+    "Seven",
+    "Eight",
+    "Nine",
+    "Ten",
+    "Eleven",
+    "Twelve",
+    "Thirteen",
+    "Fourteen",
+    "Fifteen",
+    "Sixteen",
+    "Seventeen",
+    "Eighteen",
+    "Nineteen",
+    "Twenty",
+    "Twenty-One",
+  ];
 let gameplayCategories = {};
 let customGameInformation = {};
 let customCategories = {};
@@ -121,6 +146,12 @@ const postGameplayInformation = async () => {
   console.log("customGameInformation", customGameInformation);
 };
 
+const fetchGames = async () => {
+  const url = `${apiServer}/gameplay/`;
+  let result = await fetch(url);
+  availableGames = await result.json();
+};
+
 const fetchInformation = async () => {
   const url = `${apiServer}/questions/`;
   let result = await fetch(url);
@@ -163,30 +194,7 @@ const fetchInformation = async () => {
     }
   };
 
-  // Fill in the category options for the class lists
-  const numbers = [
-    "One",
-    "Two",
-    "Three",
-    "Four",
-    "Five",
-    "Six",
-    "Seven",
-    "Eight",
-    "Nine",
-    "Ten",
-    "Eleven",
-    "Twelve",
-    "Thirteen",
-    "Fourteen",
-    "Fifteen",
-    "Sixteen",
-    "Seventeen",
-    "Eighteen",
-    "Nineteen",
-    "Twenty",
-    "Twenty-One",
-  ];
+
 
   // ------------------------------------------------ Function to fill the Category Options List ---------------------------------
   const fillCategoryOptionsDropdown = () => {
@@ -195,7 +203,7 @@ const fetchInformation = async () => {
     }
     results = [];
     resultsHTML = "";
-    console.log("customGameInformationBefore:",customGameInformation)
+    console.log("customGameInformationBefore:", customGameInformation);
     gameplayCategories = {};
     customGameInformation = {};
     customCategories = {};
@@ -208,7 +216,7 @@ const fetchInformation = async () => {
     <h1>Gameplay Categories:</h1>      <ol id="tempCategories">
         
     </ol>\n    `;
-    console.log("customGameInformationAfter:",customGameInformation)
+    console.log("customGameInformationAfter:", customGameInformation);
     //! Fill the results with categories of the same class name
     for (let i = 0; i < data.getAllQuestions.length; i++) {
       if (
@@ -393,11 +401,10 @@ const fetchInformation = async () => {
         }
 
         if (gameplayItems.length === 6) {
-
           // Create a "Start Game" button
-          const addBtnPosition = document.createElement("div")
-          addBtnPosition.id = "addBtnPosition"
-          
+          const addBtnPosition = document.createElement("div");
+          addBtnPosition.id = "addBtnPosition";
+
           const btn = document.createElement("button");
           btn.type = "button";
           btn.id = "addGameBtn";
@@ -405,7 +412,9 @@ const fetchInformation = async () => {
 
           // const addBtnPosition = document.getElementById("addBtnPosition");
           // Add the "Start Game" button to "addedCategories"
-          document.getElementById("addedCategories").appendChild(addBtnPosition);
+          document
+            .getElementById("addedCategories")
+            .appendChild(addBtnPosition);
           addBtnPosition.appendChild(btn);
 
           // Add an event listener for click
@@ -430,8 +439,8 @@ const fetchInformation = async () => {
       delete customAnswers[`answer_${i}`];
 
       const startbtn = document.getElementById("addGameBtn");
-      if (startbtn){
-        startbtn.remove()
+      if (startbtn) {
+        startbtn.remove();
       }
     }
     customGameInformation.question = customQuestions;
@@ -448,8 +457,9 @@ const fetchInformation = async () => {
   // ! --------------------------------------- Add Checkboxes to Categories List --------------------------
   const addCheckboxes = () => {
     if (document.getElementsByClassName("accordionClassListHeader")) {
-      const accordionHeaders =
-        document.getElementsByClassName("accordionClassListHeader");
+      const accordionHeaders = document.getElementsByClassName(
+        "accordionClassListHeader"
+      );
       for (let i = 0; i < accordionHeaders.length; i++) {
         const accordionHeader = document.getElementById(`accordionHeader_${i}`);
 
@@ -546,6 +556,65 @@ roundOneArray = customRoundOneArray;
 
 await fetchInformation();
 
+//! ------------------------ Fill Available Games List ------------
+
+const fillAvailableGamesList = async () => {
+  await fetchGames();
+  //----------------------- First Games List Item -------------
+
+  for (
+    let i = 0;
+    i < availableGames.getAllGameplayInformation.length;
+    i++
+  ) {
+    const availableGamesList = document.getElementById("availableGamesList");
+
+    const gamesListAccordionItem = document.createElement("div");
+    gamesListAccordionItem.className = "accordion-item accordionGamesItems";
+    availableGamesList.appendChild(gamesListAccordionItem)
+
+    const accordionHeader = document.createElement("h2");
+    accordionHeader.className = "accordion-header";
+    accordionHeader.id = `gamesListAccordionHeader_${i}`;
+    gamesListAccordionItem.appendChild(accordionHeader);
+
+    const gamesListAccordionButton = document.createElement("button");
+    gamesListAccordionButton.className = "accordion-button collapsed";
+    gamesListAccordionButton.type = "button";
+    gamesListAccordionButton.setAttribute("data-bs-toggle", "collapse");
+    gamesListAccordionButton.setAttribute(
+      "data-bs-target",
+      `#collapseGame${numbers[i]}`
+    );
+    gamesListAccordionButton.ariaExpanded = "true";
+    gamesListAccordionButton.setAttribute(
+      "aria-controls",
+      `collapseGame${numbers[i]}`
+    );
+    console.log("gameName:",availableGames.getAllGameplayInformation[i].gameName)
+    gamesListAccordionButton.innerText = availableGames.getAllGameplayInformation[i].gameName;
+    accordionHeader.appendChild(gamesListAccordionButton);
+
+
+    // Next up: collapseGameOne div
+    const collapseGamei = document.createElement("div");
+      collapseGamei.id = `collapseGame${numbers[i]}`;
+      collapseGamei.className = "accordion-collapse collapse" //show
+      collapseGamei.setAttribute("data-bs-parent", "#availableGamesList");
+      gamesListAccordionItem.appendChild(collapseGamei);
+
+      const accordionGamesListBody = document.createElement("div");
+      accordionGamesListBody.className = "accordion-body";
+      collapseGamei.appendChild(accordionGamesListBody);
+
+      const gamesListInnerText = document.createElement("strong")
+      gamesListInnerText.innerText = availableGames.getAllGameplayInformation[i].gameName;
+      accordionGamesListBody.appendChild(gamesListInnerText);
+
+  }
+};
+
+fillAvailableGamesList()
 // Pull category names from round arrays
 
 if (round === "round1") {
