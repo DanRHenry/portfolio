@@ -107,6 +107,13 @@ if (roundName[0]?.innerText == "Jeopardy!") {
 
   // Fill the class list in the admin page
   const fillClassListDropdown = () => {
+    const options = document.getElementsByTagName("option");
+    // console.log('options:',options)
+    // for (let i = 0; i >= options.length -1; i--) {
+    //   options[i].parentNode.removeChild(options[i]);
+    // }
+
+    
     for (let i = 0; i < classList.length; i++) {
       const listing = document.createElement("option");
       // Check for consecutive duplicate classes (//todo:  come up with a solution to deal with non-consecutive duplicates: either sort alphabetically and keep the same logic, or search through the array)
@@ -133,28 +140,28 @@ const postNewClassName = async () => {
 
 
 
-  // const classNameInput = document.getElementById("classNameInputField");
-  // if (classNameInput.value === "") {
-  //   console.log('Enter a name')
-  //   return
-  // }
+  const classNameInput = document.getElementById("classNameInputField");
+  if (classNameInput.value === "") {
+    console.log('Enter a name')
+    return
+  }
 
-  // let newClass = {};
-  //   newClass.className = classNameInput.value;
-  //   newClass.question = "";
-  //   newClass.answer = "";
-  //   newClass.category = "";
-  //   newClass.unit = "";
+  let newClass = {};
+    newClass.className = classNameInput.value;
+    newClass.question = "";
+    newClass.answer = "";
+    newClass.category = "";
+    newClass.unit = "";
 
-  // const url = `${apiServer}/questions/storeQuestion/`;
-  // await fetch(url, {
-  //   method: "POST",
-  //   mode: "cors",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  //   body: JSON.stringify(newClass),
-  // });
+  const url = `${apiServer}/questions/storeQuestion/`;
+  await fetch(url, {
+    method: "POST",
+    mode: "cors",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(newClass),
+  });
 
   // const options = document.getElementsByTagName("option");
   
@@ -167,9 +174,9 @@ const postNewClassName = async () => {
   
   console.log('options:',options)
   // index = element.length - 1; index >= 0; index--
-  for (let i = 0; i >= options.length -1; i--) {
-    options[i].parentNode.removeChild(options[i]);
-  }
+  // for (let i = 0; i >= options.length -1; i--) {
+  //   options[i].parentNode.removeChild(options[i]);
+  // }
 
 
   // await fetchInformation();
@@ -232,11 +239,18 @@ const fetchGames = async () => {
 };
 
 
+
+
+
 // Todo - break up this function
+
+// -------------------------------------- Fetch Questions, Answers, Categories, and Class Names ---------------------------------
 const fetchInformation = async () => {
   const url = `${apiServer}/questions/`;
   let result = await fetch(url);
   let data = await result.json();
+
+// -------------------------------------- Clear the classList array -------------------------------------------------------------
   classList = [];
   for (let i = 0; i < data.getAllQuestions.length; i++) {
     const gameAnswers = data.getAllQuestions[i].answer.split("\r\n");
@@ -244,12 +258,13 @@ const fetchInformation = async () => {
     const gameCategories = data.getAllQuestions[i].category.split("\r\n");
     const gameClassName = data.getAllQuestions[i].className.split("\r\n");
 
+// --------------------------------------- Push Class Names & IDs to the classList array ---------------------------------------
     classList.push({
       className: data.getAllQuestions[i].className,
       id: data.getAllQuestions[i]._id,
     });
 
-    // Information for the Gameplay Categories/Class/Questions/Answers/Scores
+    // --------Push Information for the Gameplay Categories/Class/Questions/Answers/Scores to the customContentArray -------------
     for (let index = 0; index < gameAnswers.length; index++) {
       customContentArray.push({
         category: gameCategories[0],
@@ -264,12 +279,14 @@ const fetchInformation = async () => {
 
   // ------------------------------------------------ Function to fill the Category Options List ---------------------------------
   const fillCategoryOptionsDropdown = () => {
+
+// ----------------------------------------------------------- Clear checkboxes --------------------------------------------------
     if (document.getElementById(`checkBoxes`)) {
       document.getElementById(`checkBoxes`).innerHTML = "";
     }
+// -------------------------------------------- clear the results array and the resultsHTML --------------------------------------
     results = [];
     resultsHTML = "";
-    // console.log("customGameInformationBefore:", customGameInformation);
     gameplayCategories = {};
     customGameInformation = {};
     customCategories = {};
@@ -283,12 +300,17 @@ const fetchInformation = async () => {
         
     </ol>\n    `;
     // console.log("customGameInformationAfter:", customGameInformation);
-    //! Fill the results with categories of the same class name
+    
+    
+    
+    // ------Check through the fetched category data and Fill the results with categories of the same class name ----------------
     for (let i = 0; i < data.getAllQuestions.length; i++) {
       if (
         data.getAllQuestions[i].className ===
         document.getElementById("class-names")?.value
       ) {
+
+    // ------------- For each category that matches the selected class, push an object into results ------------------------------
         results.push({
           question: data.getAllQuestions[i].question,
           answer: data.getAllQuestions[i].answer,
@@ -300,9 +322,15 @@ const fetchInformation = async () => {
       }
     }
 
-    // console.log("results Length:", results.length, "results:", results);
+
+
+
+    // ---------------- Use the results array of category objects to create HTML in the Select Questions section --------
+
+
     // ----------------------------------------------------- Primary Category -------------------------------------------
     // Add the first category information from the results array to the resultsHTML string. This is done separately from the rest to accomidate the bootstrap differences.
+
     for (let i = 0; i < results.length; i++) {
       if (i === 0) {
         resultsHTML += `
@@ -338,15 +366,12 @@ const fetchInformation = async () => {
     `;
       }
 
-      // let dataBsTarget = `collapse${numbers[i]}`;
-      // console.log("classlist:", classList[i])
       const element = document.createElement("div");
       element.value = classList[i].className;
       element.innerText = classList[i].className;
       element.id = classList[i].id;
       element.innerText = data.getAllQuestions[i].question;
 
-      // console.log("reslength",results.length,results)
       for (let i = 0; i < results.length; i++) {
         document.getElementById("questionList").innerHTML =
           "<span>" +
@@ -428,6 +453,12 @@ const fetchInformation = async () => {
     }
   };
 
+
+
+  // --------------------------------------- Check to see how many category boxes have been checked ----------------------------
+  
+  
+  // ------------------------If 6 have been checked, make a submit button and name entry field (change this?) ------------------
   const check = (i) => {
     // If checked...
     if (document.getElementsByClassName("checkboxInput")[i].checked === true) {
@@ -436,6 +467,10 @@ const fetchInformation = async () => {
 
       //If the length of gameplayItems is less than 6, allow the item to be appended
       console.log("gameplayItems.length:", gameplayItems.length);
+
+
+      // If the length of gameplayItems is greater or equal to 6, deselect the most recent box and warn that the limit has been reached.
+
       if (gameplayItems.length >= 6) {
         alert("There's a maximum of 6 categories.\n Uncheck one to add this.");
         document.getElementsByClassName("checkboxInput")[i].checked = false;
@@ -443,6 +478,9 @@ const fetchInformation = async () => {
       }
       if (gameplayItems.length < 6) {
         console.log("less than 6");
+
+
+
         // Add two new keys to gameplayCategories
 
         if (document.getElementsByClassName("checkboxInput")[i].checked) {
