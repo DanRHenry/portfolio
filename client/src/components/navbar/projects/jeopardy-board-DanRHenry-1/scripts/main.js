@@ -63,14 +63,18 @@ let roundTwoArray = [];
 let finalJeopardyCategory = [];
 let customContentArray = [];
 let customRoundOneArray = []; // this redefines roundOneArray to fetched content
-const classList = [];
+let classList = [];
 let results = [];
 let gameplayCategories = {};
 let customGameInformation = {};
 let customCategories = {};
 let customQuestions = {};
 let customAnswers = {};
+
+
 let customGameName = "";
+
+
 // Fill Round One, Two, and final Arrays
 for (let m = 0; roundTwoArray.length < 30; m++) {
   for (let questionPosition = m; questionPosition < 60; questionPosition++) {
@@ -101,13 +105,91 @@ if (roundName[0]?.innerText == "Jeopardy!") {
   round = "final";
 }
 
+  // Fill the class list in the admin page
+  const fillClassListDropdown = () => {
+    for (let i = 0; i < classList.length; i++) {
+      const listing = document.createElement("option");
+      // Check for consecutive duplicate classes (//todo:  come up with a solution to deal with non-consecutive duplicates: either sort alphabetically and keep the same logic, or search through the array)
+      if (classList[i - 1]?.className != classList[i].className) {
+        listing.value = classList[i].className;
+        listing.innerText = classList[i].className;
+        // listing.id = classList[i].id;
+        document.getElementById("class-names")?.append(listing);
+      }
+    }
+  };
+
 // --------------------------------------- API Calls -----------------------------------------
-const fetchStudentList = async () => {
-  const url = `${apiServer}/user/`;
-  let result = await fetch(url);
-  let data = await result.json();
-};
-//Todo - delete gameNameInput when the number of checked boxes goes below 6
+
+
+// Post a new Class Name
+const postNewClassName = async () => {
+  const options = document.getElementsByTagName("option");
+  console.log('options:',options)
+
+
+
+
+
+
+
+  // const classNameInput = document.getElementById("classNameInputField");
+  // if (classNameInput.value === "") {
+  //   console.log('Enter a name')
+  //   return
+  // }
+
+  // let newClass = {};
+  //   newClass.className = classNameInput.value;
+  //   newClass.question = "";
+  //   newClass.answer = "";
+  //   newClass.category = "";
+  //   newClass.unit = "";
+
+  // const url = `${apiServer}/questions/storeQuestion/`;
+  // await fetch(url, {
+  //   method: "POST",
+  //   mode: "cors",
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //   },
+  //   body: JSON.stringify(newClass),
+  // });
+
+  // const options = document.getElementsByTagName("option");
+  
+  
+  
+  
+  
+
+
+  
+  console.log('options:',options)
+  // index = element.length - 1; index >= 0; index--
+  for (let i = 0; i >= options.length -1; i--) {
+    options[i].parentNode.removeChild(options[i]);
+  }
+
+
+  // await fetchInformation();
+  
+  
+  // options.array.forEach(element => {
+  //   element.innerHTML = "";
+  // });
+  // classNameInput.value = "";
+console.log("clicked")
+}
+
+
+// const clicked = function () {
+//   console.log("click")
+// }
+
+document.getElementById("submitNewClassBtn").addEventListener("click", postNewClassName);
+// document.getElementById("submitNewClassBtn").addEventListener("click", clicked);
+
 const postGameplayInformation = async () => {
   const gameNameInput = document.getElementById("gameNameField")
   if (gameNameInput.value === "") {
@@ -133,17 +215,29 @@ const postGameplayInformation = async () => {
   </ol>\n    `
 };
 
+const fetchStudentList = async () => {
+  const url = `${apiServer}/user/`;
+  let result = await fetch(url);
+  let data = await result.json();
+};
+
+
+//Todo - delete gameNameInput when the number of checked boxes goes below 6
+
+
 const fetchGames = async () => {
   const url = `${apiServer}/gameplay/`;
   let result = await fetch(url);
   availableGames = await result.json();
 };
 
+
+// Todo - break up this function
 const fetchInformation = async () => {
   const url = `${apiServer}/questions/`;
   let result = await fetch(url);
   let data = await result.json();
-
+  classList = [];
   for (let i = 0; i < data.getAllQuestions.length; i++) {
     const gameAnswers = data.getAllQuestions[i].answer.split("\r\n");
     const gameQuestions = data.getAllQuestions[i].question.split("\r\n");
@@ -166,21 +260,6 @@ const fetchInformation = async () => {
       });
     }
   }
-
-  // Fill the class list in the admin page
-  const fillClassListDropdown = () => {
-    for (let i = 0; i < classList.length; i++) {
-      const listing = document.createElement("option");
-      // Check for consecutive duplicate classes (//todo:  come up with a solution to deal with non-consecutive duplicates: either sort alphabetically and keep the same logic, or search through the array)
-      if (classList[i - 1]?.className != classList[i].className) {
-        listing.value = classList[i].className;
-        listing.innerText = classList[i].className;
-        // listing.id = classList[i].id;
-        document.getElementById("class-names")?.append(listing);
-      }
-    }
-  };
-
 
 
   // ------------------------------------------------ Function to fill the Category Options List ---------------------------------

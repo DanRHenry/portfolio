@@ -14,6 +14,29 @@
   </head>
   <!-- Post From HTML Form To MongoDB Atlas | Javascript Tutorial https://www.youtube.com/watch?v=ZhqOp1Dkuso -->
   <body id="editContentBody">
+
+
+<!------------------------------------------ New Class -------------------------------->
+
+    <div id="newClass">
+      <div
+        class="container"
+        onsubmit="clearInputs()"
+      >      <h1 id="newCatTitle">Add a New Class</h1>
+
+        <!-- <label for="className">Class Name:</label> -->
+        <!-- <div class="form-group" name="className"> -->
+          <input
+            id="classNameInputField"
+            required="true"
+          />
+          <button id="submitNewClassBtn">Submit</button>
+
+        <!-- </div> -->
+      </div>
+    </div>
+
+
     <div id="newCategory">
       <form
         class="container"
@@ -22,14 +45,6 @@
         onsubmit="clearInputs()"
       >      <h1 id="newCatTitle">Add a New Category</h1>
 
-        <label for="className">Class Name:</label>
-        <div class="form-group" name="className">
-          <input
-            id="classNameInputField"
-            name="className"
-            required="true"
-          />
-        </div>
         <label for="unit">Unit Name:</label>
         <div class="form-group" name="unit">
           <input

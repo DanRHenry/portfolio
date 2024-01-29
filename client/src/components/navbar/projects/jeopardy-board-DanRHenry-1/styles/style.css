@@ -447,7 +447,7 @@ aside div {
   text-align: center;
 }
 
-#newCategory {
+#newCategory, #newClass {
   width: clamp(fit-content, 40vw, 100vw);
   display: flex;
   margin-left: 5vw;
@@ -456,6 +456,10 @@ aside div {
   border-radius: 1em;
   border: 3px solid black;
   padding: 1em;
+}
+
+#newClass {
+  margin-bottom: 1em;
 }
 
 #newInformationSubmitButton {
