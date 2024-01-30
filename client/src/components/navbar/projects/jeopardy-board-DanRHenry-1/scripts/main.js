@@ -58,6 +58,8 @@ let index;
 let resultsHTML = "";
 let availableGames;
 
+
+// -------------------------------------------------- Global Arrays ------------------------------------------------------------
 let roundOneArray = []; //this gets used by the game and defaults to placeholder questions
 let roundTwoArray = [];
 let finalJeopardyCategory = [];
@@ -65,17 +67,21 @@ let customContentArray = [];
 let customRoundOneArray = []; // this redefines roundOneArray to fetched content
 let classList = [];
 let results = [];
+
+
+// -------------------------------------------------- Global Objects ------------------------------------------------------------
+let categoriesObject = {};
 let gameplayCategories = {};
 let customGameInformation = {};
 let customCategories = {};
 let customQuestions = {};
 let customAnswers = {};
 
-
+// --------------------------------------------------- Global Strings -----------------------------------------------------------
 let customGameName = "";
+const addedCategoriesDefaultHTML = `\n <h1>Gameplay Categories:</h1><ol id="tempCategories"></ol>\n`;
 
-
-// Fill Round One, Two, and final Arrays
+// -------------------------------------- Fill Round One, Two, and final Arrays --------------------------------------------------
 for (let m = 0; roundTwoArray.length < 30; m++) {
   for (let questionPosition = m; questionPosition < 60; questionPosition++) {
     for (let catIndex = 0; catIndex < 6; catIndex++) {
@@ -91,7 +97,7 @@ for (let m = 0; roundTwoArray.length < 30; m++) {
 
 finalJeopardyCategory.push(placeholderQuestions[60]);
 
-// Swt round value
+// ---------------------------------------------- Set the round value ----------------------------------------------------------
 if (roundName[0]?.innerText == "Jeopardy!") {
   round = "title";
   titleScreen();
@@ -105,53 +111,67 @@ if (roundName[0]?.innerText == "Jeopardy!") {
   round = "final";
 }
 
-  // Fill the class list in the admin page
-  const fillClassListDropdown = () => {
-    const options = document.getElementsByTagName("option");
-    // console.log('options:',options)
-    // for (let i = 0; i >= options.length -1; i--) {
-    //   options[i].parentNode.removeChild(options[i]);
+
+
+// ------------------------------------------- Admin Page Functionality ---------------------------------------------------------4
+
+
+
+
+// ------------------------------------ Fill the class list in the admin page ---------------------------------------------------
+const fillClassListDropdown = () => {
+  const options = document.getElementsByTagName("option");
+  for (let i; i <= options.length; i++) {
+    options[i].parentElement.removeChild(options[i]);
+  }
+
+  for (let i = 0; i < classList.length; i++) {
+    const listing = document.createElement("option");
+    console.log("classList:",classList)
+
+
+    // listing.className = "class-list-item";
+    // console.log("class-list-item:",document.getElementsByClassName("class-list-item"))
+    // for (let l = document.getElementsByClassName("class-list-item").length; l > 0 ; i--) {
+    //   console.log('listing-l:',listing[l]);
+    //   listing[l].parentElement.removeChild(listing[l]);
     // }
 
-    
-    for (let i = 0; i < classList.length; i++) {
-      const listing = document.createElement("option");
-      // Check for consecutive duplicate classes (//todo:  come up with a solution to deal with non-consecutive duplicates: either sort alphabetically and keep the same logic, or search through the array)
-      if (classList[i - 1]?.className != classList[i].className) {
-        listing.value = classList[i].className;
-        listing.innerText = classList[i].className;
-        // listing.id = classList[i].id;
-        document.getElementById("class-names")?.append(listing);
-      }
+
+    // Check for consecutive duplicate classes (//todo:  come up with a solution to deal with non-consecutive duplicates: either sort alphabetically and keep the same logic, or search through the array)
+    if (classList[i - 1]?.className != classList[i].className) {
+      listing.value = classList[i].className;
+      listing.innerText = classList[i].className;
+      document.getElementById("class-names")?.append(listing);
     }
-  };
+  }
+};
 
-// --------------------------------------- API Calls -----------------------------------------
+// --------------------------------------------------- API Calls ----------------------------------------------------------------
 
 
-// Post a new Class Name
+// ----------------------------------------------------- POST -------------------------------------------------------------------
+
+// --------------- Post a new Class Name and fetch the information again to populate the class List ------------------------------
+
 const postNewClassName = async () => {
   const options = document.getElementsByTagName("option");
-  console.log('options:',options)
-
-
-
-
-
-
+  // console.log("options:", options);
 
   const classNameInput = document.getElementById("classNameInputField");
   if (classNameInput.value === "") {
-    console.log('Enter a name')
-    return
+    console.log("Enter a name");
+    return;
   }
 
+// ----------------------------- Create a new Class object and send it to the server ------------------------------------------
   let newClass = {};
-    newClass.className = classNameInput.value;
-    newClass.question = "";
-    newClass.answer = "";
-    newClass.category = "";
-    newClass.unit = "";
+  newClass.className = classNameInput.value;
+  newClass.question = "";
+  newClass.answer = "";
+  newClass.category = "";
+  newClass.unit = "";
+
 
   const url = `${apiServer}/questions/storeQuestion/`;
   await fetch(url, {
@@ -162,47 +182,32 @@ const postNewClassName = async () => {
     },
     body: JSON.stringify(newClass),
   });
+  // console.log("clicked");
+  await fetchInformation();
+  fillClassListDropdown();
+};
 
-  // const options = document.getElementsByTagName("option");
-  
-  
-  
-  
-  
-
-
-  
-  console.log('options:',options)
-  // index = element.length - 1; index >= 0; index--
-  // for (let i = 0; i >= options.length -1; i--) {
-  //   options[i].parentNode.removeChild(options[i]);
-  // }
+// ----------------------- Use customGameInformation to make API Call to post a New Game Setup --------------------------------
+/* 
+Check the new game name field to make sure one has been entered. 
+If all is well, this sends the customGameInformation global object to the API. 
+Then, fillAvailableGamesList() is run.
 
 
-  // await fetchInformation();
-  
-  
-  // options.array.forEach(element => {
-  //   element.innerHTML = "";
-  // });
-  // classNameInput.value = "";
-console.log("clicked")
-}
 
-
-// const clicked = function () {
-//   console.log("click")
-// }
-
-document.getElementById("submitNewClassBtn").addEventListener("click", postNewClassName);
-// document.getElementById("submitNewClassBtn").addEventListener("click", clicked);
+*/
+// ------------------------------------- contains fillAvailableGamesList() ----------------------------------------------------
 
 const postGameplayInformation = async () => {
-  const gameNameInput = document.getElementById("gameNameField")
+  const gameNameInput = document.getElementById("gameNameField");
+
+  // -------------------------------- Check that a game name has been entered -------------------------------------------------
   if (gameNameInput.value === "") {
     console.log("needs a value");
-    return
+    return;
   }
+
+  // -------------- Add gameNameInput field value to the customGameInformation object to send ----------------------------------
   customGameInformation.gameName = gameNameInput.value;
   const url = `${apiServer}/gameplay/gameplayinformation/`;
 
@@ -214,77 +219,95 @@ const postGameplayInformation = async () => {
     },
     body: JSON.stringify(customGameInformation),
   });
-  // console.log("customGameInformation", customGameInformation);
-  fillAvailableGamesList()
-  addedCategories.innerHTML = `\n          
-  <h1>Gameplay Categories:</h1>      <ol id="tempCategories">
-      
-  </ol>\n    `
+
+  fillAvailableGamesList();
+  addedCategories.innerHTML = addedCategoriesDefaultHTML;
 };
 
+
+// ----------------------------- Submit New Class Event Listener -----------------------------------------------------------------
+document
+  .getElementById("submitNewClassBtn")
+  .addEventListener("click", postNewClassName);
+// document.getElementById("submitNewClassBtn").addEventListener("click", clicked);
+
+
+
+// ----------------------------------------------------- GET ------------------------------------------------------------------
+// ---------------------------------- Fetch Questions, Answers, Categories, and Class Names ------------------------------------
+const fetchInformation = async () => {
+  const url = `${apiServer}/questions/`;
+  let result = await fetch(url);
+  let data = await result.json();
+  // console.log("data:",data)
+  categoriesObject = data;
+};
+
+// -------------------------------------------- Fetch Student List API Call --------------------------------------------------- 
 const fetchStudentList = async () => {
   const url = `${apiServer}/user/`;
   let result = await fetch(url);
   let data = await result.json();
 };
 
-
-//Todo - delete gameNameInput when the number of checked boxes goes below 6
-
-
+// ---------------------------------- Fetch Games from API and set to availableGames object ------------------------------------
 const fetchGames = async () => {
   const url = `${apiServer}/gameplay/`;
   let result = await fetch(url);
   availableGames = await result.json();
 };
 
+//Todo - delete gameNameInput when the number of checked boxes goes below 6
 
+await fetchInformation()
 
+  // -------------------------------------- Fill the customContent array --------------------------------------------------------
 
-
-// Todo - break up this function
-
-// -------------------------------------- Fetch Questions, Answers, Categories, and Class Names ---------------------------------
-const fetchInformation = async () => {
-  const url = `${apiServer}/questions/`;
-  let result = await fetch(url);
-  let data = await result.json();
-
-// -------------------------------------- Clear the classList array -------------------------------------------------------------
-  classList = [];
-  for (let i = 0; i < data.getAllQuestions.length; i++) {
-    const gameAnswers = data.getAllQuestions[i].answer.split("\r\n");
-    const gameQuestions = data.getAllQuestions[i].question.split("\r\n");
-    const gameCategories = data.getAllQuestions[i].category.split("\r\n");
-    const gameClassName = data.getAllQuestions[i].className.split("\r\n");
-
-// --------------------------------------- Push Class Names & IDs to the classList array ---------------------------------------
-    classList.push({
-      className: data.getAllQuestions[i].className,
-      id: data.getAllQuestions[i]._id,
+const fillCustomContentArray = (gameAnswers, gameQuestions, gameCategories, gameClassName) => {
+  // --------Push Information for the Gameplay Categories/Class/Questions/Answers/Scores to the customContentArray -------------
+  for (let index = 0; index < gameAnswers.length; index++) {
+    customContentArray.push({
+      category: gameCategories[0],
+      className: gameClassName[0],
+      question: gameQuestions[index],
+      answer: gameAnswers[index],
+      score: (index + 1) * 200,
     });
-
-    // --------Push Information for the Gameplay Categories/Class/Questions/Answers/Scores to the customContentArray -------------
-    for (let index = 0; index < gameAnswers.length; index++) {
-      customContentArray.push({
-        category: gameCategories[0],
-        className: gameClassName[0],
-        question: gameQuestions[index],
-        answer: gameAnswers[index],
-        score: (index + 1) * 200,
-      });
-    }
   }
+}
+
+const fillClassListArray = () => {
+    // -------------------------------------- Clear the classList array ---------------------------------------------------------
+  classList = [];
+
+  // -------------------------------------- Clear the customContentArray --------------------------------------------------------
+
+  customContentArray = []; //! Maybe remove this. Did not check into whether this is necessary.
+  for (let i = 0; i < categoriesObject.getAllQuestions.length; i++) {
+    const gameAnswers = categoriesObject.getAllQuestions[i].answer.split("\r\n");
+    const gameQuestions = categoriesObject.getAllQuestions[i].question.split("\r\n");
+    const gameCategories = categoriesObject.getAllQuestions[i].category.split("\r\n");
+    const gameClassName = categoriesObject.getAllQuestions[i].className.split("\r\n");
+
+    // ------------------------------------- Push Class Names & IDs to the classList array ---------------------------------------
+    classList.push({
+      className: categoriesObject.getAllQuestions[i].className,
+      id: categoriesObject.getAllQuestions[i]._id,
+    });
+    fillCustomContentArray(gameAnswers, gameQuestions, gameCategories, gameClassName)
+  }
+}
+
+fillClassListArray()
 
 
-  // ------------------------------------------------ Function to fill the Category Options List ---------------------------------
+  // ---------------------------------- Function to fill the Category Options List -----------------------------------------------
   const fillCategoryOptionsDropdown = () => {
-
-// ----------------------------------------------------------- Clear checkboxes --------------------------------------------------
+    // ----------------------------------------------------------- Clear checkboxes ----------------------------------------------
     if (document.getElementById(`checkBoxes`)) {
       document.getElementById(`checkBoxes`).innerHTML = "";
     }
-// -------------------------------------------- clear the results array and the resultsHTML --------------------------------------
+    // -------------------------------------------- clear the results array and the resultsHTML ----------------------------------
     results = [];
     resultsHTML = "";
     gameplayCategories = {};
@@ -295,38 +318,27 @@ const fetchInformation = async () => {
     customGameName = "";
     const addedCategories = document.getElementById("addedCategories");
 
-    addedCategories.innerHTML = `\n          
-    <h1>Gameplay Categories:</h1>      <ol id="tempCategories">
-        
-    </ol>\n    `;
-    // console.log("customGameInformationAfter:", customGameInformation);
-    
-    
-    
-    // ------Check through the fetched category data and Fill the results with categories of the same class name ----------------
-    for (let i = 0; i < data.getAllQuestions.length; i++) {
+    addedCategories.innerHTML = addedCategoriesDefaultHTML;
+
+    // ------Check through the fetched category categoriesObject and Fill the results with categories of the same class name -----
+    for (let i = 0; i < categoriesObject.getAllQuestions.length; i++) {
       if (
-        data.getAllQuestions[i].className ===
+        categoriesObject.getAllQuestions[i].className ===
         document.getElementById("class-names")?.value
       ) {
-
-    // ------------- For each category that matches the selected class, push an object into results ------------------------------
+        // ------------- For each category that matches the selected class, push an object into results --------------------------
         results.push({
-          question: data.getAllQuestions[i].question,
-          answer: data.getAllQuestions[i].answer,
-          className: data.getAllQuestions[i].className,
-          category: data.getAllQuestions[i].category,
-          score: data.getAllQuestions[i].score,
-          unit: data.getAllQuestions[i].unit,
+          question: categoriesObject.getAllQuestions[i].question,
+          answer: categoriesObject.getAllQuestions[i].answer,
+          className: categoriesObject.getAllQuestions[i].className,
+          category: categoriesObject.getAllQuestions[i].category,
+          score: categoriesObject.getAllQuestions[i].score,
+          unit: categoriesObject.getAllQuestions[i].unit,
         });
       }
     }
 
-
-
-
     // ---------------- Use the results array of category objects to create HTML in the Select Questions section --------
-
 
     // ----------------------------------------------------- Primary Category -------------------------------------------
     // Add the first category information from the results array to the resultsHTML string. This is done separately from the rest to accomidate the bootstrap differences.
@@ -370,7 +382,7 @@ const fetchInformation = async () => {
       element.value = classList[i].className;
       element.innerText = classList[i].className;
       element.id = classList[i].id;
-      element.innerText = data.getAllQuestions[i].question;
+      element.innerText = categoriesObject.getAllQuestions[i].question;
 
       for (let i = 0; i < results.length; i++) {
         document.getElementById("questionList").innerHTML =
@@ -424,8 +436,8 @@ const fetchInformation = async () => {
         element.value = classList[i].className;
         element.innerText = classList[i].className;
         element.id = classList[i].id;
-        element.innerText = data.getAllQuestions[i].question;
-        // document.getElementById("questionList").innerHTML = data.getAllQuestions[i].question;
+        element.innerText = categoriesObject.getAllQuestions[i].question;
+        // document.getElementById("questionList").innerHTML = categoriesObject.getAllQuestions[i].question;
         for (let i = 0; i < results.length; i++) {
           document.getElementById("questionList").innerHTML = resultsHTML;
         }
@@ -449,17 +461,16 @@ const fetchInformation = async () => {
       //! Listen to checkbox for checked or unchecked
       document
         .getElementsByClassName("checkboxInput")
-        [i].addEventListener("change", () => check(i));
+        [i].addEventListener("change", () => checkNumberOfCheckboxesTicked(i));
     }
   };
 
 
 
   // --------------------------------------- Check to see how many category boxes have been checked ----------------------------
-  
-  
+
   // ------------------------If 6 have been checked, make a submit button and name entry field (change this?) ------------------
-  const check = (i) => {
+  const checkNumberOfCheckboxesTicked = (i) => {
     // If checked...
     if (document.getElementsByClassName("checkboxInput")[i].checked === true) {
       // Check for existing gameplayItems list on the page.
@@ -467,7 +478,6 @@ const fetchInformation = async () => {
 
       //If the length of gameplayItems is less than 6, allow the item to be appended
       console.log("gameplayItems.length:", gameplayItems.length);
-
 
       // If the length of gameplayItems is greater or equal to 6, deselect the most recent box and warn that the limit has been reached.
 
@@ -478,8 +488,6 @@ const fetchInformation = async () => {
       }
       if (gameplayItems.length < 6) {
         console.log("less than 6");
-
-
 
         // Add two new keys to gameplayCategories
 
@@ -557,6 +565,9 @@ const fetchInformation = async () => {
   };
 
   fillClassListDropdown();
+
+
+  //todo ------------------------ Event Listener to run fillCategoryOptionsDropdown() on change !I don't think this is working...
   document.getElementById("class-names")?.addEventListener("change", () => {
     fillCategoryOptionsDropdown();
   });
@@ -656,29 +667,25 @@ const fetchInformation = async () => {
       customRoundOneArray.push(customContentArray[i + 6 * n]);
     }
   }
-};
+
 
 // Now replace placeholder informatiom with the fetched information
 roundOneArray = customRoundOneArray;
 
-await fetchInformation();
+// await fetchInformation();
 
 //! ------------------------ Fill Available Games List ------------
 
 const fillAvailableGamesList = async () => {
   const availableGamesList = document.getElementById("availableGamesList");
-  availableGamesList.innerHTML="";
+  availableGamesList.innerHTML = "";
   await fetchGames();
   //----------------------- First Games List Item -------------
 
-  for (
-    let i = 0;
-    i < availableGames.getAllGameplayInformation.length;
-    i++
-  ) {
+  for (let i = 0; i < availableGames.getAllGameplayInformation.length; i++) {
     const gamesListAccordionItem = document.createElement("div");
     gamesListAccordionItem.className = "accordion-item accordionGamesItems";
-    availableGamesList.appendChild(gamesListAccordionItem)
+    availableGamesList.appendChild(gamesListAccordionItem);
 
     const accordionHeader = document.createElement("h2");
     accordionHeader.className = "accordion-header";
@@ -694,45 +701,56 @@ const fillAvailableGamesList = async () => {
       `#collapseGame${i}`
     );
     gamesListAccordionButton.ariaExpanded = "true";
-    gamesListAccordionButton.setAttribute(
-      "aria-controls",
-      `collapseGame${i}`
-    );
+    gamesListAccordionButton.setAttribute("aria-controls", `collapseGame${i}`);
     // console.log("gameName:",availableGames.getAllGameplayInformation[i].question["question_6"])
-    gamesListAccordionButton.innerText = availableGames.getAllGameplayInformation[i].gameName;
+    gamesListAccordionButton.innerText =
+      availableGames.getAllGameplayInformation[i].gameName;
     accordionHeader.appendChild(gamesListAccordionButton);
-
 
     // Next up: collapseGameOne div
     const collapseGamei = document.createElement("div");
-      collapseGamei.id = `collapseGame${i}`;
-      collapseGamei.className = "accordion-collapse collapse" //show
-      collapseGamei.setAttribute("data-bs-parent", "#availableGamesList");
-      gamesListAccordionItem.appendChild(collapseGamei);
+    collapseGamei.id = `collapseGame${i}`;
+    collapseGamei.className = "accordion-collapse collapse"; //show
+    collapseGamei.setAttribute("data-bs-parent", "#availableGamesList");
+    gamesListAccordionItem.appendChild(collapseGamei);
 
-      const accordionGamesListBody = document.createElement("div");
-      accordionGamesListBody.className = "accordion-body";
-      collapseGamei.appendChild(accordionGamesListBody);
+    const accordionGamesListBody = document.createElement("div");
+    accordionGamesListBody.className = "accordion-body";
+    collapseGamei.appendChild(accordionGamesListBody);
 
-      const gamesListInnerText = document.createElement("div")
-      gamesListInnerText.className = "gamesListInnerText"
+    const gamesListInnerText = document.createElement("div");
+    gamesListInnerText.className = "gamesListInnerText";
 
-      const item =availableGames.getAllGameplayInformation[i].category;
+    const item = availableGames.getAllGameplayInformation[i].category;
 
-      let categories = ""
-      for (let c = 1; c < Object.values(item).length+1; c++) 
-      {
-        categories += `Category ${c}: `+Object.values(item)[c -1]
-        categories += "</br>"
-      }
-      gamesListInnerText.innerHTML = categories;
-      accordionGamesListBody.appendChild(gamesListInnerText);
-    
+    let categories = "";
+    for (let c = 1; c < Object.values(item).length + 1; c++) {
+      categories += `Category ${c}: ` + Object.values(item)[c - 1];
+      categories += "</br>";
+    }
+    gamesListInnerText.innerHTML = categories;
+    accordionGamesListBody.appendChild(gamesListInnerText);
   }
 };
 
-fillAvailableGamesList()
+fillAvailableGamesList();
 // Pull category names from round arrays
+
+
+
+
+
+
+
+
+
+
+
+
+
+// --------------------------------------------- Game Functionality ---------------------------------------------
+
+
 
 if (round === "round1") {
   document.getElementById("catr1-1").innerText = roundOneArray[0].category;
@@ -872,6 +890,7 @@ async function titleScreen() {
     localStorage.setItem("playerTwoName", player2Name);
   }
 }
+
 
 //!----------------------------------------------- Button Enable/Disable ----------------------------------------
 // Disable the pass and guess buttons / enable the placeholder pass and guess buttons
@@ -1292,5 +1311,4 @@ async function roundOne() {
       answerSquares[i].removeEventListener("click", clicked);
     });
   }
-  // console.log("round1 array:", roundOneArray);
 }
