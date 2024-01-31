@@ -115,19 +115,31 @@ if (roundName[0]?.innerText == "Jeopardy!") {
 
 // ------------------------------------------- Admin Page Functionality ---------------------------------------------------------4
 
-
-
+function clearOptions () {
+ const option = document.getElementsByTagName("option")
+ for (let i = option.length; i > 0; i --) {
+  // console.log('i',i)
+  // console.log(option[i -1])
+  // console.log(option[i].parentElement)
+  option[i-1].parentElement.removeChild(option[i -1])
+ }
+}
 
 // ------------------------------------ Fill the class list in the admin page ---------------------------------------------------
-const fillClassListDropdown = () => {
+async function fillClassListDropdown () {
+  const tempArray = [];
+  // await fetchInformation();
+  // await fillClassListArray();
+  clearOptions()
+
   const options = document.getElementsByTagName("option");
-  for (let i; i <= options.length; i++) {
-    options[i].parentElement.removeChild(options[i]);
-  }
+  // console.log("options:",options)
+// if (options.length > 0) {
+
 
   for (let i = 0; i < classList.length; i++) {
     const listing = document.createElement("option");
-    console.log("classList:",classList)
+    // console.log("classList:",classList)
 
 
     // listing.className = "class-list-item";
@@ -138,13 +150,27 @@ const fillClassListDropdown = () => {
     // }
 
 
-    // Check for consecutive duplicate classes (//todo:  come up with a solution to deal with non-consecutive duplicates: either sort alphabetically and keep the same logic, or search through the array)
-    if (classList[i - 1]?.className != classList[i].className) {
-      listing.value = classList[i].className;
-      listing.innerText = classList[i].className;
-      document.getElementById("class-names")?.append(listing);
-    }
+    // Check for consecutive duplicate classes (//todo:  come up with a solution to deal with non-consecutive duplicates: either sort alphabetically and keep the same logic, or search through the array) Use Filter Array Prototype?
+    if (options.length < classList.length) {
+     if (classList[i - 1]?.className != classList[i].className) {
+
+      // if (classList.includes(classList[classList.length -1].className)) {
+      //   console.log("same")
+      // } else {console.log("different")}
+
+      // for (let i = classList.length; i > 0; i --) {
+        // if (classList[i]?.className === (classList[classList.length]?.className)) {
+          listing.value = classList[i].className;
+          listing.innerText = classList[i].className;
+          document.getElementById("class-names")?.append(listing);
+        // }
+      }
+
+      // }
+    }else {console.log("else")}
+
   }
+// }
 };
 
 // --------------------------------------------------- API Calls ----------------------------------------------------------------
@@ -155,24 +181,72 @@ const fillClassListDropdown = () => {
 // --------------- Post a new Class Name and fetch the information again to populate the class List ------------------------------
 
 const postNewClassName = async () => {
-  const options = document.getElementsByTagName("option");
+
+  // const options = document.getElementsByTagName("option");
   // console.log("options:", options);
 
-  const classNameInput = document.getElementById("classNameInputField");
-  if (classNameInput.value === "") {
+  // ----------- Class Name Input ----------
+  const classNameInputField = document.getElementById("classNameInputField");
+  if (classNameInputField.value === "") {
     console.log("Enter a name");
     return;
   }
 
+  // ----------- Question Input -------------
+  // todo: add logic to check the number of questions
+  const questionInputField = document.getElementById("questionInputField");
+  if (questionInputField.value === "") {
+    console.log("Enter questions");
+    return;
+  }
+
+  // ------------Answer Input ----------------
+  // todo: add logic to check the number of answers
+  const answerInputField = document.getElementById("answerInputField");
+  if (answerInputField.value === "") {
+    console.log("Enter answers");
+    return;
+  }
+/* 
+  newClass.className = classNameInput.value;
+  newClass.question = questionInputField.value;
+  newClass.answer = answerInputField.value;
+  newClass.category = categoryInputField.value;
+  newClass.unit = unitNameInputField.value;
+*/
+
+  // ----------- Unit Input -------------------
+  const unitNameInputField = document.getElementById("unitNameInputField");
+  if (unitNameInputField.value === "") {
+    console.log("Enter a Unit Name");
+    return;
+  }
+
+  // ----------- Category Input ---------------
+
+  const categoryInputField = document.getElementById("categoryInputField");
+  if (categoryInputField.value === "") {
+    console.log("Enter a Category Name");
+    return;
+  }
+
+
+
+
 // ----------------------------- Create a new Class object and send it to the server ------------------------------------------
   let newClass = {};
-  newClass.className = classNameInput.value;
-  newClass.question = "";
-  newClass.answer = "";
-  newClass.category = "";
-  newClass.unit = "";
+  newClass.className = classNameInputField.value;
+  newClass.question = questionInputField.value;
+  newClass.answer = answerInputField.value;
+  newClass.category = categoryInputField.value;
+  newClass.unit = unitNameInputField.value;
 
-
+  classNameInputField.value = "";
+  questionInputField.value = "";
+  answerInputField.value = "";
+  categoryInputField.value = "";
+  unitNameInputField.value = "";
+// console.log("posting", newClass, "to server");
   const url = `${apiServer}/questions/storeQuestion/`;
   await fetch(url, {
     method: "POST",
@@ -183,8 +257,9 @@ const postNewClassName = async () => {
     body: JSON.stringify(newClass),
   });
   // console.log("clicked");
-  await fetchInformation();
-  fillClassListDropdown();
+  // await fetchInformation();
+  // console.log("newClass should be posted")
+  await fillClassListArray();
 };
 
 // ----------------------- Use customGameInformation to make API Call to post a New Game Setup --------------------------------
@@ -228,19 +303,30 @@ const postGameplayInformation = async () => {
 // ----------------------------- Submit New Class Event Listener -----------------------------------------------------------------
 document
   .getElementById("submitNewClassBtn")
-  .addEventListener("click", postNewClassName);
-// document.getElementById("submitNewClassBtn").addEventListener("click", clicked);
 
+  .addEventListener("click", postNewClassName);
 
 
 // ----------------------------------------------------- GET ------------------------------------------------------------------
 // ---------------------------------- Fetch Questions, Answers, Categories, and Class Names ------------------------------------
+/* 
+
+This function creates the global categoriesObject, which is used to fill questions, answers, classes, and categories for the fillClasslistArray function
+
+*/
+
+//! The categories object being fetched isn't complete
+
 const fetchInformation = async () => {
+  // console.log("fetching information...")
   const url = `${apiServer}/questions/`;
   let result = await fetch(url);
-  let data = await result.json();
-  // console.log("data:",data)
-  categoriesObject = data;
+  categoriesObject = await result.json();
+  // console.log("...information fetched");
+  // console.log("classList:",classList)
+
+  // todo are classList and categoriesObject.getAllQuestions the same thing? Can they be reduced to one variable?
+  classList = categoriesObject.getAllQuestions;
 };
 
 // -------------------------------------------- Fetch Student List API Call --------------------------------------------------- 
@@ -259,11 +345,25 @@ const fetchGames = async () => {
 
 //Todo - delete gameNameInput when the number of checked boxes goes below 6
 
+
+// ------------------------------------------------- Edit Page Sequence ---------------------------------------------------------
+
+// First, get the information from the api
 await fetchInformation()
+
+// Fill the classList array for 
+fillClassListArray();
+
+fillClassListDropdown();
+
+fillCategoryOptionsDropdown();
+
+fillAvailableGamesList();
+
 
   // -------------------------------------- Fill the customContent array --------------------------------------------------------
 
-const fillCustomContentArray = (gameAnswers, gameQuestions, gameCategories, gameClassName) => {
+function fillCustomContentArray (gameAnswers, gameQuestions, gameCategories, gameClassName) {
   // --------Push Information for the Gameplay Categories/Class/Questions/Answers/Scores to the customContentArray -------------
   for (let index = 0; index < gameAnswers.length; index++) {
     customContentArray.push({
@@ -276,7 +376,15 @@ const fillCustomContentArray = (gameAnswers, gameQuestions, gameCategories, game
   }
 }
 
-const fillClassListArray = () => {
+async function fillClassListArray () {
+  // console.log("filling classlistArray")
+  // console.log("fetching...")
+  await fetchInformation();
+  // console.log("...fetched");
+  // console.log("filling...");
+  await fillClassListDropdown();
+  // console.log("...filled");
+  // console.log("classListArray",classList)
     // -------------------------------------- Clear the classList array ---------------------------------------------------------
   classList = [];
 
@@ -302,7 +410,7 @@ fillClassListArray()
 
 
   // ---------------------------------- Function to fill the Category Options List -----------------------------------------------
-  const fillCategoryOptionsDropdown = () => {
+  function fillCategoryOptionsDropdown () {
     // ----------------------------------------------------------- Clear checkboxes ----------------------------------------------
     if (document.getElementById(`checkBoxes`)) {
       document.getElementById(`checkBoxes`).innerHTML = "";
@@ -466,11 +574,10 @@ fillClassListArray()
   };
 
 
-
   // --------------------------------------- Check to see how many category boxes have been checked ----------------------------
 
   // ------------------------If 6 have been checked, make a submit button and name entry field (change this?) ------------------
-  const checkNumberOfCheckboxesTicked = (i) => {
+  function checkNumberOfCheckboxesTicked (i) {
     // If checked...
     if (document.getElementsByClassName("checkboxInput")[i].checked === true) {
       // Check for existing gameplayItems list on the page.
@@ -564,7 +671,7 @@ fillClassListArray()
     customGameInformation.category = customCategories;
   };
 
-  fillClassListDropdown();
+  // fillClassListDropdown();
 
 
   //todo ------------------------ Event Listener to run fillCategoryOptionsDropdown() on change !I don't think this is working...
@@ -573,7 +680,7 @@ fillClassListArray()
   });
 
   // ! --------------------------------------- Add Checkboxes to Categories List --------------------------
-  const addCheckboxes = () => {
+  function addCheckboxes () {
     if (document.getElementsByClassName("accordionClassListHeader")) {
       const accordionHeaders = document.getElementsByClassName(
         "accordionClassListHeader"
@@ -655,7 +762,7 @@ fillClassListArray()
     }
   };
 
-  fillCategoryOptionsDropdown();
+  // fillCategoryOptionsDropdown();
   // ------------------------------------------------ Event Listener for the Questions List Button -----------------------------
 
   document
@@ -674,9 +781,9 @@ roundOneArray = customRoundOneArray;
 
 // await fetchInformation();
 
-//! ------------------------ Fill Available Games List ------------
+//! --------------------------------------------------- Fill Available Games List ------------------------------------------------
 
-const fillAvailableGamesList = async () => {
+async function fillAvailableGamesList () {
   const availableGamesList = document.getElementById("availableGamesList");
   availableGamesList.innerHTML = "";
   await fetchGames();
@@ -733,7 +840,7 @@ const fillAvailableGamesList = async () => {
   }
 };
 
-fillAvailableGamesList();
+// fillAvailableGamesList();
 // Pull category names from round arrays
 
 
