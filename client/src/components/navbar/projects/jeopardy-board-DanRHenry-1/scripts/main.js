@@ -1,4 +1,5 @@
 import placeholderQuestions from "./placeholder-questions.js";
+// import roundOne from "./gameplay.js"
 
 // Global DOM Variables
 const apiServer = "https://danhenrydev.com/api/jeopardy";
@@ -66,6 +67,7 @@ let customContentArray = [];
 let customRoundOneArray = []; // this redefines roundOneArray to fetched content
 let classList = [];
 let results = [];
+const gameplayAnswers = [];
 
 // -------------------------------------------------- Global Objects ------------------------------------------------------------
 let categoriesObject = {};
@@ -74,7 +76,7 @@ let customGameInformation = {};
 let customCategories = {};
 let customQuestions = {};
 let customAnswers = {};
-
+let currentGame = {};
 // --------------------------------------------------- Global Strings -----------------------------------------------------------
 let customGameName = "";
 const addedCategoriesDefaultHTML = `\n <h1>Gameplay Categories:</h1><ol id="tempCategories"></ol>\n`;
@@ -290,11 +292,12 @@ const postGameplayInformation = async () => {
 };
 
 // ----------------------------- Submit New Class Event Listener -----------------------------------------------------------------
-document
-  .getElementById("submitNewClassBtn")
+if (document.getElementById("submitNewClassBtn")) {
+  document
+    .getElementById("submitNewClassBtn")
 
-  .addEventListener("click", postNewClassName);
-
+    .addEventListener("click", postNewClassName);
+}
 // ----------------------------------------------------- GET ------------------------------------------------------------------
 // ---------------------------------- Fetch Questions, Answers, Categories, and Class Names ------------------------------------
 /* 
@@ -355,8 +358,9 @@ function fillCustomContentArray(
   gameQuestions,
   gameCategories,
   gameClassName
-) {
+  ) {
   // --------Push Information for the Gameplay Categories/Class/Questions/Answers/Scores to the customContentArray -------------
+  // console.log("gameAnswers",gameAnswers)
   for (let index = 0; index < gameAnswers.length; index++) {
     customContentArray.push({
       category: gameCategories[0],
@@ -365,6 +369,7 @@ function fillCustomContentArray(
       answer: gameAnswers[index],
       score: (index + 1) * 200,
     });
+    // console.log("customContentArray: ",customContentArray)
   }
 }
 
@@ -383,6 +388,7 @@ async function fillClassListArray() {
   // -------------------------------------- Clear the customContentArray --------------------------------------------------------
 
   customContentArray = []; //! Maybe remove this. Did not check into whether this is necessary.
+
   for (let i = 0; i < categoriesObject.getAllQuestions.length; i++) {
     const gameAnswers =
       categoriesObject.getAllQuestions[i].answer.split("\r\n");
@@ -426,8 +432,9 @@ function fillCategoryOptionsDropdown() {
   customGameName = "";
   const addedCategories = document.getElementById("addedCategories");
 
-  addedCategories.innerHTML = addedCategoriesDefaultHTML;
-
+  if (addedCategories) {
+    addedCategories.innerHTML = addedCategoriesDefaultHTML;
+  }
   // ------Check through the fetched category categoriesObject and Fill the results with categories of the same class name -----
   for (let i = 0; i < categoriesObject.getAllQuestions.length; i++) {
     if (
@@ -573,11 +580,9 @@ function fillCategoryOptionsDropdown() {
   }
 }
 
-
 let catIndex = 0;
 
 // --------------------------------------- Check to see how many category boxes have been checked ----------------------------
-
 
 // ------------------------If 6 have been checked, make a submit button and name entry field (change this?) ------------------
 function checkNumberOfCheckboxesTicked(i) {
@@ -620,7 +625,7 @@ function checkNumberOfCheckboxesTicked(i) {
         const tempCategories = document.getElementById("tempCategories");
         tempCategories.appendChild(gameplayItem);
         // Check if the length of gameplayItems is equal to 6,
-        catIndex ++
+        catIndex++;
       }
 
       if (gameplayItems.length === 6) {
@@ -784,19 +789,19 @@ roundOneArray = customRoundOneArray;
 
 async function fillAvailableGamesList() {
   const availableGamesList = document.getElementById("availableGamesList");
+  if (availableGamesList) {
+    // --------------------------- Clear out Games List -------------
+    availableGamesList.innerHTML = "";
+    await fetchGames();
 
-  // --------------------------- Clear out Games List -------------
-  availableGamesList.innerHTML = "";
-  await fetchGames();
+    let availableGamesResults = [];
+    //----------------------- First Games List Item -------------
 
-  let availableGamesResults = [];
-  //----------------------- First Games List Item -------------
-
-  // console.log(availableGames.getAllGameplayInformation);
-  for (let i = 0; i < availableGames.getAllGameplayInformation.length; i++) {
-    // console.log("availablegames.classname:",availableGames.getAllGameplayInformation[i].className)
-    // console.log("dropdownselectedvalue:",document.getElementById("class-names").value)
-    /* 
+    // console.log(availableGames.getAllGameplayInformation);
+    for (let i = 0; i < availableGames.getAllGameplayInformation.length; i++) {
+      // console.log("availablegames.classname:",availableGames.getAllGameplayInformation[i].className)
+      // console.log("dropdownselectedvalue:",document.getElementById("class-names").value)
+      /* 
 (
         categoriesObject.getAllQuestions[i].className ===
         document.getElementById("class-names")?.value
@@ -804,91 +809,109 @@ async function fillAvailableGamesList() {
 
 */
 
-    // Check the fetched games list class name against the dropdown selected class
+      // Check the fetched games list class name against the dropdown selected class
 
-    if (
-      availableGames.getAllGameplayInformation[i].className ===
-      document.getElementById("class-names").value
-    ) {
-      availableGamesResults.push(availableGames.getAllGameplayInformation[i]);
-      // console.log(availableGames.getAllGameplayInformation[i])
-      // console.log(availableGamesResults);
+      if (
+        availableGames.getAllGameplayInformation[i].className ===
+        document.getElementById("class-names").value
+      ) {
+        availableGamesResults.push(availableGames.getAllGameplayInformation[i]);
+        // console.log(availableGames.getAllGameplayInformation[i])
+        // console.log(availableGamesResults);
+      }
     }
-  }
-  // ------------------------------ Creating HTML elements ---------------------------------------
+    // ------------------------------ Creating HTML elements ---------------------------------------
 
-  // console.log("availableGamesResults", availableGamesResults);
-  for (let i = 0; i < availableGamesResults.length; i++) {
-    const gamesListAccordionItem = document.createElement("div");
-    gamesListAccordionItem.className = "accordion-item accordionGamesItems";
-    availableGamesList.appendChild(gamesListAccordionItem);
+    // console.log("availableGamesResults", availableGamesResults);
+    for (let i = 0; i < availableGamesResults.length; i++) {
+      const gamesListAccordionItem = document.createElement("div");
+      gamesListAccordionItem.className = "accordion-item accordionGamesItems";
+      availableGamesList.appendChild(gamesListAccordionItem);
 
-    const accordionHeader = document.createElement("h2");
-    accordionHeader.className = "accordion-header";
-    accordionHeader.id = `gamesListAccordionHeader_${i}`;
-    gamesListAccordionItem.appendChild(accordionHeader);
+      const accordionHeader = document.createElement("h2");
+      accordionHeader.className = "accordion-header";
+      accordionHeader.id = `gamesListAccordionHeader_${i}`;
+      gamesListAccordionItem.appendChild(accordionHeader);
 
-    const gamesListAccordionButton = document.createElement("button");
-    gamesListAccordionButton.className = "accordion-button collapsed";
-    gamesListAccordionButton.type = "button";
-    gamesListAccordionButton.setAttribute("data-bs-toggle", "collapse");
-    gamesListAccordionButton.setAttribute(
-      "data-bs-target",
-      `#collapseGame${i}`
-    );
-    gamesListAccordionButton.ariaExpanded = "true";
-    gamesListAccordionButton.setAttribute("aria-controls", `collapseGame${i}`);
+      const gamesListAccordionButton = document.createElement("button");
+      gamesListAccordionButton.className = "accordion-button collapsed";
+      gamesListAccordionButton.type = "button";
+      gamesListAccordionButton.setAttribute("data-bs-toggle", "collapse");
+      gamesListAccordionButton.setAttribute(
+        "data-bs-target",
+        `#collapseGame${i}`
+      );
+      gamesListAccordionButton.ariaExpanded = "true";
+      gamesListAccordionButton.setAttribute(
+        "aria-controls",
+        `collapseGame${i}`
+      );
 
-    gamesListAccordionButton.innerText =
-      availableGames.getAllGameplayInformation[i].gameName;
-    accordionHeader.appendChild(gamesListAccordionButton);
+      gamesListAccordionButton.innerText =
+        availableGames.getAllGameplayInformation[i].gameName;
+      accordionHeader.appendChild(gamesListAccordionButton);
 
-    const collapseGamei = document.createElement("div");
-    collapseGamei.id = `collapseGame${i}`;
-    collapseGamei.className = "accordion-collapse collapse";
-    collapseGamei.setAttribute("data-bs-parent", "#availableGamesList");
-    gamesListAccordionItem.appendChild(collapseGamei);
+      // ------------------- On click, send the selected Game Information to the currentGame global object ------------------
+      const gameSelector = document.createElement("a");
+      gameSelector.href = "http://127.0.0.1:5501/round-1.html";
+      gameSelector.innerText = "Start Game";
+      gameSelector.addEventListener("click", () => {
+        console.log("Starting Game...", i);
+        currentGame = availableGames.getAllGameplayInformation[i];
+        // console.log(currentGame.question)
+        sessionStorage.setItem(
+          "question",
+          JSON.stringify(currentGame.question)
+        );
+        sessionStorage.setItem("answer", JSON.stringify(currentGame.answer));
+        sessionStorage.setItem("className", currentGame.className);
+        sessionStorage.setItem("gameName", currentGame.gameName);
+        sessionStorage.setItem(
+          "category",
+          JSON.stringify(currentGame.category)
+        );
+        console.log("sessionStorage:", sessionStorage);
+      });
+      accordionHeader.appendChild(gameSelector);
 
-    const accordionGamesListBody = document.createElement("div");
-    accordionGamesListBody.className = "accordion-body";
-    collapseGamei.appendChild(accordionGamesListBody);
+      const collapseGamei = document.createElement("div");
+      collapseGamei.id = `collapseGame${i}`;
+      collapseGamei.className = "accordion-collapse collapse";
+      collapseGamei.setAttribute("data-bs-parent", "#availableGamesList");
+      gamesListAccordionItem.appendChild(collapseGamei);
 
-    const gamesListInnerText = document.createElement("div");
-    gamesListInnerText.className = "gamesListInnerText";
-    gamesListInnerText.id = `gamesListInnerText_${i}`;
+      const accordionGamesListBody = document.createElement("div");
+      accordionGamesListBody.className = "accordion-body";
+      collapseGamei.appendChild(accordionGamesListBody);
 
-    const item = availableGames.getAllGameplayInformation;
+      const gamesListInnerText = document.createElement("div");
+      gamesListInnerText.className = "gamesListInnerText";
+      gamesListInnerText.id = `gamesListInnerText_${i}`;
 
+      const item = availableGames.getAllGameplayInformation;
 
-    /* 
+      /* 
     Iterate over the available games
 
     */
-    let categories = "";
-    for (let c = 1; c < Object.values(item).length + 1; c++) {
-      // categories = "";
-      for (let i = 0; i < Object.values(item[c - 1].category).length; i++) {
-        // console.log("item:", item[i].category);
+      let categories = "";
+      for (let c = 1; c < Object.values(item).length + 1; c++) {
+        // categories = "";
+        for (let i = 0; i < Object.values(item[c - 1].category).length; i++) {
+          // console.log("item:", item[i].category);
 
-        // console.log(item[c - 1].category[`category_${i}`]);
+          // console.log(item[c - 1].category[`category_${i}`]);
 
-        categories += `Category ${c}: ` + item[c - 1].category[`category_${i}`];
-        categories += "</br>";
+          categories +=
+            `Category ${c}: ` + item[c - 1].category[`category_${i}`];
+          categories += "</br>";
+        }
+        accordionGamesListBody.appendChild(gamesListInnerText);
+        document.getElementById(`gamesListInnerText_${i}`).innerHTML =
+          categories;
+        categories = "";
       }
-      accordionGamesListBody.appendChild(gamesListInnerText);
-      document.getElementById(`gamesListInnerText_${i}`).innerHTML = categories;
-      categories = "";
     }
-
-    // gamesListInnerText.innerHTML = categories;
-
-    /*
-
-
-accordion-body[i].innerText = categories;
-
-
-*/
   }
 }
 // fillAvailableGamesList();
@@ -897,12 +920,13 @@ accordion-body[i].innerText = categories;
 // --------------------------------------------- Game Functionality ---------------------------------------------
 
 if (round === "round1") {
-  document.getElementById("catr1-1").innerText = roundOneArray[0].category;
-  document.getElementById("catr1-2").innerText = roundOneArray[1].category;
-  document.getElementById("catr1-3").innerText = roundOneArray[2].category;
-  document.getElementById("catr1-4").innerText = roundOneArray[3].category;
-  document.getElementById("catr1-5").innerText = roundOneArray[4].category;
-  document.getElementById("catr1-6").innerText = roundOneArray[5].category;
+  // console.log(roundOneArray);
+  // document.getElementById("catr1-1").innerText = roundOneArray[0].category;
+  // document.getElementById("catr1-2").innerText = roundOneArray[1].category;
+  // document.getElementById("catr1-3").innerText = roundOneArray[2].category;
+  // document.getElementById("catr1-4").innerText = roundOneArray[3].category;
+  // document.getElementById("catr1-5").innerText = roundOneArray[4].category;
+  // document.getElementById("catr1-6").innerText = roundOneArray[5].category;
 }
 if (round === "round2") {
   document.getElementById("catr2-1").innerText = roundTwoArray[0].category;
@@ -1357,6 +1381,88 @@ function submitGuess() {
 
 //! Round One Function
 async function roundOne() {
+  // console.log(sessionStorage)
+  let { category, className, gameName, question, answer } = sessionStorage;
+  // console.log(JSON.parse(question))
+  // question = JSON.parse(question);
+  answer = JSON.parse(answer);
+  // console.log(roundOneArray)
+  // console.log(sessionStorage)
+  // console.log("answer:",answer)
+  // for (let a = 0; a < 30; a += 6) {
+    for (let b = 0; b <= 5; b++) {
+      // console.log("a+b=",a+b)
+      // console.log(typeof gameplayAnswers)
+      // console.log("answer:",answer)
+      gameplayAnswers.push(answer[`answer_${b}`].split("\r\n"));
+      // console.log("gameplayAnswers:", gameplayAnswers);
+    }
+  // }
+  // const gameplayAnswers = answer[`answer_${0}`].split("\r\n")
+
+  // for (let i = 0; i < categoriesObject.getAllQuestions.length; i++) {
+  /* 
+      const gameAnswers =
+      categoriesObject.getAllQuestions[i].answer.split("\r\n");
+    const gameQuestions =
+      categoriesObject.getAllQuestions[i].question.split("\r\n");
+    const gameCategories =
+      categoriesObject.getAllQuestions[i].category.split("\r\n");
+    const gameClassName =
+      categoriesObject.getAllQuestions[i].className.split("\r\n");
+
+    fillCustomContentArray(
+      gameAnswers,
+      gameQuestions,
+      gameCategories,
+      gameClassName
+    );
+  }
+  */
+  // }
+  // console.log(answer);
+  const newAnswers = [];
+  for (let index = 0; index < 6; index+=6) {
+    console.log("index:",index)
+  for (let i = 0; i < Object.values(answer).length; i++) {
+    // console.log("newanswers",answer[[`answer_${i}`]].split("\r\n"))
+    // console.log(answer[`answer_${i}`])
+    newAnswers.push(answer[`answer_${i}`].split("\r\n"))
+    // newAnswers.push(answer[[`answer_${i+index}`]])
+  }
+}
+console.log("newAnswers: ",newAnswers)
+// const tempArray = newAnswers.map(callback => {
+//   // newAnswers.split(",")
+// }) 
+const tempArray = []
+
+
+for (let i = 0; i < newAnswers.length; i++) {
+  for (let item = 0; item < newAnswers[i].length; item++) {
+    tempArray.push(newAnswers[i][item])
+  }
+  // console.log(newAnswers[i])
+  
+  // console.log(newAnswers[i])
+
+    // tempArray.push(result)
+}
+// console.log(tempArray)
+
+console.log("tempArray:",tempArray)
+
+  console.log(placeholderQuestions)
+  for (let position = 0; position < 6; position++) {
+    for (let i = 0; i < 6; i++) {
+    roundOneArray[position].question = question[`question_${position}`];
+    roundOneArray[position].answer = answer[`answer_${position}`];
+  }
+  
+  }
+    console.log("roundOneArray:",roundOneArray);
+  // console.log(answer)
+  // console.log(sessionStorage.question)
   getNamesAndScoreboardInfo();
   displayPlayerTurnMessage();
   //! Reactivate this after looking into the loop
@@ -1426,12 +1532,12 @@ async function roundOne() {
       index = i;
       // console.log("passed",passed)
       if (round === "round1") {
-        console.log("question", roundOneArray[i].question);
-        console.log("answer", roundOneArray[i].answer);
+        // console.log("question", roundOneArray[i].question);
+        // console.log("answer", roundOneArray[i].answer);
         // console.log("category", roundOneArray[i].category);
       } else if (round === "round2") {
-        console.log("question", roundTwoArray[i].question);
-        console.log("answer", roundTwoArray[i].answer);
+        // console.log("question", roundTwoArray[i].question);
+        // console.log("answer", roundTwoArray[i].answer);
         // console.log("category", roundTwoArray[i].category);
       }
 
