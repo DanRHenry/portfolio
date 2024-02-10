@@ -1400,7 +1400,7 @@ async function roundOne() {
       }
     }
     for (let index = 0; index < Object.values(category).length; index++) {
-      for (let i = 0; i < 6; i++) {
+      for (let i = 0; i < 6; i+=6) {
         gameplayCategories.push(category[`category_${index}`]);
       }
     }
@@ -1452,14 +1452,20 @@ async function roundOne() {
   // TOdo
   console.log("roundOneArray:",roundOneArray)
   const tempRoundOneArray = [];
-  for (let i = 0; i < roundOneArray.length; i++) {
-  // for (let i = 0; i < roundOneArray.length; i+=6) {
-    for (let catIndex = 0; catIndex < 6; catIndex++) {
-      tempRoundOneArray.push(roundOneArray[i+catIndex])
+  for (let i = 0; i < 6; i++) {
+    for (let j = 0; j < roundOneArray.length; j+=6)
+    // if (j % i === 0) 
+  {
+      tempRoundOneArray.push(roundOneArray[i+j])
+      // console.log("i+J=",i+j)
     }
+    // for (let i = 0; i < roundOneArray.length; i+=6) {
+    // for (let catIndex = 0; catIndex < 6; catIndex++) {
+    // }
   }
 
   console.log(tempRoundOneArray)
+  roundOneArray = tempRoundOneArray
   console.log("placeholderquestions:",placeholderQuestions)
 
   //! Reactivate this after looking into the loop
