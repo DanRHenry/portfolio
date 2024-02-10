@@ -847,6 +847,7 @@ async function fillAvailableGamesList() {
         console.log("Starting Game...", i);
         currentGame = availableGames.getAllGameplayInformation[i];
         // console.log(currentGame.question)
+        // sessionStorage.clear()
         sessionStorage.setItem(
           "question",
           JSON.stringify(currentGame.question)
@@ -1392,10 +1393,14 @@ async function roundOne() {
     const gameplayCategories = [];
 
     for (let index = 0; index < 6; index += 6) {
-      for (let i = 0; i < Object.values(answer).length; i++) {
-        gameplayAnswers.push(answer[`answer_${i}`].split("\r\n"));
-        gameplayQuestions.push(question[`question_${i}`].split("\r\n"));
-      }
+        let answerArray = Object.entries(answer);
+        let questionArray = Object.entries(question);
+        for ( const item of answerArray) {
+          gameplayAnswers.push(item[1].split("\r\n"));
+        }
+        for (const item of questionArray) {
+          gameplayQuestions.push(item[1].split("\r\n"));
+        }
     }
     for (let index = 0; index < Object.values(category).length; index++) {
       for (let i = 0; i < 6; i+=6) {

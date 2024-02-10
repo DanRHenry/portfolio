@@ -104,6 +104,27 @@ hr {
   /* background-color: red; */
 }
 
+#class-and-game{
+  display: flex;
+  flex-direction: row;
+  width: 80vw;
+  /* pos; */
+  /* align-items: center; */
+  /* margin-left: auto; */
+  /* margin-right: auto; */
+  /* min-width: fit-content; */
+  /* width: fit-content; */
+  /* text-align: center; */
+  align-items: center;
+  /* width: 100vw; */
+  background-color: red;
+}
+
+#class-name, #game-name {
+  margin: auto;
+  width: fit-content;
+  min-width: fit-content;
+}
 #startGame:hover,
 .previousRound > button:hover,
 .nextRound > button:hover {
