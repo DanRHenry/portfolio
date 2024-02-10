@@ -107,7 +107,7 @@ hr {
 #class-and-game{
   display: flex;
   flex-direction: row;
-  width: 80vw;
+  width: 100vw;
   /* pos; */
   /* align-items: center; */
   /* margin-left: auto; */
