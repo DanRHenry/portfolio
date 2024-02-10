@@ -9,8 +9,9 @@ let inputFieldForP2Name = document.getElementById("inputFieldForP2Name");
 let playBtn = document.getElementById("startGame");
 
 // Game Page
-let roundName = document.getElementsByTagName("h1");
-
+let roundName = document.getElementsByClassName("round-name");
+const classNameText = document.getElementById("class-name")
+const gameNameText = document.getElementById("game-name")
 // Scoreboard
 let playerTwoScoreName = document.getElementById("p2Name");
 let playerOneScoreName = document.getElementById("p1Name");
@@ -63,13 +64,11 @@ let availableGames;
 let roundOneArray = []; //this gets used by the game and defaults to placeholder questions
 let roundTwoArray = [];
 let finalJeopardyCategory = [];
-let customContentArray = [];
-let customRoundOneArray = []; // this redefines roundOneArray to fetched content
 let classList = [];
 let results = [];
-const gameplayAnswers = [];
-const gameplayCategories = [];
-const gameplayQuestions = [];
+// const gameplayAnswers = [];
+// const gameplayCategories = [];
+// const gameplayQuestions = [];
 
 // -------------------------------------------------- Global Objects ------------------------------------------------------------
 let categoriesObject = {};
@@ -84,10 +83,10 @@ let customGameName = "";
 const addedCategoriesDefaultHTML = `\n <h1>Gameplay Categories:</h1><ol id="tempCategories"></ol>\n`;
 
 // -------------------------------------- Fill Round One, Two, and final Arrays --------------------------------------------------
-for (let m = 0; roundTwoArray.length < 30; m++) {
+for (let m = 0; roundTwoArray.length < 36; m++) {
   for (let questionPosition = m; questionPosition < 60; questionPosition++) {
     for (let catIndex = 0; catIndex < 6; catIndex++) {
-      if (roundTwoArray.length < 30) {
+      if (roundTwoArray.length < 36) {
         roundOneArray.push(placeholderQuestions[questionPosition]);
         questionPosition += 5;
         roundTwoArray.push(placeholderQuestions[questionPosition]);
@@ -96,9 +95,9 @@ for (let m = 0; roundTwoArray.length < 30; m++) {
     }
   }
 }
-console.log("roundOneArray", roundOneArray);
+// console.log("roundOneArray", roundOneArray);
 finalJeopardyCategory.push(placeholderQuestions[60]);
-
+// console.log(roundOneArray)
 // ---------------------------------------------- Set the round value ----------------------------------------------------------
 if (roundName[0]?.innerText == "Jeopardy!") {
   round = "title";
@@ -355,16 +354,16 @@ function fillCustomContentArray(
 ) {
   // --------Push Information for the Gameplay Categories/Class/Questions/Answers/Scores to the customContentArray -------------
   // console.log("gameAnswers",gameAnswers)
-  for (let index = 0; index < gameAnswers.length; index++) {
-    customContentArray.push({
-      category: gameCategories[0],
-      className: gameClassName[0],
-      question: gameQuestions[index],
-      answer: gameAnswers[index],
-      score: (index + 1) * 200,
-    });
-    // console.log("customContentArray: ",customContentArray)
-  }
+  // for (let index = 0; index < gameAnswers.length; index++) {
+  //   customContentArray.push({
+  //     category: gameCategories[0],
+  //     className: gameClassName[0],
+  //     question: gameQuestions[index],
+  //     answer: gameAnswers[index],
+  //     score: (index + 1) * 200,
+  //   });
+  //   // console.log("customContentArray: ",customContentArray)
+  // }
 }
 
 async function fillClassListArray() {
@@ -376,7 +375,7 @@ async function fillClassListArray() {
 
   // -------------------------------------- Clear the customContentArray --------------------------------------------------------
 
-  customContentArray = []; //! Maybe remove this. Did not check into whether this is necessary.
+  // customContentArray = []; //! Maybe remove this. Did not check into whether this is necessary.
 
   for (let i = 0; i < categoriesObject.getAllQuestions.length; i++) {
     const gameAnswers =
@@ -763,14 +762,14 @@ document
   .getElementById("questionsListBtn")
   ?.addEventListener("click", fillCategoryOptionsDropdown);
 
-for (let i = 0; i < 5; i++) {
-  for (let n = 0; n < 6; n++) {
-    customRoundOneArray.push(customContentArray[i + 6 * n]);
-  }
-}
+// for (let i = 0; i < 5; i++) {
+//   for (let n = 0; n < 6; n++) {
+//     customRoundOneArray.push(customContentArray[i + 6 * n]);
+//   }
+// }
 
 // Now replace placeholder informatiom with the fetched information
-roundOneArray = customRoundOneArray;
+// roundOneArray = customRoundOneArray;
 
 // await fetchInformation();
 
@@ -910,12 +909,12 @@ async function fillAvailableGamesList() {
 
 if (round === "round1") {
   // console.log(roundOneArray);
-  // document.getElementById("catr1-1").innerText = roundOneArray[0].category;
-  // document.getElementById("catr1-2").innerText = roundOneArray[1].category;
-  // document.getElementById("catr1-3").innerText = roundOneArray[2].category;
-  // document.getElementById("catr1-4").innerText = roundOneArray[3].category;
-  // document.getElementById("catr1-5").innerText = roundOneArray[4].category;
-  // document.getElementById("catr1-6").innerText = roundOneArray[5].category;
+  document.getElementById("catr1-1").innerText = roundOneArray[0].category;
+  document.getElementById("catr1-2").innerText = roundOneArray[6].category;
+  document.getElementById("catr1-3").innerText = roundOneArray[12].category;
+  document.getElementById("catr1-4").innerText = roundOneArray[18].category;
+  document.getElementById("catr1-5").innerText = roundOneArray[24].category;
+  document.getElementById("catr1-6").innerText = roundOneArray[30].category;
 }
 if (round === "round2") {
   document.getElementById("catr2-1").innerText = roundTwoArray[0].category;
@@ -1169,7 +1168,7 @@ textDisplayBtn?.addEventListener("click", function () {
 });
 
 //! --------------------------------------- Open the Clue Window -----------------------
-function openTextDisplayWindow() {
+function openTextDisplayWindow(index) {
   textDisplay.style.display = "block";
   textDisplay.style.border = ".5em solid black";
   textDisplay.style.borderRadius = "2em";
@@ -1371,20 +1370,25 @@ async function roundOne() {
   displayPlayerTurnMessage();
 
   function pullGameInformationFromSessionStorage() {
+
+
     /* 
   Destructure game information from session storage
   Parse the objects to question, category, and answer
   Fill gameplay arrays with questions and answers, splitting at new lines
   Fill gameplayCategories array with category items, duplicating six times for each category
 
-  */
+*/
+
     let { category, className, gameName, question, answer } = sessionStorage;
     question = JSON.parse(question);
     answer = JSON.parse(answer);
     category = JSON.parse(category);
-    console.log(className);
-    console.log(gameName);
+    // console.log(className);
+    classNameText.textContent = className;
+    gameNameText.textContent = gameName;
 
+    // console.log(classNameText)
     const gameplayAnswers = [];
     const gameplayQuestions = [];
     const gameplayCategories = [];
@@ -1400,10 +1404,6 @@ async function roundOne() {
         gameplayCategories.push(category[`category_${index}`]);
       }
     }
-    // console.log("gameplayAnswers", gameplayAnswers)
-    // console.log("gameplayQuestions",gameplayQuestions)
-    // console.log("gameplayCategories",gameplayCategories)
-
     const tempAnswersArray = [];
     const tempQuestionsArray = [];
     for (let i = 0; i < gameplayAnswers.length; i++) {
@@ -1412,22 +1412,55 @@ async function roundOne() {
         tempQuestionsArray.push(gameplayQuestions[i][item]);
       }
     }
-    console.log("placeholderQuestions:", placeholderQuestions);
+    // console.log("placeholderQuestions:", placeholderQuestions);
     for (let position = 0; position < 6; position++) {
       for (let i = 0; i < 6; i++) {
         roundOneArray[position].question = question[`question_${position}`];
         roundOneArray[position].answer = answer[`answer_${position}`];
-
         roundOneArray[position].category = category[`category_${position}`];
       }
 
-      for (let i = 0; i < 30; i++) {
-        roundOneArray[i].answer = tempAnswersArray[i];
-        roundOneArray[i].question = tempQuestionsArray[i];
-        roundOneArray[i].category = gameplayCategories[i];
+      // console.log(tempAnswersArray)
+      for (let i = 0; i < 36; i++) {
+        if (!roundOneArray[i]) {
+          roundOneArray.push([])
+        }
+        if (gameplayCategories[i]) {
+          roundOneArray[i].category = gameplayCategories[i];
+        }
+        if (tempQuestionsArray[i]) {
+          roundOneArray[i].question = tempQuestionsArray[i];
+        }
+        if (tempAnswersArray[i]) {
+          roundOneArray[i].answer = tempAnswersArray[i];
+        }
       }
     }
   }
+  for (let m = 0; roundTwoArray.length < 36; m++) {
+    for (let questionPosition = m; questionPosition < 60; questionPosition++) {
+      for (let catIndex = 0; catIndex < 6; catIndex++) {
+        if (roundTwoArray.length < 36) {
+          roundOneArray.push(placeholderQuestions[questionPosition]);
+          questionPosition += 5;
+          roundTwoArray.push(placeholderQuestions[questionPosition]);
+          questionPosition += 5;
+        }
+      }
+    }
+  }
+  // TOdo
+  console.log("roundOneArray:",roundOneArray)
+  const tempRoundOneArray = [];
+  for (let i = 0; i < roundOneArray.length; i++) {
+  // for (let i = 0; i < roundOneArray.length; i+=6) {
+    for (let catIndex = 0; catIndex < 6; catIndex++) {
+      tempRoundOneArray.push(roundOneArray[i+catIndex])
+    }
+  }
+
+  console.log(tempRoundOneArray)
+  console.log("placeholderquestions:",placeholderQuestions)
 
   //! Reactivate this after looking into the loop
   // fetchRandomCategories();
@@ -1503,15 +1536,15 @@ async function roundOne() {
       let box = answerSquares[i];
       activateButtons();
       box.textContent = "";
-      // openTextDisplayWindow();
+      openTextDisplayWindow(i);
 
       //! This fills in the question (answer) when the box is clicked.
       if (round === "round1") {
         console.log(i);
         console.log(roundOneArray);
         // console.log(roundOneArray)
-        // textDispCont.textContent = roundOneArray[i].question;
-        // console.log("pointsAvailable:", roundOneArray[i].score);
+        textDispCont.textContent = roundOneArray[i].question;
+        console.log("pointsAvailable:", roundOneArray[i].score);
       } else if (round === "round2") {
         textDispCont.textContent = roundTwoArray[i].question;
         console.log("pointsAvailable:", roundTwoArray[i].score);
