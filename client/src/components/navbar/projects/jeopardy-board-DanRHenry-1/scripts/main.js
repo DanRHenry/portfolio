@@ -1169,12 +1169,10 @@ textDisplayBtn?.addEventListener("click", function () {
 
 //! --------------------------------------- Open the Clue Window -----------------------
 function openTextDisplayWindow(index) {
-  textDisplay.style.display = "block";
+  textDisplay.style.display = "flex";
   textDisplay.style.border = ".5em solid black";
   textDisplay.style.borderRadius = "2em";
   textDisplay.style.height = "clamp(15vh,14em,50vh)";
-  // textDisplay.style.height = "11rem";
-  // textDisplay.style.minHeight = "40vh";
   textDisplay.style.width = "60%";
   textDisplay.style.top = "7em";
   textDisplay.style.left = "20%";
@@ -1454,19 +1452,26 @@ async function roundOne() {
   const tempRoundOneArray = [];
   for (let i = 0; i < 6; i++) {
     for (let j = 0; j < roundOneArray.length; j+=6)
-    // if (j % i === 0) 
   {
       tempRoundOneArray.push(roundOneArray[i+j])
-      // console.log("i+J=",i+j)
     }
-    // for (let i = 0; i < roundOneArray.length; i+=6) {
-    // for (let catIndex = 0; catIndex < 6; catIndex++) {
-    // }
   }
 
-  console.log(tempRoundOneArray)
+  // for (let i = 0; i < tempRoundOneArray.length; i++) {
+  //   tempRoundOneArray[i].score = 0;
+  // }
+
+  let j = 0;
+  for (let i = 0; i < tempRoundOneArray.length; i++) {
+    console.log(tempRoundOneArray[i].score)
+    if (i % 6 === 0 && i != 0) {
+      j+=200
+    }
+    tempRoundOneArray[i].score = 200 + j;
+}
+  console.log("tempRoundOneArray:",tempRoundOneArray)
   roundOneArray = tempRoundOneArray
-  console.log("placeholderquestions:",placeholderQuestions)
+  // console.log("placeholderquestions:",placeholderQuestions)
 
   //! Reactivate this after looking into the loop
   // fetchRandomCategories();
