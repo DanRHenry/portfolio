@@ -1395,6 +1395,8 @@ async function roundOne() {
     for (let index = 0; index < 6; index += 6) {
         let answerArray = Object.entries(answer);
         let questionArray = Object.entries(question);
+        // console.log("question in sessionstorage:",question);
+        // console.log("questionArray created from storage:",questionArray)
         for ( const item of answerArray) {
           gameplayAnswers.push(item[1].split("\r\n"));
         }

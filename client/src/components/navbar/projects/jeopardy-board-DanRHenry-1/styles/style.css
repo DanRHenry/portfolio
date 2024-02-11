@@ -110,14 +110,18 @@ hr {
   width: 100vw;
   /* pos; */
   /* align-items: center; */
-  /* margin-left: auto; */
-  /* margin-right: auto; */
+  /* margin-left: 10em; */
+  /* margin-right: 10em; */
   /* min-width: fit-content; */
   /* width: fit-content; */
   /* text-align: center; */
   align-items: center;
   /* width: 100vw; */
-  background-color: red;
+  /* background-color: red; */
+}
+
+.spacer {
+  width: 9em;
 }
 
 #class-name, #game-name {
