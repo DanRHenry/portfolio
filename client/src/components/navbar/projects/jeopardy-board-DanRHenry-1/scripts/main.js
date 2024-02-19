@@ -1,8 +1,8 @@
 import placeholderQuestions from "./placeholder-questions.js";
-// import roundOne from "./gameplay.js"
 
 // Global DOM Variables
 const apiServer = "https://danhenrydev.com/api/jeopardy";
+// const apiServer = "https://danhenrydev.com/api/jeopardy";
 // Title Page
 let inputFieldForP1Name = document.getElementById("inputFieldForP1Name");
 let inputFieldForP2Name = document.getElementById("inputFieldForP2Name");
@@ -99,7 +99,7 @@ for (let m = 0; roundTwoArray.length < 36; m++) {
 finalJeopardyCategory.push(placeholderQuestions[60]);
 // console.log(roundOneArray)
 // ---------------------------------------------- Set the round value ----------------------------------------------------------
-if (roundName[0]?.innerText == "Jeopardy!") {
+if (document.getElementsByTagName("title")[0].innerText == "Jeopardy") {
   round = "title";
   titleScreen();
 } else if (roundName[0]?.innerText == "Round One") {
@@ -110,7 +110,7 @@ if (roundName[0]?.innerText == "Jeopardy!") {
   roundOne();
 } else if (roundName[0]?.innerText == "Final Jeopardy") {
   round = "final";
-}
+} 
 
 // ------------------------------------------- Admin Page Functionality ---------------------------------------------------------4
 
@@ -197,13 +197,6 @@ const postNewClassName = async () => {
     console.log("Enter answers");
     return;
   }
-  /* 
-  newClass.className = classNameInput.value;
-  newClass.question = questionInputField.value;
-  newClass.answer = answerInputField.value;
-  newClass.category = categoryInputField.value;
-  newClass.unit = unitNameInputField.value;
-*/
 
   // ----------- Unit Input -------------------
   const unitNameInputField = document.getElementById("unitNameInputField");
@@ -273,6 +266,8 @@ const postGameplayInformation = async () => {
   customGameInformation.gameName = gameNameInput.value;
   customGameInformation.className =
     document.getElementById("class-names").value;
+
+    // Todo: socket
   const url = `${apiServer}/gameplay/gameplayinformation/`;
 
   await fetch(url, {
@@ -841,7 +836,7 @@ async function fillAvailableGamesList() {
 
       // ------------------- On click, send the selected Game Information to the currentGame global object ------------------
       const gameSelector = document.createElement("a");
-      gameSelector.href = "http://127.0.0.1:5501/round-1.html";
+      gameSelector.href = "http://127.0.0.1:5500/portfolio/client/src/components/navbar/projects/jeopardy-board-DanRHenry-1/round-1.html";
       gameSelector.innerText = "Start Game";
       gameSelector.addEventListener("click", () => {
         console.log("Starting Game...", i);
@@ -1036,15 +1031,44 @@ activeStudentsList?.addEventListener("click", fetchStudentList);
 
 //!--------------------------------------------- Title Screen Function ------------------------------------------
 
-async function titleScreen() {
-  playBtn.addEventListener("click", saveName);
+function titleScreen() {
+  playBtn?.addEventListener("click", saveName);
+  const welcomeText = "Sign In / Create Account";
+  if (playBtn) {
+    playBtn.innerText = welcomeText;
+  }
   function saveName() {
+    localStorage.clear()
     let player1Name = inputFieldForP1Name.value;
     let player2Name = inputFieldForP2Name.value;
 
+    if (player1Name === "" && player2Name !== "") {
+      console.log("player1Name: ",player1Name)
+      localStorage.setItem("playerTwoName", player2Name);
+      window.location.href = "http://127.0.0.1:5500/portfolio/client/src/components/navbar/projects/jeopardy-board-DanRHenry-1/edit-content.html"
+    }
+
+    if (player2Name === "" && player1Name !== "") {
+      console.log("player2Name: ",player2Name)
+      localStorage.setItem("playerOneName", player1Name);
+      window.location.href = "http://127.0.0.1:5500/portfolio/client/src/components/navbar/projects/jeopardy-board-DanRHenry-1/round-1.html"
+    }
+    if (player1Name === "" && player2Name === "") {
+      playBtn.innerText = "Please Enter Your Name..."
+      setTimeout(() => {
+        playBtn.innerText = welcomeText;
+      }, 2000);
+      playBtn.innerText
+    }
+    if (player1Name !== "" && player2Name !== "") {
+      playBtn.innerText = "Only Enter One Name"
+      setTimeout(() => {
+        playBtn.innerText = welcomeText;
+      }, 2000);
+    }
+    inputFieldForP1Name.value = "";
+    inputFieldForP2Name.value = "";
     //! Add fetch to backend
-    localStorage.setItem("playerOneName", player1Name);
-    localStorage.setItem("playerTwoName", player2Name);
   }
 }
 
@@ -1454,8 +1478,8 @@ async function roundOne() {
       }
     }
   }
-  // TOdo
-  console.log("roundOneArray:",roundOneArray)
+
+  // console.log("roundOneArray:",roundOneArray)
   const tempRoundOneArray = [];
   for (let i = 0; i < 6; i++) {
     for (let j = 0; j < roundOneArray.length; j+=6)
@@ -1464,21 +1488,16 @@ async function roundOne() {
     }
   }
 
-  // for (let i = 0; i < tempRoundOneArray.length; i++) {
-  //   tempRoundOneArray[i].score = 0;
-  // }
 
+  // Set the score values
   let j = 0;
   for (let i = 0; i < tempRoundOneArray.length; i++) {
-    console.log(tempRoundOneArray[i].score)
     if (i % 6 === 0 && i != 0) {
       j+=200
     }
     tempRoundOneArray[i].score = 200 + j;
 }
-  console.log("tempRoundOneArray:",tempRoundOneArray)
   roundOneArray = tempRoundOneArray
-  // console.log("placeholderquestions:",placeholderQuestions)
 
   //! Reactivate this after looking into the loop
   // fetchRandomCategories();
