@@ -4,6 +4,28 @@ import placeholderQuestions from "./placeholder-questions.js";
 const apiServer = "https://danhenrydev.com/api/jeopardy";
 // const apiServer = "https://danhenrydev.com/api/jeopardy";
 // Title Page
+let PREFIX = "http://127.0.0.1:"
+// PREFIX = apiServer;
+const PORT = 5501;
+const EDITPATH = "/edit-content.html"
+const ROUND1PATH = "/round-1.html";
+
+import { io } from "https://cdn.socket.io/4.7.4/socket.io.esm.min.js";
+
+const socket = io({
+    transports: ['websocket'],
+    path: "https://danhenrydev.com/api/socket.io/"
+})
+
+socket.on("connect", () => {
+    console.log("connected")
+    alert("connected")
+  })
+
+ socket.on("connect_error", (err) => {console.log(`connect_error due to ${err.message}`);
+});
+
+
 let inputFieldForP1Name = document.getElementById("inputFieldForP1Name");
 let inputFieldForP2Name = document.getElementById("inputFieldForP2Name");
 let playBtn = document.getElementById("startGame");
@@ -33,7 +55,7 @@ let inputFieldForAnswer = document.getElementById("inputFieldForAnswer");
 // Answer board
 let answerBoard = document.getElementById("answerBoard");
 // const categoryArray = [];
-const questionArray = [];
+// const questionArray = [];
 let textDisplay = document.getElementById("textDisplay");
 let textDispCont = document.getElementById("textDispCont");
 let textDisplayBtn = document.getElementById("textDisplayBtn");
@@ -836,7 +858,7 @@ async function fillAvailableGamesList() {
 
       // ------------------- On click, send the selected Game Information to the currentGame global object ------------------
       const gameSelector = document.createElement("a");
-      gameSelector.href = "http://127.0.0.1:5500/portfolio/client/src/components/navbar/projects/jeopardy-board-DanRHenry-1/round-1.html";
+      gameSelector.href = `${PREFIX}${PORT}${ROUND1PATH}`;
       gameSelector.innerText = "Start Game";
       gameSelector.addEventListener("click", () => {
         console.log("Starting Game...", i);
@@ -933,13 +955,6 @@ function clearInputs(e) {
   document.getElementById("answerInputField").value = "";
 }
 //---------------------------------------------- Event Listeners ----------------------------------------------
-// document.getElementById("newInformationSubmitButton").addEventListener("click", ()=> {
-//   document.getElementById("classNameInputField").value = "";
-//   document.getElementById("unitNameInputField").value = "";
-//   document.getElementById("categoryInputField").value = "";
-//   document.getElementById("questionInputField").value = "";
-//   document.getElementById("answerInputField").value = "";
-// })
 
 passBtn?.addEventListener("click", function listener() {
   if (passed == undefined || passed == false) {
@@ -1045,13 +1060,13 @@ function titleScreen() {
     if (player1Name === "" && player2Name !== "") {
       console.log("player1Name: ",player1Name)
       localStorage.setItem("playerTwoName", player2Name);
-      window.location.href = "http://127.0.0.1:5500/portfolio/client/src/components/navbar/projects/jeopardy-board-DanRHenry-1/edit-content.html"
+      window.location.href = `${PREFIX}${PORT}${EDITPATH}`
     }
 
     if (player2Name === "" && player1Name !== "") {
       console.log("player2Name: ",player2Name)
       localStorage.setItem("playerOneName", player1Name);
-      window.location.href = "http://127.0.0.1:5500/portfolio/client/src/components/navbar/projects/jeopardy-board-DanRHenry-1/round-1.html"
+      window.location.href = `${PREFIX}${PORT}${ROUND1PATH}`
     }
     if (player1Name === "" && player2Name === "") {
       playBtn.innerText = "Please Enter Your Name..."
