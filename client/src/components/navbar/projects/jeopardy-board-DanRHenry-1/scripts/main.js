@@ -13,8 +13,9 @@ const ROUND1PATH = "/round-1.html";
 import { io } from "https://cdn.socket.io/4.7.4/socket.io.esm.min.js";
 
 const socket = io({
-    transports: ['websocket'],
-    path: "https://danhenrydev.com/api/socket.io/"
+//    transports: ['websocket'],
+//    path: "https://danhenrydev.com/api/socket.io/"
+      path: "https://danhenrydev.com/"
 })
 
 socket.on("connect", () => {
