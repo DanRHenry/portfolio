@@ -1,0 +1,2 @@
+Currently
+trying to update the Total Calories when foods are added.

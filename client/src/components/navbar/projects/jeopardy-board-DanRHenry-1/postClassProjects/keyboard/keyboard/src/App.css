@@ -1,0 +1,69 @@
+body {
+  margin: 0;
+  background-color: rgb(5, 5, 65);
+}
+
+#keyboardContainer {
+  padding-top: 10em;
+}
+
+#keyboardContainer, #naturalKeyContainer,#chromaticKeyContainer {
+  position: absolute;
+  /* margin-top: 25vh; */
+  width: 100%;
+  text-align: center;
+  /* background-color: red; */
+}
+
+.keyboardImage, #naturalKeyLetters, #chromaticKeyLetters {
+  background-color: white;
+  /* max-height: 60%; */
+  /* max-width: 21rem; */
+  width: 21rem;
+  user-select: none;
+}
+
+#naturalKeyLetters, #chromaticKeyLetters {
+  position: relative;
+  background-color: rgba(240, 248, 255, 0);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: auto;
+}
+
+.naturalLetter {
+  position: relative;
+  top: -3em;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  width: 1em;
+  color: black;
+}
+
+.naturalLetter:hover {
+  /* background-color: yellow; */
+  color: white;
+  background-color: black;
+  border-radius: 1em;
+}
+
+.naturalLetter:active, .chromaticLetter:active {
+  color: brown;
+}
+
+.chromaticLetter:hover{
+  color:black;
+  background-color: white;
+  border-radius: .5em;
+}
+
+.chromaticPosition {
+  position: relative;
+  top: -9em;
+  left: 1.5em;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  width: 1em;
+  color: white;
+}
