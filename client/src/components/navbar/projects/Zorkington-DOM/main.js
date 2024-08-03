@@ -1,6 +1,6 @@
 // DOM Bindings
 const stuff = document.getElementById("inventory");
-const text = document.getElementById("inputText");
+const textInput = document.getElementById("inputText");
 const look = document.getElementById("look");
 const take = document.getElementById("take");
 const helpBtn = document.getElementById("help-btn");
@@ -27,7 +27,7 @@ let z = 0;
 let x = 9;
 let y = 9;
 let playerLocation = [z, x, y];
-// let i = 0;
+let locationIndex = 0;
 let response;
 let inventoryList = "";
 
@@ -36,8 +36,8 @@ let inventoryList = "";
 const welcomeMessage = `<span>Welcome to the <br><br><strong>UprightEd <br>Zorkington Project!</strong> <br><br>Before we get started... Please enter your <strong>name.</strong></span>`;
 
 function submitName() {
-  nameInput = text.value;
-  text.value = "";
+  nameInput = textInput.value;
+  textInput.value = "";
 }
 
 // Event Listeners
@@ -56,35 +56,35 @@ north.addEventListener("click", function () {
 });
 
 north.addEventListener("click", function () {
-  response = text.value.toLowerCase();
+  response = textInput.value.toLowerCase();
   describe();
 });
 
 south.addEventListener("click", function () {
-  response = text.value.toLowerCase();
+  response = textInput.value.toLowerCase();
   go("south");
 });
 south.addEventListener("click", function () {
-  response = text.value.toLowerCase();
+  response = textInput.value.toLowerCase();
   describe();
 });
 
 east.addEventListener("click", function () {
-  response = text.value.toLowerCase();
+  response = textInput.value.toLowerCase();
   go("east");
 });
 east.addEventListener("click", function () {
-  response = text.value.toLowerCase();
+  response = textInput.value.toLowerCase();
   describe();
 });
 
 west.addEventListener("click", function () {
-  response = text.value.toLowerCase();
+  response = textInput.value.toLowerCase();
   go("west");
 });
 
 west.addEventListener("click", function () {
-  response = text.value.toLowerCase();
+  response = textInput.value.toLowerCase();
   describe();
 });
 
@@ -96,52 +96,44 @@ look.addEventListener("click", describe);
 
 displayText.innerHTML = `${welcomeMessage}`;
 
-// ----------- Submit event listener, asks for name or redirects to other keywords -----------
-function startGame() {
-  text.addEventListener("keypress", function (event) {
-    if (event.key === "Enter") {
-      event.preventDefault();
-      if (nameInput == undefined) {
-        if (text.value == null || text.value < 1) {
-          displayText.innerHTML = `I didn't understand that. <br> Please enter your <strong> name </strong>.`;
-          startGame();
-        } else {
-          submitName();
-          displayText.innerHTML = `Hi, <span><strong>${nameInput}</strong>! <br>We are happy that you have come to take a tour of our <span><strong>Zorkington project</strong>! <br><br>You're at the entrance to the <span><strong>PTSB January Cohort</strong>. You see a <span><strong>magnetic stripe reader</strong>.`;
-        }
-      } else if (nameInput) {
-        submitText();
-      }
+function submitTextNameCheck() {
+  if (nameInput == undefined) {
+    if (textInput.value == null || textInput.value < 1) {
+      displayText.innerHTML = `I didn't understand that. <br> Please enter your <strong> name </strong>.`;
+    } else {
+      submitName();
+      displayText.innerHTML = `Hi, <span><strong>${nameInput}</strong>! <br>We are happy that you have come to take a tour of our <span><strong>Zorkington project</strong>! <br><br>You're at the entrance to the <span><strong>PTSB January Cohort</strong>. You see a <span><strong>magnetic stripe reader</strong>.`;
     }
-  });
+  } else if (nameInput) {
+    submitText();
+  }
 }
 
-startGame();
+// ----------- Submit event listener, asks for name or redirects to other keywords -----------
+textInput.addEventListener("keypress", function (event) {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    submitTextNameCheck();
+  }
+});
 
 //! Input Code Added Starting Here
 function submitText() {
-  response = inputText.value.toLowerCase();
+  response = textInput.value.toLowerCase();
   input = response.split(" ");
-  response = text.value.toLowerCase();
-  text.value = "";
-  input.push(text);
-
+  response = textInput.value.toLowerCase();
+  textInput.value = "";
+  input.push(textInput);
   input = response.split(" ");
-  // console.log("Split Input: ", input);
-  //!--------------------- Sanitize input (lowercase, remove: the)-------------------------
-  // console.log("inputOriginalcase", input)
   input = input.map((item) => item.toLowerCase());
-  // console.log("inputlowercase", input)
-  if (input.includes("the")) {
+   if (input.includes("the")) {
     input.splice(input.indexOf("the"), 1);
   }
-  // console.log("Spliced Input: ", input);
-
+ 
   //!------------------------------ Search input for keywords ------------------------------
 
   //------------------------------ Display Current Location Array --------------------------
   if (input.includes("cl")) {
-    console.log("cL");
     cLFunction();
   }
 
@@ -149,14 +141,12 @@ function submitText() {
   //---------------------- Use if there is no location for the coordinates -----------------
   else if (input.includes("popcl")) {
     popCL();
-    //?  start()
   }
 
   //-------------------- Display the array of location objects for debugging ---------------
   else if (input.includes("location")) {
     console.log(playerLocation, "\n", locationArray);
     displayText.innerHTML = `${playerLocation}, ${locationArray}`;
-    //?    start()
   }
 
   //------------------------------------- Look command: ------------------------------------
@@ -165,7 +155,7 @@ function submitText() {
   }
 
   //-------------------------------------- Where am I? -------------------------------------
-  //--Display Location coordinate (locationArray[i].coordinate), and Current Location (cL)--
+  //--Display Location coordinate (locationArray[locationIndex].coordinate), and Current Location (cL)--
   else if (input.includes("where")) {
     whereAmI();
   }
@@ -306,10 +296,10 @@ function submitText() {
   }
 
   // ------------------------------------ Open the door ------------------------------------
-  else if (input.includes("open") && locationArray[i].funct) {
-    locationArray[i].funct();
+  else if (input.includes("open") && locationArray[locationIndex].funct) {
+    locationArray[locationIndex].funct();
     //?    start()
-  } else if (input.includes("open") && !locationArray[i].funct) {
+  } else if (input.includes("open") && !locationArray[locationIndex].funct) {
     displayText.innerHTML = `There's nothing to open here!`;
     //?    start()
   }
@@ -355,9 +345,7 @@ class Location {
 }
 
 //!-------------------------- Standard Location Creation Function ------------------------
-function createLocation(
-  newLocation
-) {
+function createLocation(newLocation) {
   newLocation = new Location(
     newLocation.coordinate,
     newLocation.name,
@@ -547,7 +535,7 @@ const bensOfficeLocation = {
   coordinate: [0, 10, 10],
   name: "bensOffice",
   description:
-  "<br><strong>Ben</strong> is sitting at his computer, leading a help session. <br>He offers you <em>sympathy</em>.<br>",
+    "<br><strong>Ben</strong> is sitting at his computer, leading a help session. <br>He offers you <em>sympathy</em>.<br>",
   north: "blocked",
   east: "blocked",
   south: "blocked",
@@ -557,7 +545,7 @@ const bensOfficeLocation = {
   item: ["tissue"],
   lock: undefined,
   funct: undefined,
-}
+};
 
 createLocation(bensOfficeLocation);
 
@@ -578,19 +566,19 @@ function popCL(location) {
 
 //!Search function for finding the playerLocation coordinates in the locationArray(object)
 function search() {
-  for (let i = 0; i < locationArray.length; i++) {
+  for (let locationIndex = 0; locationIndex < locationArray.length; locationIndex++) {
     if (
-      JSON.stringify(locationArray[i].coordinate) !=
+      JSON.stringify(locationArray[locationIndex].coordinate) !=
       JSON.stringify(playerLocation)
     ) {
       console.log("nothing here");
     } else if (
-      JSON.stringify(locationArray[i].coordinate) ==
+      JSON.stringify(locationArray[locationIndex].coordinate) ==
       JSON.stringify(playerLocation)
     ) {
-      popCL(i);
-      return i;
-    } else if (locationArray[i].coordinate == undefined) {
+      popCL(locationIndex);
+      return locationIndex = locationIndex;
+    } else if (locationArray[locationIndex].coordinate == undefined) {
       onTheFlyLocation();
     }
   }
@@ -604,8 +592,8 @@ function search() {
 function warp() {
   if (cL[6] == "blocked") {
     displayText.innerHTML = `You cannot warp out of here`;
-    playerLocation = locationArray[i].coordinate;
-    displayText.innerHTML = `locationArray[i].coordinate: ${locationArray[i].coordinate}`;
+    playerLocation = locationArray[locationIndex].coordinate;
+    displayText.innerHTML = `locationArray[locationIndex].coordinate: ${locationArray[locationIndex].coordinate}`;
   } else {
     [z, x, y] = [0, 9, 9];
     playerLocation = [z, x, y];
@@ -615,7 +603,7 @@ function warp() {
 
 // ------------------- Creating a new location if none is present. -----------------------
 function onTheFlyLocation() {
-  if (!playerLocation[i])
+  if (!playerLocation[locationIndex])
     displayText.innerHTML = `about to create a new playerLocation, ${playerLocation}`;
   let newLocation = `_${playerLocation}`;
 
@@ -637,11 +625,11 @@ function onTheFlyLocation() {
 // -------------------------------- Take Items function: ---------------------------------
 function takeItem(itemToTake) {
   search();
-  if (locationArray[i] == undefined || locationArray[i].item.length == 0) {
+  if (locationArray[locationIndex] == undefined || locationArray[locationIndex].item.length == 0) {
     displayText.innerHTML = `There's nothing to pick up.`;
     //?        start();
   } else {
-    let localItem = locationArray[i].item;
+    let localItem = locationArray[locationIndex].item;
     if (itemToTake != undefined && localItem[localItem.indexOf(itemToTake)]) {
       inventory.push(localItem[localItem.indexOf(itemToTake)]);
       localItem.splice(localItem.indexOf(itemToTake), 1);
@@ -654,16 +642,14 @@ function takeItem(itemToTake) {
       }, 2000);
       itemToTake = undefined;
       //?          start();
-    }
-    else if (
+    } else if (
       itemToTake != undefined &&
       !localItem[localItem.indexOf(itemToTake)]
     ) {
       displayText.innerHTML = `You can't take that.`;
       itemToTake = undefined;
       //?          start();
-    }
-    else if (itemToTake == undefined) {
+    } else if (itemToTake == undefined) {
       displayText.innerHTML = `Can you be more specific?`;
     }
   }
@@ -671,7 +657,7 @@ function takeItem(itemToTake) {
 
 // ---------------------------- Confirm Drop Items Function ------------------------------
 function dropYN(item) {
-  let currentLocation = locationArray[i];
+  let currentLocation = locationArray[locationIndex];
   let itemMessage = `You set down the <strong>${item}</strong>.`;
   setTimeout(() => {
     displayText.innerHTML = itemMessage;
@@ -694,9 +680,7 @@ function drop(item) {
   if (!inventory.includes(item)) {
     displayText.innerHTML = `You can't drop what you don't have.`;
     //?        start();
-  }
-
-  else {
+  } else {
     dropYN(item);
   }
   //?          start();
@@ -712,7 +696,7 @@ function go(text) {
   if (text == "north" || text == "forward") {
     if (cL[0] == "blocked") {
       blocked(blockedNEWS);
-      playerLocation = locationArray[i].coordinate;
+      playerLocation = locationArray[locationIndex].coordinate;
     } else {
       y++;
       playerLocation = [z, x, y];
@@ -720,7 +704,7 @@ function go(text) {
   } else if (text == "east" || text == "right") {
     if (cL[1] == "blocked") {
       blocked(blockedNEWS);
-      playerLocation = locationArray[i].coordinate;
+      playerLocation = locationArray[locationIndex].coordinate;
     } else {
       x++;
       playerLocation = [z, x, y];
@@ -728,7 +712,7 @@ function go(text) {
   } else if (text == "south" || text == "backward") {
     if (cL[2] == "blocked") {
       blocked(blockedNEWS);
-      playerLocation = locationArray[i].coordinate;
+      playerLocation = locationArray[locationIndex].coordinate;
     } else {
       y--;
       playerLocation = [z, x, y];
@@ -736,7 +720,7 @@ function go(text) {
   } else if (text == "west" || text == "left") {
     if (cL[3] == "blocked") {
       blocked(blockedNEWS);
-      playerLocation = locationArray[i].coordinate;
+      playerLocation = locationArray[locationIndex].coordinate;
     } else {
       x--;
       playerLocation = [z, x, y];
@@ -745,8 +729,8 @@ function go(text) {
     if (cL[4] != "open") {
       blocked(`You can't go up from here.`);
       // displayText.innerHTML = `You can't go up from here.`;
-      if (locationArray[i]) {
-        playerLocation = locationArray[i].coordinate;
+      if (locationArray[locationIndex]) {
+        playerLocation = locationArray[locationIndex].coordinate;
       }
     } else {
       z++;
@@ -756,8 +740,8 @@ function go(text) {
     if (cL[5] != "open") {
       // displayText.innerHTML = `You can't go up from here.`;
       blocked(`You can't go down from here.`);
-      if (locationArray[i]) {
-        playerLocation = locationArray[i].coordinate;
+      if (locationArray[locationIndex]) {
+        playerLocation = locationArray[locationIndex].coordinate;
       }
     } else {
       z--;
@@ -773,12 +757,13 @@ function go(text) {
 // ----------------------------------- Looking around ------------------------------------
 function describe() {
   search();
-  if (!locationArray[i]) {
+  console.log("locationArray",locationArray)
+  if (!locationArray[locationIndex]) {
     displayText.innerHTML = `You don't see anything interesting...`;
-  } else if (locationArray[i].item.length > 0 && locationArray[i].description) {
+  } else if (locationArray[locationIndex].item.length > 0 && locationArray[locationIndex].description) {
     let items = [];
-    for (let c = 0; c < locationArray[i].item.length; c++) {
-      items.push(`${locationArray[i].item[c]},`);
+    for (let c = 0; c < locationArray[locationIndex].item.length; c++) {
+      items.push(`${locationArray[locationIndex].item[c]},`);
     }
     word = items[items.length - 1];
     word = word.slice(0, -1);
@@ -793,10 +778,10 @@ function describe() {
       itemList = items[0];
       itemList = itemList.slice(0, -1);
     }
-    displayText.innerHTML = `You look around and see... <br> ${locationArray[i].description} You also see a <strong>${itemList}</strong>`;
+    displayText.innerHTML = `You look around and see... <br> ${locationArray[locationIndex].description} You also see a <strong>${itemList}</strong>`;
     //?            start();
-  } else if (locationArray[i].description) {
-    displayText.innerHTML = `You look around and see... <br> ${locationArray[i].description}`;
+  } else if (locationArray[locationIndex].description) {
+    displayText.innerHTML = `You look around and see... <br> ${locationArray[locationIndex].description}`;
     //?          start();
   }
 }
@@ -806,7 +791,7 @@ function moveNotice(input) {
     displayText.innerHTML = `You move ${input}.`;
   }, 0);
   setTimeout(() => {
-    displayText.innerHTML = `<${locationArray[i].description}`;
+    displayText.innerHTML = `<${locationArray[locationIndex].description}`;
   }, 1000);
 }
 
@@ -821,31 +806,29 @@ function blocked(message) {
 
 // ----------------------------- Unlocking doors function: -------------------------------
 function unlock() {
-  if (!locationArray[i]) {
+  if (!locationArray[locationIndex]) {
     setTimeout(() => {
       displayText.innerHTML = "There's nothing to unlock.";
     }, 0);
     setTimeout(() => {
       describe();
     }, 2000);
-
-  } else if (locationArray[i].lock == undefined) {
+  } else if (locationArray[locationIndex].lock == undefined) {
     setTimeout(() => {
       displayText.innerHTML = "There's nothing to unlock.";
     }, 0);
     setTimeout(() => {
       describe();
     }, 2000);
-
-  } else if (inventory.includes(locationArray[i].lock)) {
-    if (locationArray[i].north == "blocked") {
-      locationArray[i].north = undefined;
-    } else if (locationArray[i].east == "blocked") {
-      locationArray[i].east = undefined;
-    } else if (locationArray[i].south == "blocked") {
-      locationArray[i].south = undefined;
-    } else if (locationArray[i].west == "blocked") {
-      locationArray[i].west = undefined;
+  } else if (inventory.includes(locationArray[locationIndex].lock)) {
+    if (locationArray[locationIndex].north == "blocked") {
+      locationArray[locationIndex].north = undefined;
+    } else if (locationArray[locationIndex].east == "blocked") {
+      locationArray[locationIndex].east = undefined;
+    } else if (locationArray[locationIndex].south == "blocked") {
+      locationArray[locationIndex].south = undefined;
+    } else if (locationArray[locationIndex].west == "blocked") {
+      locationArray[locationIndex].west = undefined;
     }
     setTimeout(() => {
       displayText.innerHTML = `You hear a <strong>mechanism <em>click</em></strong>.<br>The <strong>door</strong> swings open.`;
@@ -853,8 +836,8 @@ function unlock() {
     setTimeout(() => {
       describe();
     }, 2000);
-    inventory.splice(inventory.indexOf(locationArray[i].lock), 1);
-    locationArray[i].lock = undefined;
+    inventory.splice(inventory.indexOf(locationArray[locationIndex].lock), 1);
+    locationArray[locationIndex].lock = undefined;
     cL[cL.indexOf("blocked")] = undefined;
     //?    start()
   }
@@ -883,7 +866,7 @@ function whereAmI() {
   let currentLocation = locationArray.indexOf(playerLocation);
   displayText.innerHTML = `playerLocation: ${playerLocation}`;
   if (locationArray[currentLocation]) {
-    displayText.innerHTML = `locationArray[i].coordinate: ${locationArray[currentLocation].coordinate}`;
+    displayText.innerHTML = `locationArray[locationIndex].coordinate: ${locationArray[currentLocation].coordinate}`;
     displayText.innerHTML = `cL: ${cL}`;
   } else {
     displayText.innerHTML = `cL: ${cL}`;
@@ -894,8 +877,8 @@ function whereAmI() {
 // ------------------- Display Current Location Directional Information ------------------
 function cLFunction() {
   displayText.innerHTML = `cL Array: ${cL}`;
-  if (locationArray[i]) {
-    displayText.innerHTML = locationArray[i];
+  if (locationArray[locationIndex]) {
+    displayText.innerHTML = locationArray[locationIndex];
   } else {
     displayText.innerHTML = `there is no information at locationArray, index ${i}`;
   }
