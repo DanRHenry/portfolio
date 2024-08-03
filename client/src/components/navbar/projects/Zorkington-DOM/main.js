@@ -50,47 +50,44 @@ helpBtn.addEventListener("click", () => {
   });
 });
 
-// Directions
-north.addEventListener("click", function () {
+function handleNorthClick () {
+  response = textInput.value.toLowerCase();
   go("north");
-});
-
-north.addEventListener("click", function () {
-  response = textInput.value.toLowerCase();
   describe();
-});
+}
 
-south.addEventListener("click", function () {
-  response = textInput.value.toLowerCase();
+function handleSouthClick () {
+    response = textInput.value.toLowerCase();
   go("south");
-});
-south.addEventListener("click", function () {
-  response = textInput.value.toLowerCase();
-  describe();
-});
+    describe();
+}
 
-east.addEventListener("click", function () {
+function handleEastClick () {
   response = textInput.value.toLowerCase();
   go("east");
-});
-east.addEventListener("click", function () {
-  response = textInput.value.toLowerCase();
   describe();
-});
+}
 
-west.addEventListener("click", function () {
-  response = textInput.value.toLowerCase();
+function handleWestClick () {
+    response = textInput.value.toLowerCase();
   go("west");
-});
+    describe();
+}
 
-west.addEventListener("click", function () {
-  response = textInput.value.toLowerCase();
-  describe();
-});
-
-stuff.addEventListener("click", function () {
+function handleStuffClick () {
   displayInventory();
-});
+}
+
+// Directions
+north.addEventListener("click", handleNorthClick)
+
+south.addEventListener("click", handleSouthClick);
+
+east.addEventListener("click", handleEastClick);
+
+west.addEventListener("click", handleWestClick);
+
+stuff.addEventListener("click", handleStuffClick);
 
 look.addEventListener("click", describe);
 
@@ -126,10 +123,10 @@ function submitText() {
   input.push(textInput);
   input = response.split(" ");
   input = input.map((item) => item.toLowerCase());
-   if (input.includes("the")) {
+  if (input.includes("the")) {
     input.splice(input.indexOf("the"), 1);
   }
- 
+
   //!------------------------------ Search input for keywords ------------------------------
 
   //------------------------------ Display Current Location Array --------------------------
@@ -139,9 +136,6 @@ function submitText() {
 
   //------------------------------- Populate the Current Location --------------------------
   //---------------------- Use if there is no location for the coordinates -----------------
-  else if (input.includes("popcl")) {
-    popCL();
-  }
 
   //-------------------- Display the array of location objects for debugging ---------------
   else if (input.includes("location")) {
@@ -346,7 +340,7 @@ class Location {
 
 //!-------------------------- Standard Location Creation Function ------------------------
 function createLocation(newLocation) {
-  console.log("newLocation",newLocation)
+  // console.log("newLocation", newLocation);
   newLocation = new Location(
     newLocation.coordinate,
     newLocation.name,
@@ -455,23 +449,7 @@ const dungeonLocation = {
   lock: undefined,
   funct: undefined,
 };
-createLocation(
-  dungeonLocation
-  // "dungeon", //0
-  // [-1, 8, 11], //1
-  // `stairwell`, //2
-  // // `\nYou have stumbled on a ${green}dungeon${reset}.\nThere is a narrow path to your ${yellow}right${reset}`,//3
-  // "You have stumbled on a dungeon. There is a narrow path to your right.",
-  // "blocked", //4 north
-  // undefined, //5 east
-  // "blocked", //6 south
-  // "blocked", //7 west
-  // "open", //8 up
-  // undefined, //9 down
-  // [], //10 item
-  // undefined, //11 lock
-  // undefined // 12 funct
-);
+createLocation(dungeonLocation);
 
 // Create Traproom
 const trapRoomLocation = {
@@ -560,29 +538,28 @@ function popCL(location) {
     cL.push(locationArray[location].west);
     cL.push(locationArray[location].up);
     cL.push(locationArray[location].down);
-  } else {
-    console.log("gonna have to make something up in the popcl function");
   }
+  console.log("cl:", cL);
+  console.log(locationArray[location]);
 }
 
-//!Search function for finding the playerLocation coordinates in the locationArray(object)
-function search() {
-  for (let locationIndex = 0; locationIndex < locationArray.length; locationIndex++) {
+function searchLocationArrayForPlayerLocation() {
+  for (
+    let locationIndex = 0;
+    locationIndex < locationArray.length;
+    locationIndex++
+  ) {
     if (
-      JSON.stringify(locationArray[locationIndex].coordinate) !=
-      JSON.stringify(playerLocation)
-    ) {
-      console.log("nothing here");
-    } else if (
       JSON.stringify(locationArray[locationIndex].coordinate) ==
       JSON.stringify(playerLocation)
     ) {
       popCL(locationIndex);
-      return locationIndex = locationIndex;
-    } else if (locationArray[locationIndex].coordinate == undefined) {
-      onTheFlyLocation();
+      return;
     }
   }
+  onTheFlyLocation();
+  console.log(locationArray.length);
+  console.log("locationArray:", locationArray);
 }
 
 //?---------------------------------------------------------
@@ -604,29 +581,26 @@ function warp() {
 
 // ------------------- Creating a new location if none is present. -----------------------
 function onTheFlyLocation() {
-  if (!playerLocation[locationIndex])
+  if (!playerLocation[locationIndex]) {
     displayText.innerHTML = `about to create a new playerLocation, ${playerLocation}`;
-  let newLocation = `_${playerLocation}`;
+    let newLocation = `_${playerLocation}`;
 
-  createLocation(
-    newLocation,
-    playerLocation,
-    undefined,
-    "nothing special about this area",
-    undefined,
-    undefined,
-    undefined,
-    undefined,
-    undefined,
-    undefined,
-    []
-  );
+    createLocation({
+      coordinate: playerLocation,
+      name: newLocation,
+      description: "nothing special about this area",
+      item: [],
+    });
+  }
 }
 
 // -------------------------------- Take Items function: ---------------------------------
 function takeItem(itemToTake) {
-  search();
-  if (locationArray[locationIndex] == undefined || locationArray[locationIndex].item.length == 0) {
+  searchLocationArrayForPlayerLocation();
+  if (
+    locationArray[locationIndex] == undefined ||
+    locationArray[locationIndex].item.length == 0
+  ) {
     displayText.innerHTML = `There's nothing to pick up.`;
     //?        start();
   } else {
@@ -674,7 +648,7 @@ function dropYN(item) {
 
 // --------------------------------- Drop Items Function ---------------------------------
 function drop(item) {
-  search();
+  searchLocationArrayForPlayerLocation();
 
   // -------------------------------- Drop Inventory Check ---------------------------------
 
@@ -689,7 +663,7 @@ function drop(item) {
 
 // ---------------------------------- Movement Function ----------------------------------
 function go(text) {
-  search();
+  searchLocationArrayForPlayerLocation();
   let blockedNEWS = `The way is blocked.`;
   /* Search for the index of the current location in the locations array
    */
@@ -750,18 +724,21 @@ function go(text) {
     }
   }
 
-  onTheFlyLocation();
-  popCL();
+  // onTheFlyLocation();
+  // popCL();
   describe();
 }
 
 // ----------------------------------- Looking around ------------------------------------
 function describe() {
-  search();
-  console.log("locationArray",locationArray)
-  if (!locationArray[locationIndex]) {
-    displayText.innerHTML = `You don't see anything interesting...`;
-  } else if (locationArray[locationIndex].item.length > 0 && locationArray[locationIndex].description) {
+  searchLocationArrayForPlayerLocation();
+  // if (!locationArray[locationIndex]) {
+  //   displayText.innerHTML = `You don't see anything interesting...`;
+  // } else 
+  if (
+    locationArray[locationIndex].item.length > 0 &&
+    locationArray[locationIndex].description
+  ) {
     let items = [];
     for (let c = 0; c < locationArray[locationIndex].item.length; c++) {
       items.push(`${locationArray[locationIndex].item[c]},`);
