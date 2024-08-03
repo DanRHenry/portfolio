@@ -346,6 +346,7 @@ class Location {
 
 //!-------------------------- Standard Location Creation Function ------------------------
 function createLocation(newLocation) {
+  console.log("newLocation",newLocation)
   newLocation = new Location(
     newLocation.coordinate,
     newLocation.name,
