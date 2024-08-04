@@ -65,6 +65,7 @@ function handleSouthClick () {
 function handleEastClick () {
   response = textInput.value.toLowerCase();
   go("east");
+  console.log("clicked East")
   describe();
 }
 
@@ -130,9 +131,9 @@ function submitText() {
   //!------------------------------ Search input for keywords ------------------------------
 
   //------------------------------ Display Current Location Array --------------------------
-  if (input.includes("cl")) {
-    cLFunction();
-  }
+  // if (input.includes("cl")) {
+  //   cLFunction();
+  // }
 
   //------------------------------- Populate the Current Location --------------------------
   //---------------------- Use if there is no location for the coordinates -----------------
@@ -529,18 +530,22 @@ const bensOfficeLocation = {
 createLocation(bensOfficeLocation);
 
 //! ------------------------- Populate Current Location Array ----------------------------
-function popCL(location) {
+function popCL(locationIndex) {
+  // if (locationArray[location]) {
+    // return cL = locationArray[locationIndex]
+  // }
   cL = [];
-  if (locationArray[location]) {
-    cL.push(locationArray[location].north);
-    cL.push(locationArray[location].east);
-    cL.push(locationArray[location].south);
-    cL.push(locationArray[location].west);
-    cL.push(locationArray[location].up);
-    cL.push(locationArray[location].down);
+  if (locationArray[locationIndex]) {
+    cL.push(locationArray[locationIndex].north);
+    cL.push(locationArray[locationIndex].east);
+    cL.push(locationArray[locationIndex].south);
+    cL.push(locationArray[locationIndex].west);
+    cL.push(locationArray[locationIndex].up);
+    cL.push(locationArray[locationIndex].down);
   }
   console.log("cl:", cL);
-  console.log(locationArray[location]);
+  // console.log(locationArray[location]);
+  return cL
 }
 
 function searchLocationArrayForPlayerLocation() {
@@ -553,13 +558,14 @@ function searchLocationArrayForPlayerLocation() {
       JSON.stringify(locationArray[locationIndex].coordinate) ==
       JSON.stringify(playerLocation)
     ) {
+      console.log("popCL locationIndex happening...")
       popCL(locationIndex);
-      return;
+      // return console.log(popCL(locationIndex));
     }
   }
   onTheFlyLocation();
-  console.log(locationArray.length);
-  console.log("locationArray:", locationArray);
+  // console.log(locationArray.length);
+  // console.log("locationArray:", locationArray);
 }
 
 //?---------------------------------------------------------
@@ -731,10 +737,9 @@ function go(text) {
 
 // ----------------------------------- Looking around ------------------------------------
 function describe() {
+  console.log("describing...")
   searchLocationArrayForPlayerLocation();
-  // if (!locationArray[locationIndex]) {
-  //   displayText.innerHTML = `You don't see anything interesting...`;
-  // } else 
+  console.log("cL::",cL)
   if (
     locationArray[locationIndex].item.length > 0 &&
     locationArray[locationIndex].description
@@ -853,12 +858,15 @@ function whereAmI() {
 }
 
 // ------------------- Display Current Location Directional Information ------------------
-function cLFunction() {
-  displayText.innerHTML = `cL Array: ${cL}`;
-  if (locationArray[locationIndex]) {
-    displayText.innerHTML = locationArray[locationIndex];
-  } else {
-    displayText.innerHTML = `there is no information at locationArray, index ${i}`;
-  }
-  //?  start()
-}
+// function cLFunction() {
+//   popCL(playerLocation)
+//   console.log(cL)
+//   console.log(playerLocation)
+//   displayText.innerHTML = `cL Array: ${JSON.stringify(cL)}`;
+//   if (locationArray[locationIndex]) {
+//     displayText.innerHTML = locationArray[locationIndex];
+//   } else {
+//     displayText.innerHTML = `there is no information at locationArray, index ${i}`;
+//   }
+//   //?  start()
+// }
