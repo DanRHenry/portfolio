@@ -35,9 +35,22 @@ let inventoryList = "";
 
 const welcomeMessage = `<span>Welcome to the <br><br><strong>UprightEd <br>Zorkington Project!</strong> <br><br>Before we get started... Please enter your <strong>name.</strong></span>`;
 
-function submitName() {
+function submitNameAndUnlockButtons() {
   nameInput = textInput.value;
   textInput.value = "";
+    // Directions
+
+north.addEventListener("click", handleNorthClick)
+
+south.addEventListener("click", handleSouthClick);
+
+east.addEventListener("click", handleEastClick);
+
+west.addEventListener("click", handleWestClick);
+
+stuff.addEventListener("click", handleStuffClick);
+
+look.addEventListener("click", describe);
 }
 
 // Event Listeners
@@ -65,7 +78,6 @@ function handleSouthClick () {
 function handleEastClick () {
   response = textInput.value.toLowerCase();
   go("east");
-  console.log("clicked East")
   describe();
 }
 
@@ -79,19 +91,6 @@ function handleStuffClick () {
   displayInventory();
 }
 
-// Directions
-north.addEventListener("click", handleNorthClick)
-
-south.addEventListener("click", handleSouthClick);
-
-east.addEventListener("click", handleEastClick);
-
-west.addEventListener("click", handleWestClick);
-
-stuff.addEventListener("click", handleStuffClick);
-
-look.addEventListener("click", describe);
-
 displayText.innerHTML = `${welcomeMessage}`;
 
 function submitTextNameCheck() {
@@ -99,8 +98,8 @@ function submitTextNameCheck() {
     if (textInput.value == null || textInput.value < 1) {
       displayText.innerHTML = `I didn't understand that. <br> Please enter your <strong> name </strong>.`;
     } else {
-      submitName();
-      displayText.innerHTML = `Hi, <span><strong>${nameInput}</strong>! <br>We are happy that you have come to take a tour of our <span><strong>Zorkington project</strong>! <br><br>You're at the entrance to the <span><strong>PTSB January Cohort</strong>. You see a <span><strong>magnetic stripe reader</strong>.`;
+      submitNameAndUnlockButtons();
+      displayText.innerHTML = `Hi, <span><strong>${nameInput}</strong>! <br>We are happy that you have come to take a tour of our <span><strong>Zorkington project</strong>! <br><br>You're at the entrance to the <span><strong>PTSB January Cohort</strong>. <br><br>You see a <span><strong>magnetic stripe reader</strong>.`;
     }
   } else if (nameInput) {
     submitText();
@@ -117,6 +116,7 @@ textInput.addEventListener("keypress", function (event) {
 
 //! Input Code Added Starting Here
 function submitText() {
+  console.log("here")
   response = textInput.value.toLowerCase();
   input = response.split(" ");
   response = textInput.value.toLowerCase();
@@ -140,7 +140,7 @@ function submitText() {
 
   //-------------------- Display the array of location objects for debugging ---------------
   else if (input.includes("location")) {
-    console.log(playerLocation, "\n", locationArray);
+    // console.log(playerLocation, "\n", locationArray);
     displayText.innerHTML = `${playerLocation}, ${locationArray}`;
   }
 
@@ -237,7 +237,8 @@ function submitText() {
 
   // -------------------------------------- Exit game: -------------------------------------
   else if (input.includes("quit") || input.includes("exit")) {
-    exitGame();
+    console.log('game over')
+    warp(true);
   }
 
   // --------------------------------- Take/pick up items: ---------------------------------
@@ -265,13 +266,13 @@ function submitText() {
     let itemToDrop;
     if (input.includes("drop")) {
       itemToDrop = input[input.indexOf("drop") + 1];
-      console.log("itemtodrop:", itemToDrop);
+      // console.log("itemtodrop:", itemToDrop);
       drop(itemToDrop);
     } else if (input.includes("leave")) {
-      console.log(input);
+      // console.log(input);
       let itemToDrop = input[input.indexOf("leave") + 1]; // Takes the next word in the input index to use as an item argument
       itemToDrop = input[indexOf("leave") + 1];
-      console.log("itemtoleave:", itemToDrop);
+      // console.log("itemtoleave:", itemToDrop);
       drop(itemToDrop);
     }
   }
@@ -308,6 +309,10 @@ function submitText() {
 
 // Functions
 
+// function exitGame () {
+//   console.log("Game Over")
+//   warp()
+// }
 //!-------------------------------Location Class Constructor------------------------------
 class Location {
   constructor(
@@ -382,7 +387,7 @@ const startingLocation = {
   coordinate: [0, 9, 9],
   name: "home",
   description:
-    "You're at the entrance to the PTSB January Cohort. <br> You see a <span><strong>magnetic stripe reader.</strong></span>",
+    "You're at the entrance to the PTSB January Cohort. <br><br> You see a <span><strong>magnetic stripe reader.</strong></span>",
   north: "blocked",
   east: undefined,
   south: undefined,
@@ -535,6 +540,7 @@ function populateDirectionalStatuses(locationIndex) {
   // if (locationArray[location]) {
     // return directionalStatuses = locationArray[locationIndex]
   // }
+  // console.log("here")
   directionalStatuses = [];
   if (locationArray[locationIndex]) {
     directionalStatuses.push(locationArray[locationIndex].north);
@@ -544,6 +550,7 @@ function populateDirectionalStatuses(locationIndex) {
     directionalStatuses.push(locationArray[locationIndex].up);
     directionalStatuses.push(locationArray[locationIndex].down);
   }
+  // console.log("directionalStatuses:",directionalStatuses)
   return directionalStatuses
 }
 
@@ -557,14 +564,12 @@ function searchLocationArrayForPlayerLocation() {
       JSON.stringify(locationArray[locationIndex].coordinate) ===
       JSON.stringify(playerLocation)
     ) {
-      // console.log("returning",locationArray[locationIndex])
       return locationArray[locationIndex]
     }
   }
   onTheFlyLocation();
-  console.log("new location created on the fly for", playerLocation)
-  console.log(locationArray)
-  searchLocationArrayForPlayerLocation()
+  // console.log("new location:",locationArray)
+  // searchLocationArrayForPlayerLocation()
 }
 
 //?---------------------------------------------------------
@@ -572,16 +577,25 @@ function searchLocationArrayForPlayerLocation() {
 //! Functions Section:
 
 // ------------------------------------- Warp function --------------------------------
-function warp() {
+function warp(override) {
+  if (override === true) {
+    [z, x, y] = [0, 9, 9];
+    playerLocation = [z, x, y];
+    // look()
+    describe()
+    return;
+  }
+
   if (directionalStatuses[6] == "blocked") {
     displayText.innerHTML = `You cannot warp out of here`;
-    playerLocation = locationArray[locationIndex].coordinate;
-    displayText.innerHTML = `locationArray[locationIndex].coordinate: ${locationArray[locationIndex].coordinate}`;
+    playerLocation = searchLocationArrayForPlayerLocation().coordinate;
   } else {
     [z, x, y] = [0, 9, 9];
     playerLocation = [z, x, y];
     displayText.innerHTML = `You have warped home!`;
+    describe()
   }
+
 }
 
 // ------------------- Creating a new location if none is present. -----------------------
@@ -602,15 +616,15 @@ function onTheFlyLocation() {
 
 // -------------------------------- Take Items function: ---------------------------------
 function takeItem(itemToTake) {
-  const currentLocation = searchLocationArrayForPlayerLocation();
+  // const currentLocation = searchLocationArrayForPlayerLocation();
   if (
-    currentLocation == undefined ||
-    currentLocation.item.length == 0
+    searchLocationArrayForPlayerLocation() == undefined ||
+    searchLocationArrayForPlayerLocation().item.length == 0
   ) {
     displayText.innerHTML = `There's nothing to pick up.`;
     //?        start();
   } else {
-    let localItem = currentLocation.item;
+    let localItem = searchLocationArrayForPlayerLocation().item;
     if (itemToTake != undefined && localItem[localItem.indexOf(itemToTake)]) {
       inventory.push(localItem[localItem.indexOf(itemToTake)]);
       localItem.splice(localItem.indexOf(itemToTake), 1);
@@ -638,7 +652,7 @@ function takeItem(itemToTake) {
 
 // ---------------------------- Confirm Drop Items Function ------------------------------
 function dropYN(item) {
-  let currentLocation = locationArray[locationIndex];
+  // let searchLocationArrayForPlayerLocation() = locationArray[locationIndex];
   let itemMessage = `You set down the <strong>${item}</strong>.`;
   setTimeout(() => {
     displayText.innerHTML = itemMessage;
@@ -647,14 +661,14 @@ function dropYN(item) {
     describe();
   }, 2000);
 
-  currentLocation.item.push(item);
+  searchLocationArrayForPlayerLocation().item.push(item);
   inventory.splice([inventory.indexOf(item)], 1);
   //?          start();
 }
 
 // --------------------------------- Drop Items Function ---------------------------------
 function drop(item) {
-  const currentLocation = searchLocationArrayForPlayerLocation();
+  // const currentLocation = searchLocationArrayForPlayerLocation();
 
   // -------------------------------- Drop Inventory Check ---------------------------------
 
@@ -668,24 +682,22 @@ function drop(item) {
 }
 
 // ---------------------------------- Movement Function ----------------------------------
-function go(text) {
-  // const currentLocation = searchLocationArrayForPlayerLocation();
+async function go(text) {
   let blockedMessage = `The way is blocked.`;
-  /* Search for the index of the current location in the locations array
-   */
-  // If the text is "blocked", do not move, but display a message.
   if (text == "north" || text == "forward") {
-    if (directionalStatuses[0] == "blocked") {
-      blocked(blockedMessage);
+    if (searchLocationArrayForPlayerLocation().north == "blocked") {
+      setTimeout(() => {
+        blocked(blockedMessage);
+      }, 1);
       playerLocation = searchLocationArrayForPlayerLocation().coordinate;
     } else {
       y++;
       playerLocation = [z, x, y];
-      console.log(searchLocationArrayForPlayerLocation())
+      // console.log(searchLocationArrayForPlayerLocation())
       moveNotice(text)
     }
   } else if (text == "east" || text == "right") {
-    if (directionalStatuses[1] == "blocked") {
+    if (searchLocationArrayForPlayerLocation().east == "blocked") {
       blocked(blockedMessage);
       playerLocation = searchLocationArrayForPlayerLocation().coordinate;
     } else {
@@ -694,7 +706,7 @@ function go(text) {
       moveNotice(text)
     }
   } else if (text == "south" || text == "backward") {
-    if (directionalStatuses[2] == "blocked") {
+    if (searchLocationArrayForPlayerLocation().south == "blocked") {
       blocked(blockedMessage);
       playerLocation = searchLocationArrayForPlayerLocation().coordinate;
     } else {
@@ -703,8 +715,10 @@ function go(text) {
       moveNotice(text)
     }
   } else if (text == "west" || text == "left") {
-    if (directionalStatuses[3] == "blocked") {
-      blocked(blockedMessage);
+    if (searchLocationArrayForPlayerLocation().west == "blocked") {
+      setTimeout(() => {
+        blocked(blockedMessage);
+      }, 1);
       playerLocation = searchLocationArrayForPlayerLocation().coordinate;
     } else {
       x--;
@@ -712,8 +726,10 @@ function go(text) {
       moveNotice(text)
     }
   } else if (text == "up") {
-    if (directionalStatuses[4] != "open") {
-      blocked(`You can't go up from here.`);
+    if (searchLocationArrayForPlayerLocation().up != "open") {
+      setTimeout(() => {
+        blocked(`You can't go up from here.`);
+      }, 1);
         playerLocation = searchLocationArrayForPlayerLocation().coordinate;
     } else {
       z++;
@@ -722,8 +738,10 @@ function go(text) {
       moveNotice(text)
     }
   } else if (text == "down") {
-    if (directionalStatuses[5] != "open") {
-      blocked(`You can't go down from here.`);
+    if (searchLocationArrayForPlayerLocation().down != "open") {
+      setTimeout(() => {
+        blocked(`You can't go down from here.`);
+      }, 1);
         playerLocation = searchLocationArrayForPlayerLocation().coordinate;
     } else {
       z--;
@@ -736,51 +754,70 @@ function go(text) {
 
 // ----------------------------------- Looking around ------------------------------------
 function describe() {
-  const currentLocation = searchLocationArrayForPlayerLocation();
+  searchLocationArrayForPlayerLocation()
+
+  // console.log("current location items",searchLocationArrayForPlayerLocation().item)
+  // console.log("current location description:",searchLocationArrayForPlayerLocation().description)
     if (
       searchLocationArrayForPlayerLocation().item.length > 0 && searchLocationArrayForPlayerLocation().description
   ) {
+    // console.log("describing items...")
+    // console.log(searchLocationArrayForPlayerLocation().item)
     let items = [];
-    // for (let c = 0; c < locationArray[locationIndex].item.length; c++) {
-    //   items.push(`${locationArray[locationIndex].item[c]},`);
+
     for (let c = 0; c < searchLocationArrayForPlayerLocation().item.length; c++) {
       items.push(`${searchLocationArrayForPlayerLocation().item[c]},`);
     }
-    word = items[items.length - 1];
+
+    // console.log("items:",items)
+
+    let word = items[items.length - 1];
     word = word.slice(0, -1);
     let itemList = "";
-    if (items.length > 1) {
+
+    // console.log(searchLocationArrayForPlayerLocation().item.length)
+    // console.log("word:",word)
+    if (searchLocationArrayForPlayerLocation().item.length > 1) {
+      // console.log(searchLocationArrayForPlayerLocation().item)
       items[items.length - 1] = `and a ` + word + `.`;
       for (item of items) {
         (itemList += item), (itemList += " ");
       }
       itemList = itemList.slice(0, -1);
     } else {
+      // console.log("here")
+      // console.log(items)
       itemList = items[0];
       itemList = itemList.slice(0, -1);.0
     }
-    displayText.innerHTML = `You look around and see... <br> ${searchLocationArrayForPlayerLocation().description} You also see a <strong>${itemList}</strong>`;
-  } 
-  if (searchLocationArrayForPlayerLocation().description) {
-    displayText.innerHTML = `You look around and see... <br> ${searchLocationArrayForPlayerLocation().description}`;
+    // console.log("helloo?")
+    setTimeout(() => {
+          displayText.innerHTML = `You look around and see... <br> ${searchLocationArrayForPlayerLocation().description} <br>You also see a <strong>${itemList}</strong>`;
+    }, (0));
+
   }
+  // if (searchLocationArrayForPlayerLocation().description) {
+    displayText.innerHTML = `<br><br>You look around and see... <br> ${searchLocationArrayForPlayerLocation().description}<br>`;
+  // }
 }
+
 function moveNotice(message) {
   setTimeout(() => {
     displayText.innerHTML = `You move ${message}.`;
   }, 0);
   setTimeout(() => {
-    displayText.innerHTML = `You see ${searchLocationArrayForPlayerLocation().description}.`;
+    describe()
   }, 1000);
 }
 
 function blocked(message) {
-  setTimeout(() => {
+  // console.log("here")
+  // setTimeout(() => {
     displayText.innerHTML = message;
-  }, 0);
+  // }, 0);
   setTimeout(() => {
     describe();
-  }, 2000);
+  }, 1000);
 }
 
 // ----------------------------- Unlocking doors function: -------------------------------
@@ -852,17 +889,3 @@ function whereAmI() {
   }
   //?    start();
 }
-
-// ------------------- Display Current Location Directional Information ------------------
-// function directionalStatusesFunction() {
-//   populateDirectionalStatuses(playerLocation)
-//   console.log(directionalStatuses)
-//   console.log(playerLocation)
-//   displayText.innerHTML = `directionalStatuses Array: ${JSON.stringify(directionalStatuses)}`;
-//   if (locationArray[locationIndex]) {
-//     displayText.innerHTML = locationArray[locationIndex];
-//   } else {
-//     displayText.innerHTML = `there is no information at locationArray, index ${i}`;
-//   }
-//   //?  start()
-// }
