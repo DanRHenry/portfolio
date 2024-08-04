@@ -116,7 +116,6 @@ textInput.addEventListener("keypress", function (event) {
 
 //! Input Code Added Starting Here
 function submitText() {
-  console.log("here")
   response = textInput.value.toLowerCase();
   input = response.split(" ");
   response = textInput.value.toLowerCase();
@@ -124,21 +123,29 @@ function submitText() {
   input.push(textInput);
   input = response.split(" ");
   input = input.map((item) => item.toLowerCase());
-  if (input.includes("the")) {
-    input.splice(input.indexOf("the"), 1);
-  }
 
   //!------------------------------ Search input for keywords ------------------------------
 
-  //------------------------------ Display Current Location Array --------------------------
-  // if (input.includes("directionalStatuses")) {
-  //   cLFunction();
+  for (word of input) {
+    if (word === "the") {
+      input.splice(input.indexOf("the"), 1);
+    } 
+  }
+  if (input.length === 1 && input[0] === "") {
+    return;
+  }
+    if (input.includes("hi"))
+
+      //todo flip this around, look in the object for the method from the input words
+  // } if (input.includes(searchLocationArrayForPlayerLocation().funct)
+  {
+    console.log('well hello there')
+    // console.log(searchLocationArrayForPlayerLocation().funct)
+    console.log(searchLocationArrayForPlayerLocation())
+    searchLocationArrayForPlayerLocation().funct()
+  }
   // }
 
-  //------------------------------- Populate the Current Location --------------------------
-  //---------------------- Use if there is no location for the coordinates -----------------
-
-  //-------------------- Display the array of location objects for debugging ---------------
   else if (input.includes("location")) {
     // console.log(playerLocation, "\n", locationArray);
     displayText.innerHTML = `${playerLocation}, ${locationArray}`;
@@ -151,9 +158,9 @@ function submitText() {
 
   //-------------------------------------- Where am I? -------------------------------------
   //--Display Location coordinate (locationArray[locationIndex].coordinate), and Current Location (directionalStatuses)--
-  else if (input.includes("where")) {
-    whereAmI();
-  }
+  // else if (input.includes("where")) {
+  //   whereAmI();
+  // }
 
   //-------------------------------------- Move north: -------------------------------------
   else if (
@@ -396,7 +403,9 @@ const startingLocation = {
   down: undefined,
   item: [`keycard`, `crayon`, `index`, `football`],
   lock: "keycard",
-  funct: undefined,
+  funct: function jump () {
+    console.log("jumping")
+  },
 };
 
 createLocation(startingLocation);
@@ -878,14 +887,14 @@ function displayInventory() {
 //! ---------------------------- Debugging commands Section ------------------------------
 
 // -------------------- Display information about current location -----------------------
-function whereAmI() {
-  let currentLocation = locationArray.indexOf(playerLocation);
-  displayText.innerHTML = `playerLocation: ${playerLocation}`;
-  if (locationArray[currentLocation]) {
-    displayText.innerHTML = `locationArray[locationIndex].coordinate: ${locationArray[currentLocation].coordinate}`;
-    displayText.innerHTML = `directionalStatuses: ${directionalStatuses}`;
-  } else {
-    displayText.innerHTML = `directionalStatuses: ${directionalStatuses}`;
-  }
-  //?    start();
-}
+// function whereAmI() {
+//   let currentLocation = locationArray.indexOf(playerLocation);
+//   displayText.innerHTML = `playerLocation: ${playerLocation}`;
+//   if (locationArray[currentLocation]) {
+//     displayText.innerHTML = `locationArray[locationIndex].coordinate: ${locationArray[currentLocation].coordinate}`;
+//     displayText.innerHTML = `directionalStatuses: ${directionalStatuses}`;
+//   } else {
+//     displayText.innerHTML = `directionalStatuses: ${directionalStatuses}`;
+//   }
+//   //?    start();
+// }
