@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Form, FormGroup, Label, Col, Input, Button } from "reactstrap";
 import { useRef } from "react";
-import key from "../../../helpers/apikey.js";
+// import key from "../../../helpers/apikey.js";
+const key = ""
 export default function ContactContent() {
   const name = useRef();
   const organization = useRef();
